@@ -1,0 +1,110 @@
+/* 
+
+Specificity:
+1. inline
+2. id (#id)
+3. class (.class)
+4. type (e.g. div, h1, table)
+
+*/
+
+h1 {
+    color: blue;
+    text-align: center;
+    font-family: monospace;
+}
+
+div {
+    width: auto;
+    height: auto;
+    color:crimson;
+    padding: 20px; /* padding affects inside of element */
+    margin: 20px; /* margin affects outside of element */
+    font-family: monospace;
+    font-size: 28px;
+    font-weight: bold;
+    border: 3px solid black;
+}
+
+table {
+    background-color: orange;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* specify by type */
+td, th {
+    border: 1px solid black;
+    padding: 6px;
+}
+
+/* specify by id */
+#foo, #bar {
+    color: red;
+    font-family: monospace;
+}
+
+/* specify by class */
+.baz {
+    color: blueviolet;
+    font-family: monospace;
+}
+
+/* descendants, this styles list items that are direct children of an unordered list */
+ul > li {
+    color:yellow;
+    background-color: black;
+}
+
+button {
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+    background-color: green;
+}
+
+/* pseudoclass */
+button:hover {
+    background-color: orangered;
+}
+
+
+/* media queries to control appearance based on viewport width */
+@media (min-width: 600px) {
+    body {
+        background-color:aqua;
+    }
+}
+
+@media (min-width: 599px) {
+    body {
+        background-color:antiquewhite;
+    }
+}
+
+#container {
+    display: flex;
+    flex-wrap:wrap;
+}
+
+#container > div {
+    background-color:whitesmoke;
+    font-size: 20px;
+    margin:20px;
+    padding: 20px;
+}
+
+#grid {
+    background-color: bisque;
+    display: grid;
+    padding: 20px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-columns: 200px 200px auto;
+}
+
+.grid-item {
+    background-color: white;
+    font-size: 20px;
+    padding: 20px;
+}
