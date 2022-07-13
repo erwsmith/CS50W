@@ -14,6 +14,12 @@
         {% endfor %}
     </ul>
     
-    <a href="/wiki/Python">Python</a>
+    
+    <a href="{% url 'encyclopedia:index' %}">index</a>
 
 {% endblock %}
+
+<!-- <a href="{% url 'entry' %}">{{ entry }}</a> -->
+<!-- <a href="/wiki/Python">Python</a> -->
+<!-- <a href="{% url 'entries/Python' %}">Python</a> -->
+<!-- <a href="{% url 'encyclopedia:entry' %}">{{ entry }}</a> -->
