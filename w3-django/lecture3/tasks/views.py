@@ -4,9 +4,6 @@ from django.urls import reverse
 from django.shortcuts import render
 
 
-tasks = []
-
-
 class NewTaskForm(forms.Form):
     task = forms.CharField(label="New Task")
     # priority = forms.IntegerField(label="Priority", min_value=1, max_value=3)
@@ -14,8 +11,11 @@ class NewTaskForm(forms.Form):
 
 # VIEWS
 def index(request):
+    if "tasks" not in request.session:
+        request.session["tasks"] = []
+
     return render(request, "tasks/index.html", {
-        "tasks": tasks
+        "tasks": request.session["tasks"]
     })
 
 
@@ -25,7 +25,7 @@ def add(request):
         if form.is_valid():
             # get data from form and add to tasks list
             task = form.cleaned_data["task"]
-            tasks.append(task)
+            request.session["tasks"] += [task]
             return HttpResponseRedirect(reverse("tasks:index"))
         else:
             return render(request, "tasks/add.html", {
