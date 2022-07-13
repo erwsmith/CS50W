@@ -8,4 +8,3 @@ urlpatterns = [
     path("eric", views.eric, name="eric"),
     path("<str:name>", views.greet, name="greet")
 ]
-
