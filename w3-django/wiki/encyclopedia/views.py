@@ -92,8 +92,8 @@ def create(request):
         })
 
 
-def edit(request, title):
+def edit(request):
     return render(request, "encyclopedia/edit.html", {
-        "title": title,
+        # "title": title,
         "form": NewSearchForm()
     })
