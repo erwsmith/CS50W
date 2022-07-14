@@ -10,16 +10,11 @@
 
     <ul>
         {% for entry in entries %}
-            <li>{{ entry }}</li>
+            <li><a href="/wiki/{{ entry }}">{{ entry }}</a></li>
         {% endfor %}
     </ul>
-    
-    
-    <a href="{% url 'encyclopedia:index' %}">index</a>
 
 {% endblock %}
 
-<!-- <a href="{% url 'entry' %}">{{ entry }}</a> -->
-<!-- <a href="/wiki/Python">Python</a> -->
-<!-- <a href="{% url 'entries/Python' %}">Python</a> -->
-<!-- <a href="{% url 'encyclopedia:entry' %}">{{ entry }}</a> -->
+<!-- <a href="{% url 'encyclopedia:entry' %}">{{ title }}</a> -->
+<!-- <li><a href="{% url 'wiki:entry' %}">{{ entry }}</a></li> -->
