@@ -6,7 +6,8 @@
 
 {% block body %}
 
-    <h1>Search Result</h1>
-    <h2>{{ query }}</h2>
+    <body>
+        {{ entry | safe }}
+    </body>
 
 {% endblock %}
