@@ -25,8 +25,10 @@ def entry(request, title):
     })
 
 
-def searchResult(request):
-    return render(request, "encyclopedia/searchResult.html", {
+def search(request):
+    query = "query placeholder"
+    return render(request, "encyclopedia/search.html", {
+        "query": query
     })
 
 
