@@ -8,7 +8,7 @@ from . import util
 
 
 class NewSearchForm(forms.Form):
-    query = forms.CharField(label="Query")
+    query = forms.CharField(label="Search Encyclopedia", max_length=100)
 
 
 # VIEWS
@@ -26,22 +26,7 @@ def entry(request, title):
 
 
 def searchResult(request):
-    if request.method == "POST":
-        form = NewSearchForm(request.POST)
-        if form.is_valid():
-            # get data from form and check if they match an existing entry
-            query = form.cleaned_data["query"]
-            request.session["query"] = query
-            return HttpResponseRedirect(reverse("encyclopedia:searchResult"))
-        else:
-            return render(request, "encyclopedia/index.html", {
-                "entries": util.list_entries()
-            })
-
-    if query == 'Python':
-        return render(request, "encyclopedia/entry.html", {
-        "title": query,
-        "entry": markdown2.markdown(util.get_entry(query))
+    return render(request, "encyclopedia/searchResult.html", {
     })
 
 
