@@ -9,7 +9,7 @@
         <link href="{% static 'encyclopedia/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <div class="row">
+        <div class="row ml-sm-2">
             <div class="sidebar col-lg-2 col-md-3">
                 <h2>Wiki</h2>
                 <form action="{% url 'encyclopedia:search' %}" method="POST">
@@ -22,7 +22,7 @@
                     <a href="{% url 'encyclopedia:index' %}">Home</a>
                 </div>
                 <div>
-                    <a href="{% url 'encyclopedia:create' %}">Create New Page</a>
+                    <a href="{% url 'encyclopedia:create' %}">New Page</a>
                 </div>
                 <div>
                     <a href="{% url 'encyclopedia:edit' %}">Edit Page</a>
@@ -30,7 +30,7 @@
                 {% block nav %}
                 {% endblock %}
             </div>
-            <div class="main col-lg-10 col-md-9">
+            <div class="col mr-4 ml-2">
                 {% block body %}
                 {% endblock %}
             </div>
