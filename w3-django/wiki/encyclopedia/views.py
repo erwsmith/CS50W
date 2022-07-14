@@ -79,17 +79,30 @@ def search(request):
             })
     # if request method is not POST
     return render(request, "encyclopedia/index.html", {
+        "entries": util.list_entries(),
         "form": NewSearchForm()
     })
 
 
 def create(request):
-    return render(request, "encyclopedia/create.html", {
-        "form": NewSearchForm()
-    })
+    if request.method == "POST":
+        title = "Test"
+        content = "# Test\nThis is test content."
+        util.save_entry(title, content)
+        
+        return render(request, "encyclopedia/search.html", {
+                    "query": title,
+                    "entry": markdown2.markdown(util.get_entry(title)),
+                    "form": NewSearchForm()
+                })
+    else:
+        return render(request, "encyclopedia/create.html", {
+            "form": NewSearchForm()
+        })
 
 
 def edit(request):
     return render(request, "encyclopedia/edit.html", {
         "form": NewSearchForm()
+        
     })
