@@ -28,39 +28,51 @@ def entry(request, title):
 
 
 def search(request):
-    query = "query not set"
-
-    # get current list of entries
-    entries = util.list_entries()
-
-    # convert all entries in list to lowercase
-    entries = [entry.lower() for entry in entries]
-
     # get search query 
     if request.method == "POST":
+        # get text entered in form
         form = NewSearchForm(request.POST)
+        # validate form submission
         if form.is_valid():
+            # clean data and set all letters to lowercase
             query = form.cleaned_data["query"].lower()
-
-            # check if the query exists
+            # if the query exists, go directly to its page
+            # convert all entries in list to lowercase
+            # get current list of entries
+            entries = util.list_entries()
+            entries = [entry.lower() for entry in entries]
             if query in entries:
                 return render(request, "encyclopedia/search.html", {
                     "query": query,
                     "form": NewSearchForm(),
                     "entry": markdown2.markdown(util.get_entry(query))
                 })
-            else:
+            # setup list of partial matches
+            searchResult = []
+            partialMatch = False
+            entries = util.list_entries()
+            for entry in entries:
+                if query.lower() in entry.lower():
+                    partialMatch = True
+                    searchResult.append(entry)
+            # return partial matches
+            if partialMatch:
                 return render(request, "encyclopedia/index.html", {
-                    "entries": util.list_entries(),
-                    "form": NewSearchForm(),
-                })
-
-        else:
-            query = "form is not valid"
-            return render(request, "encyclopedia/index.html", {
+                "entries": searchResult,
                 "form": NewSearchForm()
             })
-    
+            else:
+                return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(),
+                "form": NewSearchForm()
+            })
+        # if form text is invalid
+        else:
+            return render(request, "encyclopedia/index.html", {
+                "entries": util.list_entries(),
+                "form": NewSearchForm()
+            })
+    # if request method is not POST
     return render(request, "encyclopedia/index.html", {
         "form": NewSearchForm()
     })
