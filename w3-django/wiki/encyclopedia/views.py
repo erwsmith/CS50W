@@ -1,7 +1,7 @@
 import markdown2
 
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import render
 from . import util
@@ -20,11 +20,16 @@ def index(request):
 
 
 def entry(request, title):
-    return render(request, "encyclopedia/entry.html", {
-        "title": title,
-        "entry": markdown2.markdown(util.get_entry(title)),
-        "form": NewSearchForm()
-    })
+    entries = util.list_entries()
+    entries = [entry.lower() for entry in entries]
+    if title in entries:
+        return render(request, "encyclopedia/entry.html", {
+            "title": title,
+            "entry": markdown2.markdown(util.get_entry(title)),
+            "form": NewSearchForm()
+        })
+    else:
+        return HttpResponse('Page not found')
 
 
 def search(request):
