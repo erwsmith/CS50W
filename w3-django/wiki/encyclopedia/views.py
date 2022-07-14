@@ -10,6 +10,10 @@ from . import util
 class NewSearchForm(forms.Form):
     query = forms.CharField(label="Search Encyclopedia", max_length=100)
 
+class NewEntryForm(forms.Form):
+    title = forms.CharField(label="Title", max_length=100)
+    content = forms.CharField(label="Content", max_length=10000)
+
 
 # VIEWS
 def index(request):
@@ -73,23 +77,23 @@ def search(request):
 
 def create(request):
     if request.method == "POST":
-        title = "Test Title"
-        content = "# Test Heading\nThis is test content."
-        util.save_entry(title, content)
-        
-        return render(request, "encyclopedia/search.html", {
-                    "query": title,
-                    "entry": markdown2.markdown(util.get_entry(title)),
-                    "form": NewSearchForm()
-                })
+        form = NewEntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
+        else:
+            return HttpResponse('invalid form')
+
     else:
         return render(request, "encyclopedia/create.html", {
             "form": NewSearchForm()
         })
 
 
-def edit(request):
+def edit(request, title):
     return render(request, "encyclopedia/edit.html", {
+        "title": title,
         "form": NewSearchForm()
-        
     })
