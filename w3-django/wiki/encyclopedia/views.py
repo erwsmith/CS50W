@@ -30,12 +30,16 @@ def index(request):
 
 
 def entry(request, title):
-    return render(request, "encyclopedia/entry.html", {
-        "title": title,
-        "entry": markdown2.markdown(util.get_entry(title)),
-        "form": NewSearchForm()
-    })
-
+    entries = util.list_entries()
+    entries_lower = [e.lower() for e in entries]
+    if title.lower() in entries_lower:
+        return render(request, "encyclopedia/entry.html", {
+            "title": title,
+            "entry": markdown2.markdown(util.get_entry(title)),
+            "form": NewSearchForm()
+        })
+    else:
+        return HttpResponse('Page not found')
 
 def search(request):
     # get search query 
