@@ -125,6 +125,5 @@ def edit(request, title):
 def randomPage(request):
     if request.method == "GET":
         title = random.choice(util.list_entries())
-        # return HttpResponse(title)
         return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
     
