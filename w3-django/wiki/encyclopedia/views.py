@@ -1,10 +1,13 @@
 import markdown2
 
 from django import forms
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
+
 from . import util
+
+
 
 
 class NewSearchForm(forms.Form):
@@ -15,7 +18,9 @@ class NewEntryForm(forms.Form):
     content = forms.CharField(label="Content", max_length=10000)
 
 class EditForm(forms.Form):
+    title = forms.CharField(label="Title", max_length=100)
     content = forms.CharField(label="Content", max_length=10000)
+
 
 # VIEWS
 def index(request):
@@ -83,8 +88,14 @@ def create(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
-            util.save_entry(title, content)
-            return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
+            # check if title already exists
+            entries = util.list_entries()
+            entries_lower = [e.lower() for e in entries]
+            if title.lower() in entries_lower:
+                return HttpResponse('Title already exists, please choose another title. Click back button to rename.')
+            else:
+                util.save_entry(title, content)
+                return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
         else:
             return HttpResponse('invalid form')
 
@@ -104,6 +115,7 @@ def edit(request, title):
     elif request.method == "POST":
         form = EditForm(request.POST)
         if form.is_valid():
+            title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
             util.save_entry(title, content)
             return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
