@@ -14,6 +14,8 @@ class NewEntryForm(forms.Form):
     title = forms.CharField(label="Title", max_length=100)
     content = forms.CharField(label="Content", max_length=10000)
 
+class EditForm(forms.Form):
+    content = forms.CharField(label="Content", max_length=10000)
 
 # VIEWS
 def index(request):
@@ -92,8 +94,18 @@ def create(request):
         })
 
 
-def edit(request):
-    return render(request, "encyclopedia/edit.html", {
-        # "title": title,
-        "form": NewSearchForm()
-    })
+def edit(request, title):
+    if request.method == "GET":
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "entry": util.get_entry(title),
+            "form": NewSearchForm()
+        })
+    elif request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
+        else:
+            return HttpResponse('invalid form')
