@@ -6,15 +6,12 @@
 
 {% block body %}
 
-    <h1>Edit Page</h1>
+    <h1>Editing {{ title }}</h1>
 
     <form method="POST">
         {% csrf_token %}
-        <label for="editedContent">Label</label>
-        <textarea id="editedContent" name="editedContent" class="form-control mx-auto mb-2" rows="24"></textarea>
-        <input type="submit" value="Save Changes" class="btn btn-primary my-sm-2">
+        <textarea id="content" name="content" class="form-control m-sm-2" rows="24">{{ entry }}</textarea>
+        <input type="submit" value="Save Changes" class="btn btn-primary m-sm-2">
     </form>
 
 {% endblock %}
-
-<!-- <label for="editedContent">{{ title }}</label> -->
