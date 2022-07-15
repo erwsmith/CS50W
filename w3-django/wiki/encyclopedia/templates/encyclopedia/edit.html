@@ -10,6 +10,7 @@
 
     <form method="POST">
         {% csrf_token %}
+        <textarea id="title" name="title" class="form-control m-sm-2" rows="1" required>{{ title }}</textarea>
         <textarea id="content" name="content" class="form-control m-sm-2" rows="24">{{ entry }}</textarea>
         <input type="submit" value="Save Changes" class="btn btn-primary m-sm-2">
     </form>
