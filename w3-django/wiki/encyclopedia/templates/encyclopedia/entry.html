@@ -6,6 +6,15 @@
 
 {% block body %}
 
-    {{ entry | safe }}
+    <ul class="nav nav-tabs mx-sm-2 my-sm-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Read</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'encyclopedia:edit' title %}">Edit</a>
+        </li>
+    </ul>
+
+    <div class="container-fluid">{{ entry | safe }}</div>
 
 {% endblock %}
