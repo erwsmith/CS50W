@@ -1,4 +1,5 @@
 import markdown2
+import random
 
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,8 +7,6 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from . import util
-
-
 
 
 class NewSearchForm(forms.Form):
@@ -121,3 +120,11 @@ def edit(request, title):
             return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
         else:
             return HttpResponse('invalid form')
+
+
+def randomPage(request):
+    if request.method == "GET":
+        title = random.choice(util.list_entries())
+        # return HttpResponse(title)
+        return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
+    
