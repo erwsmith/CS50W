@@ -7,5 +7,8 @@ def index (request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
-def login_request(request):
-    return render(request, "login.html")
+def login(request):
+    return render(request, "users/login.html")
+
+def logout(request):
+    return render(request, "users/login.html")
