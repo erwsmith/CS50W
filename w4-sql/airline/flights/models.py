@@ -6,8 +6,8 @@ class Flight(models.Model):
     destination = models.CharField(max_length=64)
     duration = models.IntegerField()
 
-    # def __str__(self):
-    #     return f"{self.origin} to {self.destination}, {self.duration}"
+    def __str__(self):
+        return f"{self.origin} to {self.destination}, {self.duration}"
 
 # NOTE: This is how to use and test the Flight model
 # These 2 lines on initial creation/update only: 
