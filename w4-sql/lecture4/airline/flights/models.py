@@ -1,6 +1,8 @@
 from django.db import models
 
-# NOTE: to apply changes, run: $ python3 manage.py makemigrations
+# NOTE: to apply changes, run: 
+# $ python3 manage.py makemigrations
+# $ python3 manage.py migrate
 
 class Airport(models.Model):
     code = models.CharField(max_length=3)
