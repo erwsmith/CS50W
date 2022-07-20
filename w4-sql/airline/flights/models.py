@@ -18,6 +18,17 @@ class Flight(models.Model):
     def __str__(self):
         return f"{self.id}: {self.origin} to {self.destination}"
 
+
+class Passenger(models.Model):
+    first = models.CharField(max_length=64)
+    last = models.CharField(max_length=64)
+    flights = models.ManyToManyField(Flight, blank=True, related_name="passengers")
+
+    def __str__(self):
+        return f"{self.first} {self.last}"
+
+# NOTE: each model must be added to admin.py
+
 # NOTE: This is how to use and test the Flight model
 # These 2 lines on initial creation/update only: 
 # $ python3 manage.py makemigrations
