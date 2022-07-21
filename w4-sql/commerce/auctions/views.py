@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User
+from .forms import CreateEntryForm
 
 
 def index(request):
@@ -67,12 +69,19 @@ def register(request):
 
 def create_listing(request):
     if request.method == "POST":
-        # title
-        # description
-        # starting bid
-        # image url (optional)
-        # category (optional)
-        pass
+        form = CreateEntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            starting_bid = form.cleaned_data["starting_bid"]
+            image_url = form.cleaned_data["image_url"]
+            category = form.cleaned_data["category"]
+            # TODO create model to save this data
+            return HttpResponseRedirect(reverse('auctions:listing_view', kwargs=({
+                "title":title
+                })))
+        else:
+            return HttpResponse('invalid form')
     else:
         return render(request, "auctions/create_listing.html")
 
@@ -83,3 +92,9 @@ def watchlist(request):
 
 def categories(request):
     return render(request, "auctions/categories.html")
+
+
+def listing_view(request, title):
+    return render(request, "auctions/listing_view.html", {
+            "title": title,
+        })
