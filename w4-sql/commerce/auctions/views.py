@@ -8,6 +8,8 @@ from .models import User
 
 
 def index(request):
+    '''This page shows all active listings'''
+    # title, description, current price, and photo (if one exists for the listing).
     return render(request, "auctions/index.html")
 
 
@@ -61,3 +63,23 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def create_listing(request):
+    if request.method == "POST":
+        # title
+        # description
+        # starting bid
+        # image url (optional)
+        # category (optional)
+        pass
+    else:
+        return render(request, "auctions/create_listing.html")
+
+
+def watchlist(request):
+    return render(request, "auctions/watchlist.html")
+
+
+def categories(request):
+    return render(request, "auctions/categories.html")
