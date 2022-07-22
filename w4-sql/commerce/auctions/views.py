@@ -5,8 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing
-from .forms import CreateEntryForm
+from .models import Bid, User, Listing
+from .forms import BidForm, CreateEntryForm
 
 
 def index(request):
@@ -78,9 +78,21 @@ def categories(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-    return render(request, "auctions/listing.html", {
-        "listing": listing        
-    })
+
+    if request.method == "POST":
+
+        form = BidForm(request.POST)
+
+        if form.is_valid():
+            b = Bid(bid = form.cleaned_data["bid"])
+            b.save()
+        else:
+            return HttpResponse("invalid form")
+    
+    else:
+        return render(request, "auctions/listing.html", {
+            "listing": listing        
+        })
 
 
 def create_listing(request, username):
