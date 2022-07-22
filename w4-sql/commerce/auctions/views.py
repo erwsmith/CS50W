@@ -67,25 +67,6 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-def create_listing(request):
-    if request.method == "POST":
-        form = CreateEntryForm(request.POST)
-        if form.is_valid():
-            listing_title = form.cleaned_data["listing_title"]
-            description = form.cleaned_data["description"]
-            starting_bid = form.cleaned_data["starting_bid"]
-            image_url = form.cleaned_data["image_url"]
-            category = form.cleaned_data["category"]
-            # TODO save the above
-            return HttpResponseRedirect(reverse('auctions:listing', kwargs=({
-                "listing_id": listing.id
-                })))
-        else:
-            return HttpResponse('invalid form')
-    else:
-        return render(request, "auctions/create_listing.html")
-
-
 def watchlist(request):
     return render(request, "auctions/watchlist.html")
 
@@ -97,10 +78,31 @@ def categories(request):
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing.html", {
-        "listing": listing,
-        "listing_title": listing.listing_title,
-        "description": listing.description,
-        "starting_bid": listing.starting_bid,
-        "image_url": listing.image_url,
-        "category": listing.category        
+        "listing": listing        
     })
+
+
+def create_listing(request):
+    if request.method == "POST":
+        
+        form = CreateEntryForm(request.POST)
+        
+        if form.is_valid():
+
+            # Create new listing object with form data
+            listing = Listing(
+                listing_title = form.cleaned_data["listing_title"],
+                description = form.cleaned_data["description"],
+                starting_bid = form.cleaned_data["starting_bid"],
+                image_url = form.cleaned_data["image_url"],
+                category = form.cleaned_data["category"]
+            )
+            
+            # Save the above as a new listing in the database
+            listing.save()
+
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        else:
+            return HttpResponse("invalid form")
+    else:
+        return render(request, "auctions/create_listing.html")
