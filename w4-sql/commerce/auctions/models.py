@@ -3,7 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    # username, email, password
     pass
 
 class Listing(models.Model):
@@ -21,3 +20,6 @@ class Listing(models.Model):
 
 # class Comments():
 #     pass
+
+# class Categories():
+#     pass 
