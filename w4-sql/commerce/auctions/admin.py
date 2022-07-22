@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import Listing
+from .models import User, Listing
 
 # Register your models here.
 class ListingAdmin(admin.ModelAdmin):
@@ -8,3 +9,4 @@ class ListingAdmin(admin.ModelAdmin):
 
 # use ListingAdmin settings with Listing
 admin.site.register(Listing, ListingAdmin)
+admin.site.register(User, UserAdmin)
