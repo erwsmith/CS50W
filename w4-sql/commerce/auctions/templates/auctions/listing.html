@@ -8,13 +8,13 @@
 
     <h1>{{ listing.listing_title}}</h1>
 
-    <img src="{{ image_url }}" alt="listing image" style="width:50%">
+    <img src="{{ listing.image_url }}" alt="{{ listing.image_url }}" style="width:50%">
     
-    <br><br>
+    <br>
 
     {{ listing.description }}
     
-    <br><br>
+    <br>
 
     <h3>${{ listing.starting_bid }}</h3>
 
