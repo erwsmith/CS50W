@@ -11,8 +11,9 @@ from .forms import CreateEntryForm
 
 def index(request):
     '''This page shows all active listings'''
-    # title, description, current price, and photo (if one exists for the listing).
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
