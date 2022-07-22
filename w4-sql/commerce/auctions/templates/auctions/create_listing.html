@@ -4,7 +4,7 @@
 
     <h2>Create Listing</h2>
 
-    <form action="{% url 'listing' listing.id %}" method="POST">
+    <form method="POST">
         {% csrf_token %}
         <textarea id="listing_title" name="listing_title" class="form-control mx-auto mb-2" rows="1" placeholder="Title" required></textarea>
         <textarea id="description" name="description" class="form-control mx-auto mb-2" rows="8" placeholder="Description" required></textarea>
