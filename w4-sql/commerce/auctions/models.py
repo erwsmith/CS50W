@@ -6,6 +6,12 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
+    listing_owner = models.ForeignKey(
+        User,
+        models.SET_NULL,
+        null=True,
+        related_name="owner",
+        )
     listing_title = models.CharField(max_length=100)
     description = models.CharField(max_length=10000)
     starting_bid = models.DecimalField(decimal_places=2, max_digits=12)
