@@ -6,14 +6,24 @@
 
 {% block body %}
 
-    <h1>{{ listing.title}}</h1>
-    <a href="{{ image_url }}">listing image</a>
-    <ul>
-        <li>{{ listing.description }}</li>
-        <li>Starting Bid: ${{ listing.starting_bid }}</li>
-        <li>Category: {{ listing.category }}</li>
-    </ul>
+    <h1>{{ listing.listing_title}}</h1>
+
+    <img src="{{ image_url }}" alt="listing image" style="width:50%">
     
-    <f6>Listing id {{ listing.id }}</f6>
+    <br><br>
+
+    {{ listing.description }}
+    
+    <br><br>
+
+    <h3>${{ listing.starting_bid }}</h3>
+
+    <h4>Details</h4>
+    <ul>
+        <li>Listed by </li>
+        <li>Category: {{ listing.category }}</li>
+        <li>Listing id {{ listing.id }}</li>
+    </ul>
 
 {% endblock %}
+

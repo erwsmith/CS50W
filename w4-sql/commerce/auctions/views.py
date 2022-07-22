@@ -71,12 +71,12 @@ def create_listing(request):
     if request.method == "POST":
         form = CreateEntryForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data["title"]
+            listing_title = form.cleaned_data["listing_title"]
             description = form.cleaned_data["description"]
             starting_bid = form.cleaned_data["starting_bid"]
             image_url = form.cleaned_data["image_url"]
             category = form.cleaned_data["category"]
-            # TODO create model to save this data
+            # TODO save the above
             return HttpResponseRedirect(reverse('auctions:listing', kwargs=({
                 "listing_id": listing.id
                 })))
@@ -98,7 +98,7 @@ def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        "title": listing.title,
+        "listing_title": listing.listing_title,
         "description": listing.description,
         "starting_bid": listing.starting_bid,
         "image_url": listing.image_url,
