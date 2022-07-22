@@ -5,7 +5,7 @@ from .models import User, Listing
 
 # Register your models here.
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ("listing_title", "description", "starting_bid", "category") 
+    list_display = ("listing_title", "description", "starting_bid", "category", "listing_owner") 
 
 # use ListingAdmin settings with Listing
 admin.site.register(Listing, ListingAdmin)
