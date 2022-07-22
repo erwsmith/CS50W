@@ -41,6 +41,30 @@ def entry(request, title):
     else:
         return HttpResponse('Page not found')
 
+
+def create(request):
+    if request.method == "POST":
+        form = NewEntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            # check if title already exists
+            entries = util.list_entries()
+            entries_lower = [e.lower() for e in entries]
+            if title.lower() in entries_lower:
+                return HttpResponse('Title already exists, please choose another title. Click back button to rename.')
+            else:
+                util.save_entry(title, content)
+                return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
+        else:
+            return HttpResponse('invalid form')
+
+    else:
+        return render(request, "encyclopedia/create.html", {
+            "form": NewSearchForm()
+        })
+
+        
 def search(request):
     # get search query 
     if request.method == "POST":
@@ -83,29 +107,6 @@ def search(request):
         "entries": util.list_entries(),
         "form": NewSearchForm()
     })
-
-
-def create(request):
-    if request.method == "POST":
-        form = NewEntryForm(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data["title"]
-            content = form.cleaned_data["content"]
-            # check if title already exists
-            entries = util.list_entries()
-            entries_lower = [e.lower() for e in entries]
-            if title.lower() in entries_lower:
-                return HttpResponse('Title already exists, please choose another title. Click back button to rename.')
-            else:
-                util.save_entry(title, content)
-                return HttpResponseRedirect(reverse('encyclopedia:entry', kwargs=({"title":title})))
-        else:
-            return HttpResponse('invalid form')
-
-    else:
-        return render(request, "encyclopedia/create.html", {
-            "form": NewSearchForm()
-        })
 
 
 def edit(request, title):
