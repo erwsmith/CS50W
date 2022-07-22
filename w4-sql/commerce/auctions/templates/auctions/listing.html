@@ -20,8 +20,8 @@
 
     <h4>Details</h4>
     <ul>
-        <li>Listed by </li>
-        <li>Category: {{ listing.category }}</li>
+        <li>Listed by {{ listing.listing_owner }}</li>
+        <li>Category: <a href="{% url 'categories' %}">{{ listing.category }}</a></li>
         <li>Listing id: {{ listing.id }}</li>
     </ul>
 
