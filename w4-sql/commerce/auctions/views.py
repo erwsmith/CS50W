@@ -83,7 +83,7 @@ def listing(request, listing_id):
     })
 
 
-def create_listing(request):
+def create_listing(request, username):
     if request.method == "POST":
         
         form = CreateEntryForm(request.POST)
@@ -92,6 +92,7 @@ def create_listing(request):
 
             # Create new listing object with form data
             listing = Listing(
+                listing_owner = User.objects.get(username=username),
                 listing_title = form.cleaned_data["listing_title"],
                 description = form.cleaned_data["description"],
                 starting_bid = form.cleaned_data["starting_bid"],
