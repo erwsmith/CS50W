@@ -8,7 +8,7 @@
 
     <h1>{{ listing.listing_title}}</h1>
 
-    <img src="{{ listing.image_url }}" alt="{{ listing.image_url }}" style="width:50%">
+    <img src="{{ listing.image_url }}" alt="No Image" style="width:50%">
     
     <br>
 
@@ -22,7 +22,7 @@
     <ul>
         <li>Listed by </li>
         <li>Category: {{ listing.category }}</li>
-        <li>Listing id {{ listing.id }}</li>
+        <li>Listing id: {{ listing.id }}</li>
     </ul>
 
 {% endblock %}
