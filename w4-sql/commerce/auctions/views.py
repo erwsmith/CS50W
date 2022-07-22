@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing
 from .forms import CreateEntryForm
 
 
@@ -77,8 +77,8 @@ def create_listing(request):
             image_url = form.cleaned_data["image_url"]
             category = form.cleaned_data["category"]
             # TODO create model to save this data
-            return HttpResponseRedirect(reverse('auctions:listing_view', kwargs=({
-                "title":title
+            return HttpResponseRedirect(reverse('auctions:listing', kwargs=({
+                "listing_id": listing.id
                 })))
         else:
             return HttpResponse('invalid form')
@@ -94,7 +94,13 @@ def categories(request):
     return render(request, "auctions/categories.html")
 
 
-def listing_view(request, title):
-    return render(request, "auctions/listing_view.html", {
-            "title": title,
-        })
+def listing(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "title": listing.title,
+        "description": listing.description,
+        "starting_bid": listing.starting_bid,
+        "image_url": listing.image_url,
+        "category": listing.category        
+    })
