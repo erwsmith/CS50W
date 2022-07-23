@@ -5,13 +5,9 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
 class Listing(models.Model):
-    user = models.ForeignKey(
-        User,
-        models.SET_NULL,
-        null=True,
-        related_name="owner",
-        )
+    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="owner")
     listing_title = models.CharField(max_length=100)
     description = models.CharField(max_length=10000)
     starting_bid = models.DecimalField(decimal_places=2, max_digits=12)
@@ -23,18 +19,8 @@ class Listing(models.Model):
 
 
 class Bid(models.Model):
-    user = models.ForeignKey(
-        User,
-        models.SET_NULL,
-        null=True,
-        related_name="bidder",
-        )
-    listing = models.ForeignKey(
-        Listing,
-        models.SET_NULL,
-        null=True,
-        related_name="bid_listing_id",
-        )
+    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="bidder")
+    listing = models.ForeignKey(Listing, models.SET_NULL, null=True, related_name="bid_listing_id")
     bid = models.DecimalField(decimal_places=2, max_digits=12)
 
     def __str__(self):
