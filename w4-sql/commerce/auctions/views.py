@@ -103,7 +103,7 @@ def listing(request, listing_id):
         form = BidForm(request.POST)
 
         if form.is_valid():
-            b = Bid(bid = form.cleaned_data["bid"])
+            b = Bid(bid=form.cleaned_data["bid"])
             b.save()
         else:
             return HttpResponse("invalid form")
