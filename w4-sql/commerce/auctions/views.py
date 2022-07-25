@@ -73,7 +73,16 @@ def watchlist(request):
 
 
 def categories(request):
-    return render(request, "auctions/categories.html")
+    categories = Listing.objects.values("category")
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+
+def category(request, category):
+    return render(request, "auctions/category.html", {
+        "category": category
+    })
 
 
 def listing(request, listing_id):
@@ -104,7 +113,7 @@ def create_listing(request, username):
 
             # Create new listing object with form data
             listing = Listing(
-                listing_owner = User.objects.get(username=username),
+                user = User.objects.get(username=username),
                 listing_title = form.cleaned_data["listing_title"],
                 description = form.cleaned_data["description"],
                 starting_bid = form.cleaned_data["starting_bid"],
