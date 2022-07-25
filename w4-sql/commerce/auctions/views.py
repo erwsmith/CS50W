@@ -110,7 +110,8 @@ def listing(request, listing_id):
     
     else:
         return render(request, "auctions/listing.html", {
-            "listing": listing        
+            "listing": listing, 
+            "form": BidForm()
         })
 
 
