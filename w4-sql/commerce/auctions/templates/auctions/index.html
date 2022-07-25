@@ -1,7 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <div class="container mb-2 p-2">
+        <h2>Active Listings</h2>
+    </div>
 
     {% for listing in listings %}
     <a href="{% url 'listing' listing.id %}">
@@ -12,7 +14,7 @@
                 </div> 
                 <div class="col">
                     <h2>{{ listing.listing_title }}</h2>
-                    <h3>{{ listing.starting_bid }}</h3>
+                    <h3>${{ listing.current_price }}</h3>
                     <p>{{ listing.description }}</p>
                 </div>
             </div>
