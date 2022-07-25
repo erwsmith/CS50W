@@ -26,7 +26,7 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, models.SET_NULL, null=True, related_name="category_id", blank=True)
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.listing_title}"
 
 
 class Bid(models.Model):
