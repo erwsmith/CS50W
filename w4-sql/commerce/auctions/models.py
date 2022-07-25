@@ -15,13 +15,14 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.category_name}"
 
+
 class Listing(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="owner")
-    category = models.ForeignKey(Category, models.SET_NULL, null=True, related_name="category_id", blank=True)
     listing_title = models.CharField(max_length=100)
     description = models.CharField(max_length=10000)
     starting_bid = models.DecimalField(decimal_places=2, max_digits=12)
     image_url = models.URLField(max_length=2048, blank=True)
+    category = models.ForeignKey(Category, models.SET_NULL, null=True, related_name="category_id", blank=True, choices=Category.objects.values("category_name"))
 
     def __str__(self):
         return f"{self.id}"
