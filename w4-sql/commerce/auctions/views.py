@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Bid, User, Listing
+from .models import User, Listing, Bid, Comment, Category
 from .forms import BidForm, CreateEntryForm
 
 
@@ -73,7 +73,7 @@ def watchlist(request):
 
 
 def categories(request):
-    categories = Listing.objects.values("category")
+    categories = Category.objects.values("category")
     return render(request, "auctions/categories.html", {
         "categories": categories
     })

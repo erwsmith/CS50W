@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment, Category
 
 # Django Admin Settings
 class ListingAdmin(admin.ModelAdmin):
@@ -13,9 +13,13 @@ class BidAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("comment", "user", "listing", "id")
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("category_name", "id")
+
 
 # Model registration
 admin.site.register(User, UserAdmin)
 admin.site.register(Listing, ListingAdmin)
 admin.site.register(Bid, BidAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Category, CategoryAdmin)
