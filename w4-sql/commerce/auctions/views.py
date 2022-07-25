@@ -115,24 +115,20 @@ def listing(request, listing_id):
 
 
 def create_listing(request, username):
-    
-    form = CreateEntryForm(request.POST)
 
     if request.method == "POST":
-        
+        form = CreateEntryForm(request.POST)
         if form.is_valid():
 
             # Create new listing object with form data
-            listing = form.save(commit=False)
-
-            # listing = Listing(
-            #     user = User.objects.get(username=username),
-            #     listing_title = form.cleaned_data["listing_title"],
-            #     description = form.cleaned_data["description"],
-            #     starting_bid = form.cleaned_data["starting_bid"],
-            #     image_url = form.cleaned_data["image_url"],
-            #     category = form.cleaned_data["category"]
-            # )
+            listing = Listing(
+                user = User.objects.get(username=username),
+                listing_title = form.cleaned_data["listing_title"],
+                description = form.cleaned_data["description"],
+                starting_bid = form.cleaned_data["starting_bid"],
+                image_url = form.cleaned_data["image_url"],
+                category = form.cleaned_data["category"]
+            )
             
             # Save the above as a new listing in the database
             listing.save()
@@ -143,5 +139,5 @@ def create_listing(request, username):
 
     else:
         return render(request, "auctions/create_listing.html", {
-            "form": form
+            "form": CreateEntryForm()
         })
