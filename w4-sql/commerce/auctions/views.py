@@ -73,9 +73,8 @@ def watchlist(request):
 
 
 def categories(request):
-    categories = Category.objects.values("category")
     return render(request, "auctions/categories.html", {
-        "categories": categories
+        "categories": Category.objects.all()
     })
 
 
