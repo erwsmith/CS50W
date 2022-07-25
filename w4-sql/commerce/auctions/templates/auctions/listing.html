@@ -7,23 +7,22 @@
 {% block body %}
 
     <h1>{{ listing.listing_title}}</h1>
-
-    <img src="{{ listing.image_url }}" alt="No Image" style="width:50%">
     
-    <br>
+    <div class="col-6">
+        <img src="{{ listing.image_url }}" alt="No Image" style="width:50%">
+    </div>
 
-    {{ listing.description }}
-    
-    <br>
-
-    <h3>${{ listing.starting_bid }}</h3>
-
-    <h4>Details</h4>
-    <ul>
-        <li>Listed by {{ listing.user }}</li>
-        <li>Category: <a href="{% url 'categories' %}">{{ listing.category }}</a></li>
-        <li>Listing id: {{ listing.id }}</li>
-    </ul>
+    <div class="col-6">
+        {{ listing.description }}
+        <br>
+        <h3>${{ listing.starting_bid }}</h3>
+        <h4>Details</h4>
+        <ul>
+            <li>Listed by {{ listing.user }}</li>
+            <li>Category: <a href="{% url 'categories' %}">{{ listing.category }}</a></li>
+            <li>Listing id: {{ listing.id }}</li>
+        </ul>
+    </div>
 
 {% endblock %}
 
