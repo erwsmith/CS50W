@@ -4,16 +4,20 @@
     <h2>Active Listings</h2>
 
     {% for listing in listings %}
-        <a href="{% url 'listing' listing.id %}">
-            <img src="{{ listing.image_url }}" alt=" " style="width:25%">
-        </a>
-        <br>
-        <a href="{% url 'listing' listing.id %}">{{ listing.listing_title }}</a>
-        <br>
-        {{ listing.starting_bid }}
-        <br>
-        {{ listing.description }}
-        <hr>
+    <a href="{% url 'listing' listing.id %}">
+        <div class="container border border-gray mb-4 p-2">
+            <div class="row">
+                <div class="col">
+                    <img src="{{ listing.image_url }}" alt=" " style="width:50%">
+                </div> 
+                <div class="col">
+                    <h2>{{ listing.listing_title }}</h2>
+                    <h3>{{ listing.starting_bid }}</h3>
+                    <p>{{ listing.description }}</p>
+                </div>
+            </div>
+        </div>
+    </a>
     {% endfor %}
 
 {% endblock %}
