@@ -73,9 +73,20 @@ def watchlist(request):
 
 
 def categories(request):
+    # TODO - see Airline/flights/views.py, flight(); (commented in below) for how it accesses all passengers
+    # listing = Listing.objects.get(pk=?)
     return render(request, "auctions/categories.html", {
-        "categories": Category.objects.all()
+        "categories": Category.objects.all(),
+        # TODO fix this: "listings": listing.category.all(),
     })
+
+# def flight(request, flight_id):
+#     flight = Flight.objects.get(pk=flight_id)
+#     return render(request, "flights/flight.html", {
+#         "flight": flight,
+#         "passengers": flight.passengers.all(),
+#         "non_passengers": Passenger.objects.exclude(flights=flight).all()
+#     })
 
 
 def category(request, category):
@@ -104,22 +115,24 @@ def listing(request, listing_id):
 
 
 def create_listing(request, username):
+    
+    form = CreateEntryForm(request.POST)
 
     if request.method == "POST":
-        
-        form = CreateEntryForm(request.POST)
         
         if form.is_valid():
 
             # Create new listing object with form data
-            listing = Listing(
-                user = User.objects.get(username=username),
-                listing_title = form.cleaned_data["listing_title"],
-                description = form.cleaned_data["description"],
-                starting_bid = form.cleaned_data["starting_bid"],
-                image_url = form.cleaned_data["image_url"],
-                category = form.cleaned_data["category"]
-            )
+            listing = form.save(commit=False)
+
+            # listing = Listing(
+            #     user = User.objects.get(username=username),
+            #     listing_title = form.cleaned_data["listing_title"],
+            #     description = form.cleaned_data["description"],
+            #     starting_bid = form.cleaned_data["starting_bid"],
+            #     image_url = form.cleaned_data["image_url"],
+            #     category = form.cleaned_data["category"]
+            # )
             
             # Save the above as a new listing in the database
             listing.save()
@@ -127,7 +140,8 @@ def create_listing(request, username):
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
         else:
             return HttpResponse("invalid form")
+
     else:
         return render(request, "auctions/create_listing.html", {
-            "categories": Category.objects.all()
+            "form": form
         })
