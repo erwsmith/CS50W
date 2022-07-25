@@ -5,7 +5,7 @@ from .models import User, Listing, Bid, Comment, Category
 
 # Django Admin Settings
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ("listing_title", "user", "description", "starting_bid", "category", "id") 
+    list_display = ("listing_title", "user", "description", "current_price", "starting_bid", "category", "id")
 
 class BidAdmin(admin.ModelAdmin):
     list_display = ("user", "listing", "bid", "id")
