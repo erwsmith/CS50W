@@ -5,9 +5,9 @@
 
     {% for category in categories %}
 
-        {% if category.category != ""  %}
+        {% if category.category_name != ""  %}
         <ul>
-            <li><a href="{% url 'category' category.category %}">{{ category.category }}</a></li>
+            <li><a href="{% url 'category' category.category_name %}">{{ category.category_name }}</a></li>
         </ul>
         {% endif %}    
 
