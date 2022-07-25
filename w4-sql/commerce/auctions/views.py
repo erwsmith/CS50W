@@ -127,6 +127,7 @@ def create_listing(request, username):
                 listing_title = form.cleaned_data["listing_title"],
                 description = form.cleaned_data["description"],
                 starting_bid = form.cleaned_data["starting_bid"],
+                current_price = form.cleaned_data["starting_bid"],
                 image_url = form.cleaned_data["image_url"],
                 category = form.cleaned_data["category"]
             )
