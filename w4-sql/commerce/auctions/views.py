@@ -104,6 +104,7 @@ def listing(request, listing_id):
 
 
 def create_listing(request, username):
+
     if request.method == "POST":
         
         form = CreateEntryForm(request.POST)
@@ -127,4 +128,6 @@ def create_listing(request, username):
         else:
             return HttpResponse("invalid form")
     else:
-        return render(request, "auctions/create_listing.html")
+        return render(request, "auctions/create_listing.html", {
+            "categories": Category.objects.all()
+        })
