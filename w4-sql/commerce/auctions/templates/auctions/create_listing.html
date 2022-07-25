@@ -10,7 +10,17 @@
         <textarea id="description" name="description" class="form-control mx-auto mb-2" rows="8" placeholder="Description" required></textarea>
         <textarea id="starting_bid" name="starting_bid" class="form-control mx-auto mb-2" rows="1" placeholder="Starting Bid" required></textarea>
         <textarea id="image_url" name="image_url" class="form-control mx-auto mb-2" rows="1" placeholder="Image URL"></textarea>
-        <textarea id="category" name="category" class="form-control mx-auto mb-2" rows="1" placeholder="Category"></textarea>
+        
+        <label for="category">Category:</label>
+        <select name="category" class="form-control mx-auto mb-2" default_value="Select Category">
+            <option value="none" selected disabled hidden> -- </option>
+            {% for category in categories %}
+                <option value="{{ category.category_name }}">{{ category.category_name }}</option>
+            {% endfor %}
+        </select>
+        
+        <br>
+        
         <input type="submit" value="Save" class="btn btn-primary my-sm-2">
     </form>
 
