@@ -13,6 +13,9 @@ class CreateEntryForm(forms.Form):
 class BidForm(forms.Form):
     bid = forms.DecimalField(label="", decimal_places=2, max_digits=12, required=True, min_value=0)
 
+# TODO get current_price from listing to give to BidForm
+# Need to use Bid model
+# Listing.objects.values("current_price")
 
 # class Watchlist(forms.Form):
 #     pass
