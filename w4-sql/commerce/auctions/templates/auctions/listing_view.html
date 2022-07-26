@@ -12,9 +12,11 @@
             <h1>{{ listing.listing_title }}</h1>
         </div>
         <div class="row m-2">
-            <button type="button" class="btn btn-secondary">Watchlist</button>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="submit" id="watchlist_button" name="watchlist_button" value="Watchlist" class="btn btn-secondary">
+            </form>
         </div>
-        
         <div class="row m-2">
             <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="height:500px">
         </div>
@@ -29,7 +31,7 @@
             <form class="form-inline mx-2" method="POST">
                 {% csrf_token %}
                 {{ form | crispy }}
-                <input type="submit" value="Place Bid" class="btn btn-primary mx-2">
+                <input type="submit" id="bid_form" name="bid_form" value="Place Bid" class="btn btn-primary mx-2">
             </form>
         </div>
         <div class="row m-2">
