@@ -73,12 +73,10 @@ def watchlist(request):
 
 
 def categories(request):
-    # TODO - see Airline/flights/views.py, flight(); (commented in below) for how it accesses all passengers
-    # listing = Listing.objects.get(pk=?)
     return render(request, "auctions/categories.html", {
         "categories": Category.objects.all(),
-        # TODO fix this: "listings": listing.category.all(),
     })
+
 
 # def flight(request, flight_id):
 #     flight = Flight.objects.get(pk=flight_id)
@@ -89,11 +87,13 @@ def categories(request):
 #     })
 
 
-def category(request, category):
-    return render(request, "auctions/category.html", {
-        "category": category
+def category_view(request, category_id):
+    listings = Listing.objects.all()
+    category = Category.objects.get(pk=category_id),
+    return render(request, "auctions/category_view.html", {
+        "category": category,
+        "listings": listings
     })
-
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -110,7 +110,7 @@ def listing(request, listing_id):
     
     else:
         return render(request, "auctions/listing.html", {
-            "listing": listing, 
+            "listing": listing,
             "form": BidForm()
         })
 
