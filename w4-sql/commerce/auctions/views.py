@@ -65,10 +65,14 @@ def register(request):
 
 
 def watchlist_view(request, user_id):
-    watchlist = Watchlist.objects.get(user=user_id)
-    return render(request, "auctions/watchlist_view.html", {
-        "listings": watchlist.listings.all()
-    })
+    try:
+        watchlist = Watchlist.objects.get(user=user_id)
+        return render(request, "auctions/watchlist_view.html", {
+            "listings": watchlist.listings.all()
+        })
+    except:
+        # TODO #1 flash message "You don't have a watchlist yet."
+        return HttpResponseRedirect(reverse("index"))
 
 
 def categories(request):
