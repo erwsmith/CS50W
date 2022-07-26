@@ -4,6 +4,10 @@
 
     <div class="container mb-2 p-2">
         <h2>Watchlist: {{ user.username }}</h2>
+
+        {% if message %}
+            <div>{{ message }}</div>
+        {% endif %}
     </div>
     {% if listings %}
         {% for listing in listings %}
@@ -23,7 +27,7 @@
             </a>
         {% endfor %}
     {% else %}
-        <p>This category is empty.</p>
+
     {% endif %}
 
 {% endblock %}
