@@ -23,7 +23,7 @@ class Listing(models.Model):
     starting_bid = models.DecimalField(decimal_places=2, max_digits=12)
     current_price = models.DecimalField(decimal_places=2, max_digits=12)
     image_url = models.URLField(max_length=2048, blank=True)
-    category = models.ForeignKey(Category, models.SET_NULL, null=True, related_name="category_id", blank=True)
+    category = models.ForeignKey(Category, models.SET_NULL, null=True, related_name="category_listings", blank=True)
 
     def __str__(self):
         return f"{self.listing_title}"
