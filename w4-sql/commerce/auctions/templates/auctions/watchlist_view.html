@@ -2,6 +2,23 @@
 
 {% block body %}
     
-    <h2>Watchlist View</h2>    
+    <h2>{{ user.username }}'s Watchlist </h2>    
+
+    {% if listings %}
+        {% for listing in listings %}
+            <a href="{% url 'listing_view' listing.id %}">
+                <img src="{{ listing.image_url }}" alt=" " style="width:25%">
+            </a>
+            <br>
+            <a href="{% url 'listing_view' listing.id %}">{{ listing.listing_title }}</a>
+            <br>
+            {{ listing.current_price }}
+            <br>
+            {{ listing.description }}
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>This category is empty.</p>
+    {% endif %}
 
 {% endblock %}
