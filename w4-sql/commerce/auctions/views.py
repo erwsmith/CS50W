@@ -84,30 +84,33 @@ def category_view(request, category_id):
 
 def listing_view(request, listing_id):
     if request.method == "POST":
-        form = BidForm(request.POST)
-        if form.is_valid():
-            listing = Listing.objects.get(pk=listing_id)
-            b = Bid(
-                user = User.objects.get(pk=int(request.user.id)),
-                listing = listing,
-                bid = form.cleaned_data["bid"],
-                )
-            bid_value = b.bid
-            if bid_value > listing.current_price:
-                b.save()
-                listing.current_price = bid_value
-                listing.save()
-                listing = Listing.objects.get(pk=listing_id)
-                category = Category.objects.get(category_name=listing.category)
-                return render(request, "auctions/listing_view.html", {
-                    "listing": listing,
-                    "category":category,
-                    "form": BidForm(),
-                })
-            else:
-                return HttpResponse("bid is too low")    
+        if "watchlist_button" in request.POST:
+            return HttpResponse("watchlist button clicked successfully")
         else:
-            return HttpResponse("invalid form")
+            form = BidForm(request.POST)
+            if form.is_valid():
+                listing = Listing.objects.get(pk=listing_id)
+                b = Bid(
+                    user = User.objects.get(pk=int(request.user.id)),
+                    listing = listing,
+                    bid = form.cleaned_data["bid"],
+                    )
+                bid_value = b.bid
+                if bid_value > listing.current_price:
+                    b.save()
+                    listing.current_price = bid_value
+                    listing.save()
+                    listing = Listing.objects.get(pk=listing_id)
+                    category = Category.objects.get(category_name=listing.category)
+                    return render(request, "auctions/listing_view.html", {
+                        "listing": listing,
+                        "category":category,
+                        "form": BidForm(),
+                    })
+                else:
+                    return HttpResponse("bid is too low")
+            else:
+                return HttpResponse("invalid form")
     else:
         listing = Listing.objects.get(pk=listing_id)
         category = Category.objects.get(category_name=listing.category)
