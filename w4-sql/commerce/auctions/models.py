@@ -47,6 +47,6 @@ class Comment(models.Model):
         return f"{self.id}"
 
 # TODO finish / test this:
-# class watchlist(models.Model):
+# class Watchlist(models.Model):
 #     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="user_watchlist")
 #     listings = models.ManyToManyField(Listing, blank=True, related_name="watched_listings")
