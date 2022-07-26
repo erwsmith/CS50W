@@ -64,8 +64,10 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-def watchlist(request):
-    return render(request, "auctions/watchlist.html")
+def watchlist_view(request, user_id):
+    return render(request, "auctions/watchlist_view.html", {
+        "user_id": user_id
+    })
 
 
 def categories(request):
