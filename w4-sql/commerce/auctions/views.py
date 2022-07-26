@@ -78,22 +78,13 @@ def categories(request):
     })
 
 
-# def flight(request, flight_id):
-#     flight = Flight.objects.get(pk=flight_id)
-#     return render(request, "flights/flight.html", {
-#         "flight": flight,
-#         "passengers": flight.passengers.all(),
-#         "non_passengers": Passenger.objects.exclude(flights=flight).all()
-#     })
-
-
 def category_view(request, category_id):
-    listings = Listing.objects.all()
-    category = Category.objects.get(pk=category_id),
+    category = Category.objects.get(pk=category_id)
     return render(request, "auctions/category_view.html", {
         "category": category,
-        "listings": listings
+        "listings": category.category_listings.all()
     })
+
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
