@@ -83,7 +83,6 @@ def category_view(request, category_id):
 
 
 def listing_view(request, listing_id):
-    listing = Listing.objects.get(pk=listing_id)
     if request.method == "POST":
         form = BidForm(request.POST)
         if form.is_valid():
@@ -92,8 +91,11 @@ def listing_view(request, listing_id):
         else:
             return HttpResponse("invalid form")
     else:
+        listing = Listing.objects.get(pk=listing_id)
+        category = Category.objects.get(category_name=listing.category)
         return render(request, "auctions/listing_view.html", {
             "listing": listing,
+            "category":category,
             "form": BidForm(),
         })
 
@@ -114,7 +116,7 @@ def create_listing(request, username):
             )
             # Save the above as a new listing in the database
             listing.save()
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+            return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         else:
             return HttpResponse("invalid form")
     else:
