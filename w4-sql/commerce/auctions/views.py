@@ -18,12 +18,10 @@ def index(request):
 
 def login_view(request):
     if request.method == "POST":
-
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-
         # Check if authentication successful
         if user is not None:
             login(request, user)
@@ -45,7 +43,6 @@ def register(request):
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
-
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
@@ -53,7 +50,6 @@ def register(request):
             return render(request, "auctions/register.html", {
                 "message": "Passwords must match."
             })
-
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
@@ -86,32 +82,26 @@ def category_view(request, category_id):
     })
 
 
-def listing(request, listing_id):
+def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-
     if request.method == "POST":
-
         form = BidForm(request.POST)
-
         if form.is_valid():
             b = Bid(bid=form.cleaned_data["bid"])
             b.save()
         else:
             return HttpResponse("invalid form")
-    
     else:
-        return render(request, "auctions/listing.html", {
+        return render(request, "auctions/listing_view.html", {
             "listing": listing,
-            "form": BidForm()
+            "form": BidForm(),
         })
 
 
 def create_listing(request, username):
-
     if request.method == "POST":
         form = CreateEntryForm(request.POST)
         if form.is_valid():
-
             # Create new listing object with form data
             listing = Listing(
                 user = User.objects.get(username=username),
@@ -122,14 +112,11 @@ def create_listing(request, username):
                 image_url = form.cleaned_data["image_url"],
                 category = form.cleaned_data["category"]
             )
-            
             # Save the above as a new listing in the database
             listing.save()
-
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
         else:
             return HttpResponse("invalid form")
-
     else:
         return render(request, "auctions/create_listing.html", {
             "form": CreateEntryForm()
