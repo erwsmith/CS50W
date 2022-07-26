@@ -38,6 +38,14 @@ class Bid(models.Model):
         return f"{self.id}"
 
 
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="user_watchlist")
+    listings = models.ManyToManyField(Listing, blank=True, related_name="watchlist_listing_id")
+
+    def __str__(self):
+        return f"{self.id}"
+
+
 class Comment(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="commenter",)
     listing = models.ForeignKey(Listing, models.SET_NULL, null=True, related_name="comment_listing_id",)
@@ -45,8 +53,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.id}"
-
-# TODO finish / test this:
-# class Watchlist(models.Model):
-#     user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="user_watchlist")
-#     listings = models.ManyToManyField(Listing, blank=True, related_name="watched_listings")
