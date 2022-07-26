@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Bid, Comment, Category
+from .models import User, Listing, Bid, Comment, Category, Watchlist
 from .forms import BidForm, CreateEntryForm
 
 
@@ -65,8 +65,9 @@ def register(request):
 
 
 def watchlist_view(request, user_id):
+    watchlist = Watchlist.objects.get(user=user_id)
     return render(request, "auctions/watchlist_view.html", {
-        "user_id": user_id
+        "listings": watchlist.listings.all()
     })
 
 
