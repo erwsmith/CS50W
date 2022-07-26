@@ -39,7 +39,7 @@ class Bid(models.Model):
 
 
 class Watchlist(models.Model):
-    user = models.ForeignKey(User, models.SET_NULL, null=True, related_name="user_watchlist")
+    user = models.OneToOneField(User, models.SET_NULL, null=True, related_name="user_watchlist", unique=True)
     listings = models.ManyToManyField(Listing, blank=True, related_name="watchlist_listing_id")
 
     def __str__(self):
