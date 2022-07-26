@@ -2,16 +2,21 @@
 
 {% block body %}
     <h2>{{ category.category_name }}</h2>
-    {% for listing in listings %}
-        <a href="{% url 'listing' listing.id %}">
-            <img src="{{ listing.image_url }}" alt=" " style="width:25%">
-        </a>
-        <br>
-        <a href="{% url 'listing' listing.id %}">{{ listing.listing_title }}</a>
-        <br>
-        {{ listing.starting_bid }}
-        <br>
-        {{ listing.description }}
-        <hr>
-    {% endfor %}
+    {% if listings %}
+        {% for listing in listings %}
+            <a href="{% url 'listing_view' listing.id %}">
+                <img src="{{ listing.image_url }}" alt=" " style="width:25%">
+            </a>
+            <br>
+            <a href="{% url 'listing_view' listing.id %}">{{ listing.listing_title }}</a>
+            <br>
+            {{ listing.starting_bid }}
+            <br>
+            {{ listing.description }}
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>This category is empty.</p>
+    {% endif %}
+        
 {% endblock %}
