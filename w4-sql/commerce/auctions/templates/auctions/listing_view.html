@@ -38,7 +38,7 @@
         <div class="row m-2">
             <ul>
                 <li>Listed by {{ listing.user }}</li>
-                <li>Category: <a href="{% url 'categories' %}">{{ listing.category }}</a></li>
+                <li>Category: <a href="{% url 'category_view' category.id %}">{{ listing.category }}</a></li>
                 <li>Listing id: {{ listing.id }}</li>
             </ul>
         </div>
