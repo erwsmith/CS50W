@@ -7,7 +7,7 @@
 
         {% if category.category_name != ""  %}
         <ul>
-            <li><a href="{% url 'category' category.category_name %}">{{ category.category_name }}</a></li>
+            <li><a href="{% url 'category_view' category.id %}">{{ category.category_name }}</a></li>
         </ul>
         {% endif %}    
 
