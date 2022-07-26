@@ -1,25 +1,29 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+
     <div class="container mb-2 p-2">
         <h2>Active Listings</h2>
     </div>
-
-    {% for listing in listings %}
-    <a href="{% url 'listing_view' listing.id %}">
-        <div class="container border border-gray mb-4 p-2">
-            <div class="row">
-                <div class="col">
-                    <img src="{{ listing.image_url }}" alt=" " style="width:50%">
-                </div> 
-                <div class="col">
-                    <h2>{{ listing.listing_title }}</h2>
-                    <h3>${{ listing.current_price }}</h3>
-                    <p>{{ listing.description }}</p>
+    {% if listings %}
+        {% for listing in listings %}
+            <a href="{% url 'listing_view' listing.id %}">
+                <div class="container border border-gray mb-4 p-2">
+                    <div class="row">
+                        <div class="col">
+                            <img src="{{ listing.image_url }}" alt=" " style="width:50%">
+                        </div> 
+                        <div class="col">
+                            <h2>{{ listing.listing_title }}</h2>
+                            <h3>${{ listing.current_price }}</h3>
+                            <p>{{ listing.description }}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </a>
-    {% endfor %}
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>There are no active listings.</p>
+    {% endif %}
 
 {% endblock %}
