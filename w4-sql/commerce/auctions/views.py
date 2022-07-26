@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -71,8 +72,9 @@ def watchlist_view(request, user_id):
             "listings": watchlist.listings.all()
         })
     except:
-        # TODO #1 flash message "You don't have a watchlist yet."
-        return HttpResponseRedirect(reverse("index"))
+        return render(request, "auctions/watchlist_view.html", {
+            "message": "Your watchlist is currently empty.",
+        })
 
 
 def categories(request):
@@ -92,7 +94,21 @@ def category_view(request, category_id):
 def listing_view(request, listing_id):
     if request.method == "POST":
         if "watchlist_button" in request.POST:
-            return HttpResponse("watchlist button clicked successfully")
+            listing = Listing.objects.get(pk=listing_id)
+            try:
+                # THIS NEEDS TO BE FIXED, IT'S MAKING A NEW WATCHLIST EVERY TIME
+                watchlist = Watchlist.objects.get(pk=int(request.user.id))
+                watchlist.listings.add(listing)
+                return render(request, "auctions/listing_view.html", {
+                    "message": "Listing saved to your watchlist."
+                })
+            except:
+                watchlist = Watchlist(
+                    user = User.objects.get(pk=int(request.user.id)),
+                )
+                watchlist.save()
+                watchlist.listings.add(listing)
+                return HttpResponse("New watchlist created & listing saved.")
         else:
             form = BidForm(request.POST)
             if form.is_valid():
@@ -100,7 +116,7 @@ def listing_view(request, listing_id):
                 b = Bid(
                     user = User.objects.get(pk=int(request.user.id)),
                     listing = listing,
-                    bid = form.cleaned_data["bid"],
+                    bid = form.cleaned_data["bid"]
                     )
                 bid_value = b.bid
                 if bid_value > listing.current_price:
