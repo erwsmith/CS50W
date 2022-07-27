@@ -1,5 +1,6 @@
 {% extends "auctions/layout.html" %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block title %}
     {{ listing.listing_title }}
@@ -29,7 +30,7 @@
                 <p>{{ listing.description }}</p>
             </div>
             <div class="row m-2">
-                <h3>${{ listing.current_price }}</h3>
+                <h3>${{ listing.current_price | intcomma }}</h3>
             </div>
             <div class="row m-2">
                 <form class="form-inline mx-2" method="POST">
