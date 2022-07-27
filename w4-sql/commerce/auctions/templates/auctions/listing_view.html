@@ -15,16 +15,19 @@
             <div class="row m-2">
                 <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="height:500px">
             </div>
-            <div class="row m-2">
-                <form method="POST">
-                    {% csrf_token %}
-                    {% if button_type == "add" %}
-                        <input type="submit" id="watchlist_button" name="watchlist_button" value="Add to watchlist" class="btn btn-primary">
-                    {% else %}
-                        <input type="submit" id="watchlist_button" name="rm_watchlist_button" value="Remove from watchlist" class="btn btn-primary">
-                    {% endif %}
-                </form>
-            </div>
+            {% if user != listing.user %}
+                <div class="row m-2">
+                    
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% if watchlist_button == "add" %}
+                                <input type="submit" id="watchlist_button" name="watchlist_button" value="Add to watchlist" class="btn btn-primary">
+                            {% else %}
+                                <input type="submit" id="rm_watchlist_button" name="rm_watchlist_button" value="Remove from watchlist" class="btn btn-primary">
+                            {% endif %}
+                        </form>
+                </div>
+            {% endif %}
             <hr>
             <div class="row m-2">
                 <p>{{ listing.description }}</p>
@@ -33,11 +36,18 @@
                 <h3>${{ listing.current_price | intcomma }}</h3>
             </div>
             <div class="row m-2">
-                <form class="form-inline mx-2" method="POST">
-                    {% csrf_token %}
-                    {{ form | crispy }}
-                    <input type="submit" id="bid_form" name="bid_form" value="Place Bid" class="btn btn-primary mx-2">
-                </form>
+                {% if user == listing.user %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="submit" id="close_button" name="close_button" value="Close Auction" class="btn btn-primary">
+                    </form>
+                {% else%}
+                    <form class="form-inline mx-2" method="POST">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <input type="submit" id="bid_form" name="bid_form" value="Place Bid" class="btn btn-primary mx-2">
+                    </form>
+                {% endif %}
             </div>
             <div class="row m-2">
                 <h5>Details</h5>
