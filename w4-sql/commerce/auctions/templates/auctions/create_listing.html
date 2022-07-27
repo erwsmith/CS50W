@@ -2,13 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-
-    <h2>Create Listing</h2>
-
-    <form method="POST">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <input type="submit" value="Save" class="btn btn-primary my-sm-2">
-    </form>
-
+    <div class="container mb-4 p-2">
+        <h2>Create Listing</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <input type="submit" value="Save" class="btn btn-primary my-sm-2">
+        </form>
+    </div>
 {% endblock %}
