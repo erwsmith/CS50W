@@ -134,8 +134,10 @@ def listing_view(request, listing_id):
                     "category":category,
                     "form": BidForm(),
                 })
-            return HttpResponse("bid is too low")
-        return HttpResponse("invalid form")
+            messages.warning(request, "Bid is too low.")
+            return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
+        messages.warning(request, "Invalid form.")
+        return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
     
     # GET request method handling
     # Check if listing is in user's watchlist
