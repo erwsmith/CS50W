@@ -60,9 +60,9 @@ def register(request):
     return render(request, "auctions/register.html")
 
 
-def watchlist_view(request, user_id):
+def watchlist_view(request):
     try:
-        watchlist = Watchlist.objects.get(user=user_id)
+        watchlist = Watchlist.objects.get(user=int(request.user.id))
         return render(request, "auctions/watchlist_view.html", {
             "listings": watchlist.listings.all()
             })
@@ -86,37 +86,45 @@ def category_view(request, category_id):
 
 
 def listing_view(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    category = Category.objects.get(category_name=listing.category)
+
     if request.method == "POST":
+        
+        # Watchlist handling
+        # Add to watchlist
         if "watchlist_button" in request.POST:
-            listing = Listing.objects.get(pk=listing_id)
-            category = Category.objects.get(category_name=listing.category)
+            # If user has a watchlist already
             try:
-                # THIS NEEDS TO BE FIXED, IT'S MAKING A NEW WATCHLIST EVERY TIME
-                watchlist = Watchlist.objects.get(pk=int(request.user.id))
+                watchlist = Watchlist.objects.get(user=int(request.user.id))
                 watchlist.listings.add(listing)
-                messages.success(request, "Listing added to your watchlist.")
+                messages.success(request, "Listing added to your watchlist!")
                 return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
+            # If user does not have a watchlist yet
             except:
-                watchlist = Watchlist(
-                    user = User.objects.get(pk=int(request.user.id)),
-                )
+                watchlist = Watchlist(user = User.objects.get(pk=int(request.user.id)))
                 watchlist.save()
                 watchlist.listings.add(listing)
-                messages.info(request, "New watchlist created.")
+                messages.success(request, "New watchlist created and listing added!")
                 return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
-        
+        # Remove from watchlist
+        elif "rm_watchlist_button" in request.POST:
+            watchlist = Watchlist.objects.get(user=int(request.user.id))
+            watchlist.listings.remove(listing)
+            messages.success(request, "Listing removed from watchlist")
+            return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
+
+        # Bid handling
         form = BidForm(request.POST)
         if form.is_valid():
-            listing = Listing.objects.get(pk=listing_id)
             b = Bid(
                 user = User.objects.get(pk=int(request.user.id)),
                 listing = listing,
                 bid = form.cleaned_data["bid"]
                 )
-            bid_value = b.bid
-            if bid_value > listing.current_price:
+            if b.bid > listing.current_price:
                 b.save()
-                listing.current_price = bid_value
+                listing.current_price = b.bid
                 listing.save()
                 listing = Listing.objects.get(pk=listing_id)
                 category = Category.objects.get(category_name=listing.category)
@@ -128,12 +136,23 @@ def listing_view(request, listing_id):
                 })
             return HttpResponse("bid is too low")
         return HttpResponse("invalid form")
-    listing = Listing.objects.get(pk=listing_id)
-    category = Category.objects.get(category_name=listing.category)
+    
+    # GET request method handling
+    # Check if listing is in user's watchlist
+    try: 
+        watchlist = Watchlist.objects.get(user=int(request.user.id))
+        if listing in watchlist.listings.all():
+            button_type = "remove" 
+        else:
+            button_type = "add"
+    except: 
+        button_type = "add"
+    
     return render(request, "auctions/listing_view.html", {
         "listing": listing,
         "category":category,
         "form": BidForm(),
+        "button_type": button_type
     })
 
 
