@@ -12,13 +12,17 @@
                 <h1>{{ listing.listing_title }}</h1>
             </div>
             <div class="row m-2">
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="submit" id="watchlist_button" name="watchlist_button" value="Watchlist" class="btn btn-secondary">
-                </form>
+                <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="height:500px">
             </div>
             <div class="row m-2">
-                <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="height:500px">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if button_type == "add" %}
+                        <input type="submit" id="watchlist_button" name="watchlist_button" value="Add to watchlist" class="btn btn-primary">
+                    {% else %}
+                        <input type="submit" id="watchlist_button" name="rm_watchlist_button" value="Remove from watchlist" class="btn btn-primary">
+                    {% endif %}
+                </form>
             </div>
             <hr>
             <div class="row m-2">
