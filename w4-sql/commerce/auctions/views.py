@@ -114,7 +114,8 @@ def listing_view(request, listing_id):
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         # Close auction
         elif "close_button" in request.POST:
-            
+            listing.status = "closed"
+            listing.save()
             messages.success(request, "Auction closed")
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         # Bid handling
