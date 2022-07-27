@@ -9,6 +9,11 @@
 {% block body %}
     {% if user.is_authenticated %}
         <div class="container-fluid m-2">
+            {% if listing.status == "closed" %}
+                <div class="row m-2 p-2" style="background-color:darkorchid; color:white;">
+                    <h2>This listing is closed.</h2>
+                </div>
+            {% endif %}
             <div class="row m-2">
                 <h1>{{ listing.listing_title }}</h1>
             </div>
