@@ -12,4 +12,3 @@ class CreateEntryForm(forms.Form):
 
 class BidForm(forms.Form):
     bid = forms.DecimalField(label="", decimal_places=2, max_digits=12, required=True, min_value=0)
-    
