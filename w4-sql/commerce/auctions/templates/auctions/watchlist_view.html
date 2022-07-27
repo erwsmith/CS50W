@@ -16,6 +16,11 @@
                             <img src="{{ listing.image_url }}" alt=" " style="width:50%">
                         </div> 
                         <div class="col">
+                            {% if listing.status == "closed" %}
+                                <div class="row m-2 p-2" style="background-color:darkorchid; color:white;">
+                                    <h2>This listing is closed.</h2>
+                                </div>
+                            {% endif %}
                             <h2>{{ listing.listing_title }}</h2>
                             <h3>${{ listing.current_price | intcomma }}</h3>
                             <p>{{ listing.description }}</p>
