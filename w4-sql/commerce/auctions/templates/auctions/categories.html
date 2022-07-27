@@ -1,16 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Categories</h2>
-
-    {% for category in categories %}
-
-        {% if category.category_name != ""  %}
-        <ul>
-            <li><a href="{% url 'category_view' category.id %}">{{ category.category_name }}</a></li>
-        </ul>
-        {% endif %}    
-
-    {% endfor %}
-
+    <div class="container mb-4 p-2">
+        <h2>Categories</h2>
+        {% for category in categories %}
+            {% if category.category_name != ""  %}
+                <ul>
+                    <li><a href="{% url 'category_view' category.id %}">{{ category.category_name }}</a></li>
+                </ul>            
+            {% endif %}    
+        {% endfor %}
+    </div>
 {% endblock %}
