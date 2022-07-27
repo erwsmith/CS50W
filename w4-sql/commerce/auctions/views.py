@@ -90,7 +90,6 @@ def listing_view(request, listing_id):
     category = Category.objects.get(category_name=listing.category)
 
     if request.method == "POST":
-        
         # Watchlist handling
         # Add to watchlist
         if "watchlist_button" in request.POST:
@@ -113,7 +112,6 @@ def listing_view(request, listing_id):
             watchlist.listings.remove(listing)
             messages.success(request, "Listing removed from watchlist")
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
-
         # Bid handling
         form = BidForm(request.POST)
         if form.is_valid():
@@ -138,18 +136,16 @@ def listing_view(request, listing_id):
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         messages.warning(request, "Invalid form.")
         return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
-    
     # GET request method handling
     # Check if listing is in user's watchlist
+    button_type = "add"
     try: 
         watchlist = Watchlist.objects.get(user=int(request.user.id))
         if listing in watchlist.listings.all():
             button_type = "remove" 
-        else:
-            button_type = "add"
-    except: 
-        button_type = "add"
-    
+    except:
+        pass
+
     return render(request, "auctions/listing_view.html", {
         "listing": listing,
         "category":category,
