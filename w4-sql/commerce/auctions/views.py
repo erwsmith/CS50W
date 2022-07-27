@@ -14,7 +14,7 @@ def index(request):
     '''This page shows all active listings'''
     return render(request, "auctions/index.html", {
         "listings": Listing.objects.all()
-    })
+        })
 
 
 def login_view(request):
@@ -26,17 +26,15 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
+            messages.success(request, "Login successful")
             return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
         return render(request, "auctions/login.html")
+    return render(request, "auctions/login.html")
 
 
 def logout_view(request):
     logout(request)
+    messages.info(request, "Log out successful.")
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -48,21 +46,18 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
+            messages.warning(request, "Passwords must match.")
+            return render(request, "auctions/register.html")
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
+            messages.warning(request, "Username already taken.")
+            return render(request, "auctions/register.html")
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "auctions/register.html")
+    return render(request, "auctions/register.html")
 
 
 def watchlist_view(request, user_id):
@@ -70,17 +65,16 @@ def watchlist_view(request, user_id):
         watchlist = Watchlist.objects.get(user=user_id)
         return render(request, "auctions/watchlist_view.html", {
             "listings": watchlist.listings.all()
-        })
+            })
     except:
-        return render(request, "auctions/watchlist_view.html", {
-            "message": "Your watchlist is currently empty.",
-        })
+        messages.info(request, "Your watchlist is currently empty.")
+        return render(request, "auctions/watchlist_view.html")
 
 
 def categories(request):
     return render(request, "auctions/categories.html", {
-        "categories": Category.objects.all(),
-    })
+        "categories": Category.objects.all()
+        })
 
 
 def category_view(request, category_id):
@@ -95,53 +89,52 @@ def listing_view(request, listing_id):
     if request.method == "POST":
         if "watchlist_button" in request.POST:
             listing = Listing.objects.get(pk=listing_id)
+            category = Category.objects.get(category_name=listing.category)
             try:
                 # THIS NEEDS TO BE FIXED, IT'S MAKING A NEW WATCHLIST EVERY TIME
                 watchlist = Watchlist.objects.get(pk=int(request.user.id))
                 watchlist.listings.add(listing)
-                return render(request, "auctions/listing_view.html", {
-                    "message": "Listing saved to your watchlist."
-                })
+                messages.success(request, "Listing added to your watchlist.")
+                return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
             except:
                 watchlist = Watchlist(
                     user = User.objects.get(pk=int(request.user.id)),
                 )
                 watchlist.save()
                 watchlist.listings.add(listing)
-                return HttpResponse("New watchlist created & listing saved.")
-        else:
-            form = BidForm(request.POST)
-            if form.is_valid():
+                messages.info(request, "New watchlist created.")
+                return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
+        
+        form = BidForm(request.POST)
+        if form.is_valid():
+            listing = Listing.objects.get(pk=listing_id)
+            b = Bid(
+                user = User.objects.get(pk=int(request.user.id)),
+                listing = listing,
+                bid = form.cleaned_data["bid"]
+                )
+            bid_value = b.bid
+            if bid_value > listing.current_price:
+                b.save()
+                listing.current_price = bid_value
+                listing.save()
                 listing = Listing.objects.get(pk=listing_id)
-                b = Bid(
-                    user = User.objects.get(pk=int(request.user.id)),
-                    listing = listing,
-                    bid = form.cleaned_data["bid"]
-                    )
-                bid_value = b.bid
-                if bid_value > listing.current_price:
-                    b.save()
-                    listing.current_price = bid_value
-                    listing.save()
-                    listing = Listing.objects.get(pk=listing_id)
-                    category = Category.objects.get(category_name=listing.category)
-                    return render(request, "auctions/listing_view.html", {
-                        "listing": listing,
-                        "category":category,
-                        "form": BidForm(),
-                    })
-                else:
-                    return HttpResponse("bid is too low")
-            else:
-                return HttpResponse("invalid form")
-    else:
-        listing = Listing.objects.get(pk=listing_id)
-        category = Category.objects.get(category_name=listing.category)
-        return render(request, "auctions/listing_view.html", {
-            "listing": listing,
-            "category":category,
-            "form": BidForm(),
-        })
+                category = Category.objects.get(category_name=listing.category)
+                messages.success(request, "Your bid was successful!")
+                return render(request, "auctions/listing_view.html", {
+                    "listing": listing,
+                    "category":category,
+                    "form": BidForm(),
+                })
+            return HttpResponse("bid is too low")
+        return HttpResponse("invalid form")
+    listing = Listing.objects.get(pk=listing_id)
+    category = Category.objects.get(category_name=listing.category)
+    return render(request, "auctions/listing_view.html", {
+        "listing": listing,
+        "category":category,
+        "form": BidForm(),
+    })
 
 
 def create_listing(request, username):
@@ -160,10 +153,9 @@ def create_listing(request, username):
             )
             # Save the above as a new listing in the database
             listing.save()
+            messages.success(request, "Listing created!")
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
-        else:
-            return HttpResponse("invalid form")
-    else:
-        return render(request, "auctions/create_listing.html", {
-            "form": CreateEntryForm()
-        })
+        return HttpResponse("invalid form")
+    return render(request, "auctions/create_listing.html", {
+        "form": CreateEntryForm()
+    })
