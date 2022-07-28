@@ -63,8 +63,17 @@
                     <li>Number of bids: {{ bid_count }}</li>
                     <li>Listed by {{ listing.user }}</li>
                     <li>Listing id: {{ listing.id }}</li>
+                    <li>Max bid: {{ bid_max }}</li>
                 </ul>
             </div>
+            {% for bid in bids %}
+                <ul>
+                    <li>id: {{ bid.id }}</li>
+                    <li>bidder: {{ bid.user }}</li>
+                    <li>listing: {{ bid.listing }}</li>
+                    <li>bid: {{ bid.bid }}</li>
+                </ul>            
+            {% endfor %}
         </div>
     {% else %}
         <h1>Please log in or register.</h1>
