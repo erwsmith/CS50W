@@ -89,9 +89,12 @@ def category_view(request, category_id):
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     category = Category.objects.get(category_name=listing.category)
-    bid_count = Bid.objects.filter(listing__id=listing_id).aggregate(Count('bid'))["bid__count"]
-    bid_max = Bid.objects.filter(listing__id=listing_id).aggregate(Max('bid'))["bid__max"]
+
     # TODO identify winner of auction
+    bids = Bid.objects.filter(listing__id=listing_id)
+    bid_count = bids.aggregate(Count('bid'))["bid__count"]
+    bid_max = bids.aggregate(Max('bid'))["bid__max"]
+    # highest_bidder = bids.objects.get()
 
     if request.method == "POST":
         # Watchlist handling
@@ -157,6 +160,8 @@ def listing_view(request, listing_id):
         "form": BidForm(),
         "watchlist_button": watchlist_button,
         "bid_count": bid_count,
+        "bid_max": bid_max, 
+        "bids": bids
     })
 
 def create_listing(request, username):
