@@ -34,13 +34,13 @@
                 </div>
             {% endif %}
             <hr>
-            <div class="row m-2">
+            <div class="row my-2 mx-4">
                 <p>{{ listing.description }}</p>
             </div>
-            <div class="row m-2">
+            <div class="row my-2 mx-4">
                 <h3>${{ listing.current_price | intcomma }}</h3>
             </div>
-            <div class="row m-2">
+            <div class="row my-2 mx-4">
                 {% if user == listing.user %}
                     <form method="POST">
                         {% csrf_token %}
@@ -54,13 +54,14 @@
                     </form>
                 {% endif %}
             </div>
-            <div class="row m-2">
+            <div class="row mt-4 mx-4">
                 <h5>Details</h5>
             </div>
-            <div class="row m-2">
+            <div class="row my-2 mx-4">
                 <ul>
-                    <li>Listed by {{ listing.user }}</li>
                     <li>Category: <a href="{% url 'category_view' category.id %}">{{ listing.category }}</a></li>
+                    <li>Number of bids: {{ bid_count }}</li>
+                    <li>Listed by {{ listing.user }}</li>
                     <li>Listing id: {{ listing.id }}</li>
                 </ul>
             </div>
