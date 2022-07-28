@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Max, Count
 
 from .models import User, Listing, Bid, Comment, Category, Watchlist
 from .forms import BidForm, CreateEntryForm
@@ -88,6 +89,9 @@ def category_view(request, category_id):
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     category = Category.objects.get(category_name=listing.category)
+    bid_count = Bid.objects.filter(listing__id=listing_id).aggregate(Count('bid'))["bid__count"]
+    bid_max = Bid.objects.filter(listing__id=listing_id).aggregate(Max('bid'))["bid__max"]
+    # TODO identify winner of auction
 
     if request.method == "POST":
         # Watchlist handling
@@ -101,7 +105,7 @@ def listing_view(request, listing_id):
                 return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
             # If user does not have a watchlist yet
             except:
-                watchlist = Watchlist(user = User.objects.get(pk=int(request.user.id)))
+                watchlist = Watchlist(user=User.objects.get(pk=int(request.user.id)))
                 watchlist.save()
                 watchlist.listings.add(listing)
                 messages.success(request, "New watchlist created and listing added!")
@@ -133,11 +137,7 @@ def listing_view(request, listing_id):
                 listing = Listing.objects.get(pk=listing_id)
                 category = Category.objects.get(category_name=listing.category)
                 messages.success(request, "Your bid was successful!")
-                return render(request, "auctions/listing_view.html", {
-                    "listing": listing,
-                    "category":category,
-                    "form": BidForm(),
-                })
+                return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
             messages.warning(request, "Bid is too low.")
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         messages.warning(request, "Invalid form.")
@@ -156,8 +156,8 @@ def listing_view(request, listing_id):
         "category":category,
         "form": BidForm(),
         "watchlist_button": watchlist_button,
+        "bid_count": bid_count,
     })
-
 
 def create_listing(request, username):
     if request.method == "POST":
