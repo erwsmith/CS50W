@@ -3,7 +3,7 @@
 {% load humanize %}
 
 {% block title %}
-    {{ listing.listing_title }}
+    Auction: {{ listing.listing_title }}
 {% endblock %}
 
 {% block body %}
@@ -11,7 +11,14 @@
         <div class="container-fluid m-2">
             {% if listing.status == "closed" %}
                 <div class="row m-2 p-2" style="background-color:darkorchid; color:white;">
-                    <h2>This listing is closed.</h2>
+                    <h2>
+                    Listing closed.
+                    {% if user == highest_bidder %}
+                        You won! 
+                    {% endif %}
+                    </h2>
+                        
+                    
                 </div>
             {% endif %}
             <div class="row m-2">
@@ -60,20 +67,31 @@
             <div class="row my-2 mx-4">
                 <ul>
                     <li>Category: <a href="{% url 'category_view' category.id %}">{{ listing.category }}</a></li>
-                    <li>Number of bids: {{ bid_count }}</li>
                     <li>Listed by {{ listing.user }}</li>
                     <li>Listing id: {{ listing.id }}</li>
+                    <li>Number of bids: {{ bid_count }}</li>
                     <li>Max bid: {{ bid_max }}</li>
+                    <li>Status: {{ listing.status }}</li>
+                    {% if listing.status == "closed" %}
+                        <li>Winner: {{ highest_bidder }}</li>
+                    {% else %}
+                        <li>Highest bidder: {{ highest_bidder }}</li>
+                    {% endif %}
                 </ul>
             </div>
-            {% for bid in bids %}
-                <ul>
-                    <li>id: {{ bid.id }}</li>
-                    <li>bidder: {{ bid.user }}</li>
-                    <li>listing: {{ bid.listing }}</li>
-                    <li>bid: {{ bid.bid }}</li>
-                </ul>            
-            {% endfor %}
+            <div class="row mt-4 mx-4">
+                <h5>Bid history</h5>
+            </div>
+            <div class="row mt-4 mx-4">
+                {% for bid in bids %}
+                    <ul>
+                        <li>id: {{ bid.id }}</li>
+                        <li>bidder: {{ bid.user }}</li>
+                        <li>listing: {{ bid.listing }}</li>
+                        <li>bid: {{ bid.bid }}</li>
+                    </ul>            
+                {% endfor %}
+            </div>
         </div>
     {% else %}
         <h1>Please log in or register.</h1>
