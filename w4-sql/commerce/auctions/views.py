@@ -89,7 +89,10 @@ def category_view(request, category_id):
 
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-    category = Category.objects.get(category_name=listing.category)
+    try:
+        category = Category.objects.get(category_name=listing.category)
+    except:
+        category = 0
     comments = Comment.objects.filter(listing__id=listing_id)
 
     # TODO identify winner of auction
@@ -162,7 +165,6 @@ def listing_view(request, listing_id):
                 listing.current_price = b.bid
                 listing.save()
                 listing = Listing.objects.get(pk=listing_id)
-                category = Category.objects.get(category_name=listing.category)
                 messages.success(request, "Your bid was successful!")
                 return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
             messages.warning(request, "Bid is too low.")
