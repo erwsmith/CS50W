@@ -1,3 +1,4 @@
+from operator import is_
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +9,7 @@ from django.urls import reverse
 from django.db.models import Max, Count
 
 from .models import User, Listing, Bid, Comment, Category, Watchlist
-from .forms import BidForm, CreateEntryForm
+from .forms import BidForm, CreateEntryForm, CommentForm
 
 
 def index(request):
@@ -74,7 +75,7 @@ def watchlist_view(request):
 
 def categories(request):
     return render(request, "auctions/categories.html", {
-        "categories": Category.objects.all()
+        "categories": Category.objects.all().order_by('category_name')
         })
 
 
@@ -82,23 +83,30 @@ def category_view(request, category_id):
     category = Category.objects.get(pk=category_id)
     return render(request, "auctions/category_view.html", {
         "category": category,
-        "listings": category.category_listings.all()
+        "listings": category.category_listings.all(),
     })
 
 
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     category = Category.objects.get(category_name=listing.category)
+    comments = Comment.objects.filter(listing__id=listing_id)
 
     # TODO identify winner of auction
     # Get all bids associated with listing
     bids = Bid.objects.filter(listing__id=listing_id)
     # Count number of bids
-    bid_count = bids.aggregate(Count('bid'))["bid__count"]
+    bid_count = bids.aggregate(Count('bid'))['bid__count']
     # Get max bid
-    bid_max = bids.aggregate(Max('bid'))["bid__max"]
+    try:
+        bid_max = f"${bids.aggregate(Max('bid'))['bid__max']:,.2f}"
+    except:
+        bid_max = listing.starting_bid
     # Get max bidder
-    highest_bidder = bids.order_by('-bid')[0].user
+    try:
+        highest_bidder = bids.order_by('-bid')[0].user
+    except:
+        highest_bidder = "No bids"
 
     if request.method == "POST":
         # Watchlist handling
@@ -129,13 +137,25 @@ def listing_view(request, listing_id):
             listing.save()
             messages.success(request, "Auction closed")
             return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
+        # Post comment
+        elif "comment_form" in request.POST:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                c = Comment(
+                user = User.objects.get(pk=int(request.user.id)),
+                listing = listing,
+                comment = comment_form.cleaned_data["comment"]
+                )
+                c.save()
+                messages.success(request, "Comment posted!")
+                return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
         # Bid handling
-        form = BidForm(request.POST)
-        if form.is_valid():
+        bid_form = BidForm(request.POST)
+        if bid_form.is_valid():
             b = Bid(
                 user = User.objects.get(pk=int(request.user.id)),
                 listing = listing,
-                bid = form.cleaned_data["bid"]
+                bid = bid_form.cleaned_data["bid"]
                 )
             if b.bid > listing.current_price:
                 b.save()
@@ -161,13 +181,16 @@ def listing_view(request, listing_id):
     return render(request, "auctions/listing_view.html", {
         "listing": listing,
         "category":category,
-        "form": BidForm(),
+        "bid_form": BidForm(),
+        "comment_form": CommentForm(),
         "watchlist_button": watchlist_button,
         "bid_count": bid_count,
         "bid_max": bid_max, 
         "bids": bids, 
-        "highest_bidder": highest_bidder
+        "highest_bidder": highest_bidder,
+        "comments": comments
     })
+
 
 def create_listing(request, username):
     if request.method == "POST":
