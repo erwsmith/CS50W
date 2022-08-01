@@ -39,7 +39,7 @@
             </div>
 
             <div class="row m-2">
-                <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="width:750px">
+                <img class = "border border-secondary rounded" src="{{ listing.image_url }}" alt="No Image" style="height:250px">
             </div>
             
             <div class="row mx-2" style="width:750px">
@@ -73,7 +73,9 @@
                     </div>
                     <div class="row my-2">
                         <ul>
-                            <li>Category: <a href="{% url 'category_view' category.id %}">{{ category.category_name }}</a></li>
+                            {% if category %}
+                                <li>Category: <a href="{% url 'category_view' category.id %}">{{ category.category_name }}</a></li>
+                            {% endif %}
                             <li>Listed by {{ listing.user }}</li>
                             <li>Number of bids: {{ bid_count }}</li>
                             <li>Status: {{ listing.status }}</li>
