@@ -91,10 +91,14 @@ def listing_view(request, listing_id):
     category = Category.objects.get(category_name=listing.category)
 
     # TODO identify winner of auction
+    # Get all bids associated with listing
     bids = Bid.objects.filter(listing__id=listing_id)
+    # Count number of bids
     bid_count = bids.aggregate(Count('bid'))["bid__count"]
+    # Get max bid
     bid_max = bids.aggregate(Max('bid'))["bid__max"]
-    # highest_bidder = bids.objects.get()
+    # Get max bidder
+    highest_bidder = bids.order_by('-bid')[0].user
 
     if request.method == "POST":
         # Watchlist handling
@@ -161,7 +165,8 @@ def listing_view(request, listing_id):
         "watchlist_button": watchlist_button,
         "bid_count": bid_count,
         "bid_max": bid_max, 
-        "bids": bids
+        "bids": bids, 
+        "highest_bidder": highest_bidder
     })
 
 def create_listing(request, username):
@@ -186,3 +191,10 @@ def create_listing(request, username):
     return render(request, "auctions/create_listing.html", {
         "form": CreateEntryForm()
     })
+
+
+def closed_listings(request):
+    '''This page shows all closed listings'''
+    return render(request, "auctions/closed_listings.html", {
+        "listings": Listing.objects.all()
+        })
