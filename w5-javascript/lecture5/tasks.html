@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Tasks</title>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // by default the submit button is disabled
+                document.querySelector('#submit').disabled = true;
+                // when user types anything in input field
+                document.querySelector('#task').onkeyup = () => {
+                    // only accept entries that are longer than 0
+                    if (document.querySelector('#task').value.length > 0) {
+                        document.querySelector('#submit').disabled = false;
+                    } else {
+                        document.querySelector('#submit').disabled = true;
+                    }
+                };
+                document.querySelector('form').onsubmit = () => {
+                    // save task
+                    const task = document.querySelector('#task').value;
+                    // show task value in js console
+                    console.log(task);
+                    // create new list item
+                    const li = document.createElement('li');
+                    // set list item's innerHTML to the task
+                    li.innerHTML = task;
+                    // appen the new list item to the existing element called tasks
+                    document.querySelector('#tasks').append(li);
+                    // reset form to blank after adding a new task
+                    document.querySelector('#task').value = '';
+                    document.querySelector('#submit').disabled = true;
+                    // Stop form from submitting (do everything client-side)
+                    return false;
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Tasks</h1>
+        <ul id="tasks">
+        </ul>
+        <form>
+            <input id="task", placeholder="New Task" type="text">
+            <input id="submit" type="submit">
+        </form>
+    </body>
+</html>

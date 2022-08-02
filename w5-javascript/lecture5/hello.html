@@ -3,23 +3,35 @@
     <head>
         <title>Hello</title>
         <script>
-            function hello() {
-                // alert('Hello world!');
-                // if heading variable is reassigned later:
-                    // let heading = document.querySelector('h1')
-                // if heading variable will never be reassingned:
-                const heading = document.querySelector('h1')
-                // double vs. triple equal, triple ensures value and type are equal
-                if (heading.innerHTML === 'Hello!') {
-                    heading.innerHTML = 'Goodbye!';
-                } else {
-                    heading.innerHTML = 'Hello!';
-                }
-            }
+            // function hello() {
+            //     // alert('Hello world!');
+            //     // if heading variable is reassigned later:
+            //         // let heading = document.querySelector('h1')
+            //     // if heading variable will never be reassingned:
+            //     const heading = document.querySelector('h1')
+            //     // double vs. triple equal, triple ensures value and type are equal
+            //     if (heading.innerHTML === 'Hello!') {
+            //         heading.innerHTML = 'Goodbye!';
+            //     } else {
+            //         heading.innerHTML = 'Hello!';
+            //     }
+            // }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('form').onsubmit = function() {
+                    // get element with id="name" 
+                    const name = document.querySelector('#name').value;
+                    alert(`Hello, ${name}!`);
+                };
+            });
         </script>
     </head>
     <body>
         <h1>Hello!</h1>
-        <button onclick="hello()">Click Here</button>
+        <!-- <button onclick="hello()">Click Here</button> -->
+        <form>
+            <input autofocus id="name" placeholder="Name" type="text">
+            <input type="submit">
+        </form>
     </body>
 </html>
