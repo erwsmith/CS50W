@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hello</title>
+        <script>
+            function hello() {
+                // alert('Hello world!');
+                // if heading variable is reassigned later:
+                    // let heading = document.querySelector('h1')
+                // if heading variable will never be reassingned:
+                const heading = document.querySelector('h1')
+                // double vs. triple equal, triple ensures value and type are equal
+                if (heading.innerHTML === 'Hello!') {
+                    heading.innerHTML = 'Goodbye!';
+                } else {
+                    heading.innerHTML = 'Hello!';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Hello!</h1>
+        <button onclick="hello()">Click Here</button>
+    </body>
+</html>
