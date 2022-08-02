@@ -15,7 +15,7 @@ from .forms import BidForm, CreateEntryForm, CommentForm
 def index(request):
     '''This page shows all active listings'''
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all()
+        "listings": Listing.objects.all().order_by('-id')
         })
 
 
