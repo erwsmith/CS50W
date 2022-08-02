@@ -14,9 +14,7 @@ from .forms import BidForm, CreateEntryForm, CommentForm
 
 def index(request):
     '''This page shows all active listings'''
-    return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all().order_by('-id')
-        })
+    return render(request, "auctions/index.html", {"listings": Listing.objects.all().order_by('-id')})
 
 
 def login_view(request):
@@ -65,18 +63,14 @@ def register(request):
 def watchlist_view(request):
     try:
         watchlist = Watchlist.objects.get(user=int(request.user.id))
-        return render(request, "auctions/watchlist_view.html", {
-            "listings": watchlist.listings.all()
-            })
+        return render(request, "auctions/watchlist_view.html", {"listings": watchlist.listings.all()})
     except:
         messages.info(request, "Your watchlist is currently empty.")
         return render(request, "auctions/watchlist_view.html")
 
 
 def categories(request):
-    return render(request, "auctions/categories.html", {
-        "categories": Category.objects.all().order_by('category_name')
-        })
+    return render(request, "auctions/categories.html", {"categories": Category.objects.all().order_by('category_name')})
 
 
 def category_view(request, category_id):
@@ -145,10 +139,9 @@ def listing_view(request, listing_id):
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 c = Comment(
-                user = User.objects.get(pk=int(request.user.id)),
-                listing = listing,
-                comment = comment_form.cleaned_data["comment"]
-                )
+                    user=User.objects.get(pk=int(request.user.id)),
+                    listing=listing,
+                    comment=comment_form.cleaned_data["comment"])
                 c.save()
                 messages.success(request, "Comment posted!")
                 return HttpResponseRedirect(reverse("listing_view", args=(listing.id,)))
@@ -156,10 +149,9 @@ def listing_view(request, listing_id):
         bid_form = BidForm(request.POST)
         if bid_form.is_valid():
             b = Bid(
-                user = User.objects.get(pk=int(request.user.id)),
-                listing = listing,
-                bid = bid_form.cleaned_data["bid"]
-                )
+                user=User.objects.get(pk=int(request.user.id)),
+                listing=listing,
+                bid=bid_form.cleaned_data["bid"])
             if b.bid > listing.current_price:
                 b.save()
                 listing.current_price = b.bid
@@ -182,7 +174,7 @@ def listing_view(request, listing_id):
         pass
     return render(request, "auctions/listing_view.html", {
         "listing": listing,
-        "category":category,
+        "category": category,
         "bid_form": BidForm(),
         "comment_form": CommentForm(),
         "watchlist_button": watchlist_button,
@@ -200,14 +192,13 @@ def create_listing(request, username):
         if form.is_valid():
             # Create new listing object with form data
             listing = Listing(
-                user = User.objects.get(username=username),
-                listing_title = form.cleaned_data["listing_title"],
-                description = form.cleaned_data["description"],
-                starting_bid = form.cleaned_data["starting_bid"],
-                current_price = form.cleaned_data["starting_bid"],
-                image_url = form.cleaned_data["image_url"],
-                category = form.cleaned_data["category"]
-            )
+                user=User.objects.get(username=username),
+                listing_title=form.cleaned_data["listing_title"],
+                description=form.cleaned_data["description"],
+                starting_bid=form.cleaned_data["starting_bid"],
+                current_price=form.cleaned_data["starting_bid"],
+                image_url=form.cleaned_data["image_url"],
+                category=form.cleaned_data["category"])
             # Save the above as a new listing in the database
             listing.save()
             messages.success(request, "Listing created!")
@@ -220,6 +211,4 @@ def create_listing(request, username):
 
 def closed_listings(request):
     '''This page shows all closed listings'''
-    return render(request, "auctions/closed_listings.html", {
-        "listings": Listing.objects.all()
-        })
+    return render(request, "auctions/closed_listings.html", {"listings": Listing.objects.all()})
