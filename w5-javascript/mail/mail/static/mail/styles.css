@@ -1,3 +1,10 @@
 textarea {
     min-height: 400px;
 }
+
+inbox_div {
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 8px;
+}
