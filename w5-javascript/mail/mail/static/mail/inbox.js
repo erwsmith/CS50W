@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
   console.log(e);
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-  document.querySelector('#compose-form').addEventListener('submit', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
   // By default, load the inbox
@@ -20,7 +19,8 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
   // Set compose-form to post email on submit
-  document.querySelector('#compose-form').onsubmit = function() {
+  document.querySelector('#compose-form').onsubmit = function(e) {
+    e.preventDefault();
     // POST /emails
     fetch('/emails', {
       method: 'POST',
@@ -35,6 +35,8 @@ function compose_email() {
         // Print result
         console.log(result);
     })
+    load_mailbox('sent');
+    return false;
   }
 }
 
@@ -77,7 +79,6 @@ function load_email(email) {
   document.querySelector('#email-view-body').innerHTML = '';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
-
   // PUT /emails/<int:email_id> - mark email as read
   fetch(`/emails/${email.id}`, {
     method: 'PUT',
@@ -85,6 +86,18 @@ function load_email(email) {
         read: true
     })
   })
+  // Archive email
+  document.querySelector('#archive-button').onclick = function() {
+    // PUT /emails/<int:email_id> - mark email as archived
+    console.log("Archive button clicked!")
+    fetch(`/emails/${email.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: true
+      })
+    })
+    load_mailbox('inbox')
+  }
   // GET /emails/<int:email_id>
   fetch(`/emails/${email.id}`)
   .then(response => response.json())
