@@ -8,7 +8,7 @@ from .models import User, Email
 
 # Django Admin Settings
 class EmailAdmin(admin.ModelAdmin):
-    # list_display = ("user", "sender", "recipients", "subject", "timestamp", "read", "archived", "id")
+    list_display = ("user", "sender", "subject", "timestamp", "read", "archived", "id")
     ordering = ["user"]
 
 
