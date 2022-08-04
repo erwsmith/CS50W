@@ -54,11 +54,11 @@ function load_mailbox(mailbox) {
       // add newline
       document.querySelector('#emails-view').append(document.createElement('hr'));
       // add custom div for read / unread emails
+      let element = document.createElement('inbox_div_unread');
       if (email.read) {
-        const element = document.createElement('inbox_div_read');
-      } else {
-        const element = document.createElement('inbox_div_unread');
+        element = document.createElement('inbox_div_read');
       }
+      // const element = document.createElement('inbox_div_unread');
       element.innerHTML = `${email.sender} ${email.subject} ${email.timestamp}`
       element.id = `${email.id}`
       document.querySelector('#emails-view').append(element);
