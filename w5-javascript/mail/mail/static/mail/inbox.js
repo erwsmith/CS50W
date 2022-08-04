@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', function(e) {
+document.addEventListener('DOMContentLoaded', function() {
   // Use buttons to toggle between views
-  console.log(e);
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
@@ -77,46 +76,73 @@ function load_mailbox(mailbox) {
 function load_email(email) {
   document.querySelector('#email-view').style.display = 'block';
   document.querySelector('#email-view-body').innerHTML = '';
+  document.querySelector('#archive_button').innerHTML = '';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
-  // PUT /emails/<int:email_id> - mark email as read
+  // get email
+  // GET /emails/<int:email_id>
+  fetch(`/emails/${email.id}`)
+  .then(response => response.json())
+  .then(email => {
+    const element0 = document.createElement('div');
+    element0.innerHTML = `From: ${email.sender}`;
+    document.querySelector('#email-view-body').append(element0);
+    const element1 = document.createElement('div');
+    element1.innerHTML = `To: ${email.recipients} `;
+    document.querySelector('#email-view-body').append(element1);
+    const element2 = document.createElement('div');
+    element2.innerHTML = `Subject: ${email.subject}`;
+    document.querySelector('#email-view-body').append(element2);
+    const element3 = document.createElement('div');
+    element3.innerHTML = `Timestamp: ${email.timestamp}`;
+    document.querySelector('#email-view-body').append(element3);
+    const element4 = document.createElement('div');
+    document.querySelector('#email-view-body').append(document.createElement('hr'));
+    element4.innerHTML = `${email.body}`;
+    document.querySelector('#email-view-body').append(element4);
+  });
+  // mark email as read
+  // PUT /emails/<int:email_id>
   fetch(`/emails/${email.id}`, {
     method: 'PUT',
     body: JSON.stringify({
         read: true
     })
   })
-  // Archive email
-  document.querySelector('#archive-button').onclick = function() {
-    // PUT /emails/<int:email_id> - mark email as archived
-    console.log("Archive button clicked!")
-    fetch(`/emails/${email.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-          archived: true
+  // Archive 
+  if (email.archived) {
+    const unarchive_button = document.createElement('button');
+    unarchive_button.innerHTML = "Unarchive";
+    unarchive_button.id = "unarchive-button";
+    unarchive_button.className = "btn btn-sm btn-outline-primary";
+    document.querySelector('#archive_button').append(unarchive_button);
+    document.querySelector('#unarchive-button').onclick = function() {
+      // PUT /emails/<int:email_id> - mark email as unarchived
+      console.log("Unarchive button clicked!")
+      fetch(`/emails/${email.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: false
+        })
       })
-    })
-    load_mailbox('inbox')
+      load_mailbox('inbox')
+    }
+  } else {
+    const archive_button = document.createElement('button');
+    archive_button.innerHTML = "Archive";
+    archive_button.id = "archive-button";
+    archive_button.className = "btn btn-sm btn-outline-primary";
+    document.querySelector('#archive_button').append(archive_button);
+    document.querySelector('#archive-button').onclick = function() {
+      // PUT /emails/<int:email_id> - mark email as unarchived
+      console.log("Archive button clicked!")
+      fetch(`/emails/${email.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: true
+        })
+      })
+      load_mailbox('inbox')
+    }
   }
-  // GET /emails/<int:email_id>
-  fetch(`/emails/${email.id}`)
-  .then(response => response.json())
-  .then(email => {
-      const element0 = document.createElement('div');
-      element0.innerHTML = `From: ${email.sender}`;
-      document.querySelector('#email-view-body').append(element0);
-      const element1 = document.createElement('div');
-      element1.innerHTML = `To: ${email.recipients} `;
-      document.querySelector('#email-view-body').append(element1);
-      const element2 = document.createElement('div');
-      element2.innerHTML = `Subject: ${email.subject}`;
-      document.querySelector('#email-view-body').append(element2);
-      const element3 = document.createElement('div');
-      element3.innerHTML = `Timestamp: ${email.timestamp}`;
-      document.querySelector('#email-view-body').append(element3);
-      const element4 = document.createElement('div');
-      document.querySelector('#email-view-body').append(document.createElement('hr'));
-      element4.innerHTML = `${email.body}`;
-      document.querySelector('#email-view-body').append(element4);
-    });
 }
