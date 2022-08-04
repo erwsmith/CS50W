@@ -2,9 +2,17 @@ textarea {
     min-height: 400px;
 }
 
-inbox_div {
-    border: 1px solid gray;
-    border-radius: 5px;
+inbox_div_read {
+    border: 1px solid red;
+    border-radius: 1px;
     margin: 8px;
     padding: 8px;
+}
+
+inbox_div_unread {
+    border: 1px solid gray;
+    border-radius: 1px;
+    margin: 8px;
+    padding: 8px;
+
 }
