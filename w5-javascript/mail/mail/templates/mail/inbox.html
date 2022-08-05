@@ -22,13 +22,12 @@
     </div>
 
     <div id="email-view">
-        <div id="email-view-body"></div>
+        <div style="white-space: pre-line" id="email-view-body"></div>
         <hr>
-        <div class="row">
-            <div class="col-1" id="reply-button"></div> 
-            <div class="col-1" id="archive_button"></div> 
+        <div class="row mx-auto">
+            <div class="mr-1" id="reply-button"></div> 
+            <div id="archive-button"></div> 
         </div> 
-        
     </div>
 
     <div id="compose-view">
@@ -43,8 +42,8 @@
             <div class="form-group">
                 <input class="form-control" id="compose-subject" placeholder="Subject">
             </div>
-            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input type="submit" class="btn btn-sm btn-outline-primary my-2"/>
+            <textarea class="form-control" id="compose-body" placeholder="Body" autofocus="on"></textarea>
+            <input type="submit" class="btn btn-sm btn-outline-primary my-2" value="Send"/>
         </form>
     </div>
 {% endblock %}
