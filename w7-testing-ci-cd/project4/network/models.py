@@ -25,5 +25,8 @@ class Follower(models.Model):
     user = models.OneToOneField(User, models.SET_NULL, null=True)
     following = models.ManyToManyField(User, blank=True, related_name="followers")
 
+    def is_valid_follower(self):
+        return self.user == self.following
+
     def __str__(self):
         return f"{self.id}"
