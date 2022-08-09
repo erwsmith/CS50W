@@ -1,28 +1,39 @@
 from django.test import TestCase, Client
 from django.db.models import Max
 
-from .models import Post
+from .models import Post, Like, Follower, User
 
 # Create your tests here.
 class NetworkTestCase(TestCase):
-    pass
 
-    # def setUp(self):
-    #     # create airports
-    #     a1 = Airport.objects.create(code="AAA", city="City A")
-    #     a2 = Airport.objects.create(code="BBB", city="City B")
-    #     # create flights
-    #     Flight.objects.create(origin=a1, destination=a2, duration=100)
-    #     Flight.objects.create(origin=a1, destination=a1, duration=200)
-    #     Flight.objects.create(origin=a1, destination=a2, duration=-100)
+    def setUp(self):
+        # create users
+        u1 = User.objects.create(username="erwsmith", email="erwsmith@gmail.com")
+        u2 = User.objects.create(username="user2", email="user2@gmail.com")
+        # create posts
+        p1 = Post.objects.create(user=u1, body="Post A", id=1)
+        p2 = Post.objects.create(user=u2, body="Post B", id=2)
+        # create likes
+        Like.objects.create(post=p1, user=u1, liked=True)
+        Like.objects.create(post=p2, user=u2, liked=True)
+        Like.objects.create(post=p2, user=u1, liked=True)
+        # create followers
+        f1 = Follower.objects.create(user=u1) 
+        f1.following.add(u2)
+        f2 = Follower.objects.create(user=u2)
+        f2.following.add(u1)
 
-    # def test_departures_count(self):
-    #     a = Airport.objects.get(code="AAA")
-    #     self.assertEqual(a.departures.count(), 3)
+    def test_likes_count_1(self):
+        p = Post.objects.get(pk=1)
+        self.assertEqual(p.likes.count(), 1)
     
-    # def test_arrivals_count(self):
-    #     a = Airport.objects.get(code="AAA")
-    #     self.assertEqual(a.arrivals.count(), 1)
+    def test_likes_count_2(self):
+        p = Post.objects.get(pk=2)
+        self.assertEqual(p.likes.count(), 2)
+
+    def followers_count(self):
+        p = User.objects.get(username="erwsmith")
+        self.assertEqual(p.followers.count(), 1)
 
     # def test_valid_flight(self):
     #     a1 = Airport.objects.get(code="AAA")
