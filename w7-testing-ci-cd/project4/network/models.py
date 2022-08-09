@@ -15,13 +15,13 @@ class Post(models.Model):
 
 class Like(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, null=True)
-    post = models.ForeignKey(Post, models.SET_NULL, null=True)
+    post = models.ForeignKey(Post, models.SET_NULL, null=True, related_name="likes")
     liked = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id}"
 
-class Follow(models.Model):
+class Follower(models.Model):
     user = models.OneToOneField(User, models.SET_NULL, null=True)
     following = models.ManyToManyField(User, blank=True, related_name="followers")
 
