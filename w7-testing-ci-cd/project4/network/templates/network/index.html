@@ -2,7 +2,15 @@
 {% load static %}
 
 {% block body %}
-    <h2></h2>
+    <div class="container mb-4 p-2">
+        <h2>Home</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Post" class="btn btn-outline-primary rounded-pill my-sm-2">
+        </form>
+    </div>
+    
 {% endblock %}
 
 {% block script %}
