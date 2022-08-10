@@ -44,10 +44,6 @@ class NetworkTestCase(TestCase):
         f = Follower.objects.get(user=u1)
         self.assertTrue(f.is_valid_follower())
 
-    #     self.assertTrue(f.is_valid_flight())
-    
-    #     self.assertFalse(f.is_valid_flight())
-
     # def test_index(self):
     #     c = Client()
     #     response = c.get("/flights/")
