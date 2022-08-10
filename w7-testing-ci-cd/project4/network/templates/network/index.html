@@ -3,16 +3,37 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div class="container mb-4 p-2">
+<div class="container">
+    <br>
+    <div id="all-view">
+        <div id="all-view-body"></div>
+    </div>
+
+    <div id="following-view">
+        <div id="post-view-body"></div>
+    </div>
+
+    <div id="create-view">
+        <form id="post-form">
+            {% csrf_token %}
+            <textarea class="form-control" id="post-body" placeholder="What's up?" autofocus="on"></textarea>
+            <input type="submit" class="btn btn-outline-primary my-sm-2 rounded-pill" value="Post"/>
+        </form>
+    </div>
+</div>
+    
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}
+
+
+<!-- <div class="container mb-4 p-2">
         <h2 id="posts_view_head"></h2>
         <form id="create_post_form" method="POST" class="border border-light">
             {% csrf_token %}
             {{ form | crispy }}
             <input type="submit" value="Post" class="btn btn-outline-primary rounded-pill my-sm-2">
         </form>
-    </div>
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'network/network.js' %}"></script>
-{% endblock %}
+    </div> -->
