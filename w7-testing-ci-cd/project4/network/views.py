@@ -1,14 +1,31 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .forms import *
+from .models import *
 
 
 def index(request):
-    return render(request, "network/index.html")
+    if request.method == "POST":
+        form = CreatePostForm(request.POST)
+        if form.is_valid():
+            # Create new post object with form data
+            post = Post(
+                user=User.objects.get(username=request.user.username),
+                body=form.cleaned_data["body"],
+            )
+            # Save the above as a new post in the database
+            post.save()
+            messages.success(request, "Post created!")
+            return HttpResponseRedirect(reverse("index"))
+        return HttpResponse("invalid form")
+    return render(request, "network/index.html", {
+        "form": CreatePostForm()
+    })
 
 
 def login_view(request):
