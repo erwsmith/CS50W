@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
         <div class="container mb-4 p-2">
             <h2 id="posts_view_head"></h2>
-            <form id="create_post_form" method="POST" class="border border-light">
+            <form method="POST">
                 {% csrf_token %}
                 {{ form }}
                 <input type="submit" value="Post!" class="btn btn-outline-primary rounded-pill my-sm-2 px-4 py-2">
@@ -22,6 +22,12 @@
                 </div>
                 <div class="row">
                     <p class="my-1 mx-2">{{ post.body }}</p>
+                </div>
+                <div class="row">
+                    <p class="my-2 mx-4 align-middle">{{ post.likes.count }}
+                        <input type="image" src="static/network/liked.png" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
+                        <input type="image" src="static/network/unliked.png" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
+                    </p>
                 </div>
             </div>
         {% endfor %}
