@@ -18,7 +18,9 @@
             {% for post in posts %}
                 <div class="container-md border border-gray rounded mb-2 width:50%">
                     <div class="row">
-                        <button name="profile-button" class="btn btn-light rounded-2 font-weight-bold" id="profile-button">{{ post.user }}</button>
+                        <a href="{% url 'profile' post.user.id %}" name="profile-button" class="btn btn-light rounded-2 font-weight-bold" id="profile-button">
+                            {{ post.user }}
+                        </a>
                         <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
                     </div>
                     <div class="row">
