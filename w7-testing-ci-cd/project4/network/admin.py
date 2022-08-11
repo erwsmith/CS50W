@@ -16,6 +16,7 @@ class LikeAdmin(admin.ModelAdmin):
 class FollowerAdmin(admin.ModelAdmin):
     list_display = ("user", "id")
     ordering = ["user"]
+    filter_horizontal = ("following",)
 
 # Model registration
 admin.site.register(User, UserAdmin)
