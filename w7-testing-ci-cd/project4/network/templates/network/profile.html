@@ -10,10 +10,10 @@
                     <h2 id="posts_view_head">{{ profile_user }}'s profile</h2>
                 </div>
                 <div class="col-md-2">
-                    Following: TODO
+                    Following: {{ follower.following.count }}
                 </div>
                 <div class="col-md-2">
-                    Followers: {{ user.followers.count }}
+                    Followers: {{ profile_user.followers.count }}
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
             {% for post in posts %}
                 <div class="container-md border border-gray rounded mb-2 width:50%">
                     <div class="row">
-                        <button name="profile-button" class="font-weight-bold btn btn-light rounded-2" id="profile-button">{{ post.user }}</button>
+                        <p class="font-weight-bold mx-2 mt-2">{{ post.user }}</p>
                         <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
                     </div>
                     <div class="row">
