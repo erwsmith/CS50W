@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -27,6 +27,46 @@ def index(request):
         "form": CreatePostForm(), 
         "posts": Post.objects.all().order_by('-timestamp'),
     })
+
+def following(request, user_id):
+    if request.method == "POST":
+        form = CreatePostForm(request.POST)
+        if form.is_valid():
+            # Create new post object with form data
+            post = Post(
+                user=User.objects.get(username=request.user.username),
+                body=form.cleaned_data["body"],
+            )
+            # Save the above as a new post in the database
+            post.save()
+            messages.success(request, "Post created!")
+            return HttpResponseRedirect(reverse("index"))
+        return HttpResponse("invalid form")
+    return render(request, "network/index.html", {
+        "form": CreatePostForm(), 
+        "posts": Post.objects.all().order_by('-timestamp'),
+    })
+
+def profile(request, user_id):
+    return render(request, "network/profile.html", {
+        "posts": Post.objects.all().order_by('-timestamp'),
+    })
+
+# def posts_display(request, display):
+#     # Filter posts returned based on display
+#     if display == "profile":
+#         posts = Post.objects.filter(user=request.user)
+#     elif display == "all":
+#         posts = Post.objects.all()
+#     elif display == "following":
+#         posts = Post.objects.all()
+#         # posts = Post.objects.filter(user=request.user.following.all())
+#     else:
+#         return JsonResponse({"error": "Invalid display requested."}, status=400)
+
+#     # Return posts in reverse chronologial order
+#     posts = posts.order_by("-timestamp").all()
+#     return JsonResponse([post.serialize() for post in posts], safe=False)
 
 
 def login_view(request):
