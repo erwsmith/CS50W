@@ -52,11 +52,14 @@ def profile(request, user_id):
     profile_user = User.objects.get(pk=user_id)
     follower = Follower.objects.get(user=profile_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
+    following_bool = False
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "follower": follower,
-        "posts": posts
+        "posts": posts,
+        "following_bool": following_bool
     })
+
 
 # def posts_display(request, display):
 #     # Filter posts returned based on display
