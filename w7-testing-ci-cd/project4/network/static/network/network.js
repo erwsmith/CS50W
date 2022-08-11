@@ -1,40 +1,24 @@
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
     // Use buttons to toggle between views
-    document.querySelector('#user_profile').addEventListener('click', () => load_display('user_profile'));
-    document.querySelector('#all_posts').addEventListener('click', () => load_display('all_posts'));
-    document.querySelector('#following_posts').addEventListener('click', () => load_display('following_posts'));
-    document.querySelector('#create_post').addEventListener('click', create_post);
+    // document.querySelector('#profile').addEventListener('click', () => load_display('profile'));
+    // document.querySelector('#all').addEventListener('click', () => load_display('all'));
+    // document.querySelector('#following').addEventListener('click', () => load_display('following'));
+    // document.querySelector('#compose').addEventListener('click', compose_post);
     // By default, load the inbox
-    load_display('all_posts');
-  });
+    // load_display('all');
+//   });
 
-//   function create_post() {
+
+// function load_display(display) {
 //     // Show create view and hide other views
-//     document.querySelector('#all-view').style.display = 'none';
-//     document.querySelector('#following-view').style.display = 'none';
-//     document.querySelector('#create-view').style.display = 'block';
-//     // Clear out post composition field
-//     document.querySelector('#post-body').value = '';
-//     // Set form to post on submit
-//     document.querySelector('#post-form').onsubmit = function(e) {
-//       e.preventDefault();
-//       // POST /posts
-//       fetch('/posts', {
-//         method: 'POST',
-//         body: JSON.stringify({
-//             body: document.querySelector('#post-body').value,
-//         })
-//       })
-//       .then(response => response.json())
-//       .then(result => {
-//           // Print result
-//           console.log(result);
-//       })
-//       .then(function() {load_display('all_posts');});
-//       return false;
-//     }
-//   }
+//     document.querySelector('#posts-view').style.display = 'block';
 
-//   function load_display(post_filter) {
-//     return false;
-//   }
+//     fetch(`/posts/${display}`)
+//     .then(response => response.json())
+//     .then(posts => {
+//         console.log(posts)
+//         // posts.forEach((post) => {
+//         //     const post_data = [`${post.user}`]
+//         // });
+//     });
+// }
