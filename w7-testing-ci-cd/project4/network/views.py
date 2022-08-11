@@ -24,7 +24,8 @@ def index(request):
             return HttpResponseRedirect(reverse("index"))
         return HttpResponse("invalid form")
     return render(request, "network/index.html", {
-        "form": CreatePostForm()
+        "form": CreatePostForm(), 
+        "posts": Post.objects.all().order_by('-timestamp')
     })
 
 
