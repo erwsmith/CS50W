@@ -1,11 +1,12 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Use buttons to toggle between views
-//     document.querySelector('#all_posts').addEventListener('click', () => load_display('all_posts'));
-//     document.querySelector('#following_posts').addEventListener('click', () => load_display('following_posts'));
-//     document.querySelector('#create_post').addEventListener('click', create_post);
-//     // By default, load the inbox
-//     load_display('all_posts');
-//   });
+document.addEventListener('DOMContentLoaded', function() {
+    // Use buttons to toggle between views
+    document.querySelector('#user_profile').addEventListener('click', () => load_display('user_profile'));
+    document.querySelector('#all_posts').addEventListener('click', () => load_display('all_posts'));
+    document.querySelector('#following_posts').addEventListener('click', () => load_display('following_posts'));
+    document.querySelector('#create_post').addEventListener('click', create_post);
+    // By default, load the inbox
+    load_display('all_posts');
+  });
 
 //   function create_post() {
 //     // Show create view and hide other views
