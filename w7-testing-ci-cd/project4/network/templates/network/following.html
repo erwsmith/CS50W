@@ -5,9 +5,6 @@
     <br>
     {% if user.is_authenticated %}
         <div class="container mb-4 p-2">
-            <h2 id="posts_view_head">This is the Following page</h2>
-        </div>
-        <div class="container mb-4 p-2">
             <h2 id="posts_view_head"></h2>
             <form method="POST">
                 {% csrf_token %}
@@ -15,30 +12,30 @@
                 <input type="submit" value="Post!" class="btn btn-outline-primary rounded-pill my-sm-2 px-4 py-2">
             </form>
         </div>
-        <div id="posts-view">
-            {% if posts %}
-                {% for post in posts %}
-                    <div class="container-md border border-gray rounded mb-2 width:50%">
-                        <div class="row">
-                            <h3 class="mx-2">{{ post.user }}</h3>
-                            <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
-                        </div>
-                        <div class="row">
-                            <p class="my-1 mx-2">{{ post.body }}</p>
-                        </div>
-                        <div class="row">
-                            <p class="my-2 mx-4 align-middle">{{ post.likes.count }}
-                                <input type="image" src="static/network/liked.png" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
-                                <input type="image" src="static/network/unliked.png" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
-                            </p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>There are no posts yet.</p>
-            {% endif %}
-        </div>
     {% endif %}
+    <div id="posts-view">
+        {% if posts %}
+            {% for post in posts %}
+                <div class="container-md border border-gray rounded mb-2 width:50%">
+                    <div class="row">
+                        <button name="profile-button" class="btn btn-light rounded-2 font-weight-bold" id="profile-button">{{ post.user }}</button>
+                        <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
+                    </div>
+                    <div class="row">
+                        <p class="my-1 mx-2">{{ post.body }}</p>
+                    </div>
+                    <div class="row">
+                        <p class="my-2 mx-4 align-middle">{{ post.likes.count }}
+                            <input type="image" src="{% static 'network/liked.png' %}" alt="like" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
+                            <input type="image" src="{% static 'network/unliked.png' %}" alt="unlike" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no posts yet.</p>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block script %}
