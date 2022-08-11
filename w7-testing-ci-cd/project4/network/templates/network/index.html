@@ -1,9 +1,41 @@
 {% extends "network/layout.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block body %}
-<div class="container">
+    <br>
+    {% if user.is_authenticated %}
+        <div class="container mb-4 p-2">
+            <h2 id="posts_view_head"></h2>
+            <form id="create_post_form" method="POST" class="border border-light">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Post!" class="btn btn-outline-primary rounded-pill my-sm-2 px-4 py-2">
+            </form>
+        </div>
+    {% endif %}
+    {% if posts %}
+        {% for post in posts %}
+            <div class="container-md border border-gray rounded mb-2 width:50%">
+                <div class="row">
+                    <h3 class="mx-2">{{ post.user }}</h3>
+                    <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
+                </div>
+                <div class="row">
+                    <p class="my-1 mx-2">{{ post.body }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>There are no posts yet.</p>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}
+
+
+<!-- <div class="container">
     <br>
     <div id="all-view">
         <div id="all-view-body"></div>
@@ -20,20 +52,4 @@
             <input type="submit" class="btn btn-outline-primary my-sm-2 rounded-pill" value="Post"/>
         </form>
     </div>
-</div>
-    
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'network/network.js' %}"></script>
-{% endblock %}
-
-
-<!-- <div class="container mb-4 p-2">
-        <h2 id="posts_view_head"></h2>
-        <form id="create_post_form" method="POST" class="border border-light">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <input type="submit" value="Post" class="btn btn-outline-primary rounded-pill my-sm-2">
-        </form>
-    </div> -->
+</div> -->
