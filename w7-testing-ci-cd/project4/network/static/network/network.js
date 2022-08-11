@@ -1,11 +1,7 @@
 // document.addEventListener('DOMContentLoaded', function() {
-    // Use buttons to toggle between views
-    // document.querySelector('#profile').addEventListener('click', () => load_display('profile'));
-    // document.querySelector('#all').addEventListener('click', () => load_display('all'));
-    // document.querySelector('#following').addEventListener('click', () => load_display('following'));
-    // document.querySelector('#compose').addEventListener('click', compose_post);
-    // By default, load the inbox
-    // load_display('all');
+//     document.querySelector("#profile-button").addEventListener('click', () => {
+//         console.log(`button clicked!`)
+//     });
 //   });
 
 
