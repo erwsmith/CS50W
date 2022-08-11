@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <br>
+    {% if user.is_authenticated %}
+        <div class="container mb-4 p-2">
+            <h2 id="posts_view_head">This is the Profile page</h2>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}
