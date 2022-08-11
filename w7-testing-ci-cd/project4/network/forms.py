@@ -6,9 +6,9 @@ class CreatePostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['body']
-        labels = {
-            'body': '',
-        }
+        # Set form label to blank
+        labels = {'body': ''}
+        # Set HTML attrs for post body form
         widgets = {
             'body': Textarea(attrs={
                 'cols': 80, 
