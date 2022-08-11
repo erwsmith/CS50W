@@ -49,9 +49,13 @@ def following(request, user_id):
 
 
 def profile(request, user_id):
+    profile_user = User.objects.get(pk=user_id)
+    follower = Follower.objects.get(user=profile_user)
+    posts = Post.objects.filter(user=user_id).order_by('-timestamp')
     return render(request, "network/profile.html", {
-        "profile_user": User.objects.get(id=user_id),
-        "posts": Post.objects.filter(user=user_id).order_by('-timestamp'),
+        "profile_user": profile_user,
+        "follower": follower,
+        "posts": posts
     })
 
 # def posts_display(request, display):
