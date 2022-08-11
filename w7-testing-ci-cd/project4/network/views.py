@@ -42,14 +42,16 @@ def following(request, user_id):
             messages.success(request, "Post created!")
             return HttpResponseRedirect(reverse("index"))
         return HttpResponse("invalid form")
-    return render(request, "network/index.html", {
+    return render(request, "network/following.html", {
         "form": CreatePostForm(), 
         "posts": Post.objects.all().order_by('-timestamp'),
     })
 
+
 def profile(request, user_id):
     return render(request, "network/profile.html", {
-        "posts": Post.objects.all().order_by('-timestamp'),
+        "profile_user": User.objects.get(id=user_id),
+        "posts": Post.objects.filter(user=user_id).order_by('-timestamp'),
     })
 
 # def posts_display(request, display):
