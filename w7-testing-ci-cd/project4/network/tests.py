@@ -26,6 +26,7 @@ class NetworkTestCase(TestCase):
         f2.following.add(u1)
         f3 = Follower.objects.create(user=u3)
         f3.following.add(u1)
+        f3.following.add(u2)
 
     def test_likes_count_1(self):
         p = Post.objects.get(pk=1)
@@ -34,15 +35,43 @@ class NetworkTestCase(TestCase):
     def test_likes_count_2(self):
         p = Post.objects.get(pk=2)
         self.assertEqual(p.likes.count(), 3)
-
-    def test_followers_count(self):
-        u = User.objects.get(pk=1)
-        self.assertEqual(u.followers.count(), 2)
-
+    
     def test_valid_follower(self):
         u1 = User.objects.get(username="erwsmith")
         f = Follower.objects.get(user=u1)
         self.assertTrue(f.is_valid_follower())
+
+    # Count total number of followers
+    def test_followers_count_0(self):
+        self.assertEqual(Follower.objects.count(), 3)
+    
+    def test_followers_count_1(self):
+        u = User.objects.get(username="erwsmith")
+        self.assertEqual(u.followers.count(), 2)
+
+    def test_followers_count_2(self):
+        u = User.objects.get(username="user2")
+        self.assertEqual(u.followers.count(), 2)
+
+    def test_followers_count_3(self):
+        u = User.objects.get(username="user3")
+        self.assertEqual(u.followers.count(), 0)
+
+    def test_following_count_1(self):
+        u1 = User.objects.get(username="erwsmith")
+        f1 = Follower.objects.get(user=u1).following.count()
+        self.assertEqual(f1, 1)
+
+    def test_following_count_2(self):
+        u2 = User.objects.get(username="user2")
+        f2 = Follower.objects.get(user=u2).following.count()
+        self.assertEqual(f2, 1)
+
+    def test_following_count_3(self):
+        u3 = User.objects.get(username="user3")
+        f3 = Follower.objects.get(user=u3).following.count()
+        self.assertEqual(f3, 2)
+
 
     # def test_index(self):
     #     c = Client()
