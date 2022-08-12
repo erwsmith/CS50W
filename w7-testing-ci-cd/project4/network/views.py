@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .forms import *
 from .models import *
@@ -23,10 +24,15 @@ def index(request):
             messages.success(request, "Post created!")
             return HttpResponseRedirect(reverse("index"))
         return HttpResponse("invalid form")
+    posts = list(Post.objects.all().order_by('-timestamp'))
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
         "form": CreatePostForm(), 
-        "posts": Post.objects.all().order_by('-timestamp'),
+        "page_obj": page_obj,
     })
+
 
 def following_view(request):
     if request.method == "POST":
