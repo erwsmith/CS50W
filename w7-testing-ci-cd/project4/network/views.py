@@ -28,7 +28,7 @@ def index(request):
         "posts": Post.objects.all().order_by('-timestamp'),
     })
 
-def following(request, user_id):
+def following_view(request, user_id):
     if request.method == "POST":
         form = CreatePostForm(request.POST)
         if form.is_valid():
@@ -54,7 +54,6 @@ def profile(request, user_id):
     active_user_as_follower = Follower.objects.get(user=active_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
     is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
-    
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "posts": posts,
