@@ -77,14 +77,16 @@ class NetworkTestCase(TestCase):
         active_user = User.objects.get(username="user2")
         u1 = User.objects.get(username="erwsmith")
         active_user_as_follower = Follower.objects.get(user=active_user)
-        self.assertTrue(u1 in active_user_as_follower.following.all())
-
+        # self.assertTrue(u1 in active_user_as_follower.following.all()) 
+        # exists() has the same effect as the line above, but much faster db call: 
+        self.assertTrue(active_user_as_follower.following.filter(id=u1.id).exists())
+        
     # is erwsmith following user2? True
     def test_following_1(self):
         active_user = User.objects.get(username="erwsmith")
         u2 = User.objects.get(username="user2")
         active_user_as_follower = Follower.objects.get(user=active_user)
-        self.assertTrue(u2 in active_user_as_follower.following.all())
+        self.assertTrue(active_user_as_follower.following.filter(id=u2.id).exists())
 
     # is user3 following erwsmith and user2? True
     def test_following_2(self):
@@ -92,15 +94,15 @@ class NetworkTestCase(TestCase):
         u1 = User.objects.get(username="erwsmith")
         u2 = User.objects.get(username="user2")
         active_user_as_follower = Follower.objects.get(user=active_user)
-        self.assertTrue(u1 in active_user_as_follower.following.all())
-        self.assertTrue(u2 in active_user_as_follower.following.all())
+        self.assertTrue(active_user_as_follower.following.filter(id=u1.id).exists())
+        self.assertTrue(active_user_as_follower.following.filter(id=u2.id).exists())
 
     # is erwsmith following and user3? False
     def test_following_3(self):
         active_user = User.objects.get(username="erwsmith")
         u3 = User.objects.get(username="user3")
         active_user_as_follower = Follower.objects.get(user=active_user)
-        self.assertFalse(u3 in active_user_as_follower.following.all())
+        self.assertFalse(active_user_as_follower.following.filter(id=u3.id).exists())
 
 
     # def test_index(self):
