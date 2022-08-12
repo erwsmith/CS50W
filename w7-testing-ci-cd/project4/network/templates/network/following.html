@@ -18,7 +18,9 @@
             {% for post in posts %}
                 <div class="container-md border border-gray rounded mb-2 width:50%">
                     <div class="row">
-                        <button name="profile-button" class="btn btn-light rounded-2 font-weight-bold" id="profile-button">{{ post.user }}</button>
+                        <a href="{% url 'profile' post.user.id %}" name="profile-button" class="btn btn-light rounded-2 font-weight-bold" id="profile-button">
+                            {{ post.user }}
+                        </a>
                         <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
                     </div>
                     <div class="row">
@@ -26,8 +28,8 @@
                     </div>
                     <div class="row">
                         <p class="my-2 mx-4 align-middle">{{ post.likes.count }}
-                            <input type="image" src="{% static 'network/liked.png' %}" alt="like" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
-                            <input type="image" src="{% static 'network/unliked.png' %}" alt="unlike" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
+                            <input type="image" src="{% static 'network/liked.png' %}" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
+                            <input type="image" src="{% static 'network/unliked.png' %}" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
                         </p>
                     </div>
                 </div>
