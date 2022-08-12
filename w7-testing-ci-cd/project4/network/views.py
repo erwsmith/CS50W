@@ -50,19 +50,15 @@ def following(request, user_id):
 
 def profile(request, user_id):
     profile_user = User.objects.get(pk=user_id)
-    follower = Follower.objects.get(user=profile_user)
+    active_user = User.objects.get(pk=request.user.id)
+    active_user_as_follower = Follower.objects.get(user=active_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
-    following_bool = False
+    is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
     
-    # if Entry.objects.filter(id=item.id).exists():
-    # Do something
-
-
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
-        "follower": follower,
         "posts": posts,
-        "following_bool": following_bool
+        "is_following": is_following
     })
 
 
