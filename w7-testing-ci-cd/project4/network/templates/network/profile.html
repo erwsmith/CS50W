@@ -16,15 +16,16 @@
                     Followers: {{ profile_user.followers.count }}
                 </div>
                 {% if user != profile_user %}
-                    {% if is_following %}
                         <div class="col-auto ">
-                            <input type="button" class="btn btn-outline-primary rounded-pill" id="unfollow-button" value="Unfollow">
-                        </div>
-                    {% else %}
-                        <div class="col-auto ">
-                            <input type="button" class="btn btn-outline-primary rounded-pill" id="follow-button" value="Follow">
-                        </div>
-                    {% endif %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                {% if is_following %}
+                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="unfollow-button" value="Unfollow">
+                                {% else %}
+                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="follow-button" value="Follow">
+                                {% endif %}
+                            </form>
+                    
                 {% endif %}
             </div>
         </div>
