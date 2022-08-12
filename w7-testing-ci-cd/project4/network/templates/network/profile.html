@@ -20,9 +20,9 @@
                             <form method="POST">
                                 {% csrf_token %}
                                 {% if is_following %}
-                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="unfollow-button" value="Unfollow">
+                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="unfollow-button" name="unfollow-button" value="Unfollow">
                                 {% else %}
-                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="follow-button" value="Follow">
+                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="follow-button" name="follow-button" value="Follow">
                                 {% endif %}
                             </form>
                     
