@@ -10,5 +10,4 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("following_view/", views.following_view, name="following_view"),
     path("<int:user_id>/profile/", views.profile, name="profile"),
-
 ]
