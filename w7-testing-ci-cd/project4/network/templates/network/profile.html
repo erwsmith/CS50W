@@ -4,24 +4,6 @@
 {% block body %}
     <br>
     {% if user.is_authenticated %}
-        <div class="row">
-            {{ profile_user }}
-        </div>
-        <div class="row">
-            .followers.all: {{ profile_user.followers.all }}
-        </div>
-        <div class="row">
-            .id: {{ profile_user.id }} 
-        </div>
-        <div class="row">
-            .username: {{ profile_user.username }}
-        </div>
-        <div class="row">
-            user.id: {{ user.id }}
-        </div>
-        <div class="row">
-            following bool: {{ following_bool }}
-        </div>
         <div class="container mb-2 p-2">
             <div class="row align-items-center">
                 <div class="col-auto">
@@ -34,13 +16,13 @@
                     Followers: {{ profile_user.followers.count }}
                 </div>
                 {% if user != profile_user %}
-                    {% if user not in profile_user.followers.all %}
+                    {% if is_following %}
                         <div class="col-auto ">
-                            <input type="button" class="btn btn-outline-primary rounded-pill" id="follow-button" value="Follow">
+                            <input type="button" class="btn btn-outline-primary rounded-pill" id="unfollow-button" value="Unfollow">
                         </div>
                     {% else %}
                         <div class="col-auto ">
-                            <input type="button" class="btn btn-outline-primary rounded-pill" id="unfollow-button" value="Unfollow">
+                            <input type="button" class="btn btn-outline-primary rounded-pill" id="follow-button" value="Follow">
                         </div>
                     {% endif %}
                 {% endif %}
