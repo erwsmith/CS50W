@@ -44,16 +44,16 @@ def following_view(request):
         return HttpResponse("invalid form")
     active_user = User.objects.get(pk=request.user.id)
     active_user_as_follower = Follower.objects.get(user=active_user)
-    # posts = Post.objects.filter(user__in = active_user_as_follower.following.all()).order_by('-timestamp'),
+    following_posts = list(Post.objects.filter(user__in = active_user_as_follower.following.all()).order_by('-timestamp'))
     return render(request, "network/following_view.html", {
         "form": CreatePostForm(), 
-        # "posts": posts,
-        "posts": Post.objects.all().order_by('-timestamp'),
+        "posts": following_posts,
     })
 
 
 def profile(request, user_id):
     profile_user = User.objects.get(pk=user_id)
+    follower = Follower.objects.get(user=profile_user)
     active_user = User.objects.get(pk=request.user.id)
     active_user_as_follower = Follower.objects.get(user=active_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
@@ -61,7 +61,8 @@ def profile(request, user_id):
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "posts": posts,
-        "is_following": is_following
+        "is_following": is_following,
+        "follower": follower,
     })
 
 
