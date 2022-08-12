@@ -72,6 +72,36 @@ class NetworkTestCase(TestCase):
         f3 = Follower.objects.get(user=u3).following.count()
         self.assertEqual(f3, 2)
 
+    # is user2 following erwsmith? True
+    def test_following_0(self):
+        active_user = User.objects.get(username="user2")
+        u1 = User.objects.get(username="erwsmith")
+        active_user_as_follower = Follower.objects.get(user=active_user)
+        self.assertTrue(u1 in active_user_as_follower.following.all())
+
+    # is erwsmith following user2? True
+    def test_following_1(self):
+        active_user = User.objects.get(username="erwsmith")
+        u2 = User.objects.get(username="user2")
+        active_user_as_follower = Follower.objects.get(user=active_user)
+        self.assertTrue(u2 in active_user_as_follower.following.all())
+
+    # is user3 following erwsmith and user2? True
+    def test_following_2(self):
+        active_user = User.objects.get(username="user3")
+        u1 = User.objects.get(username="erwsmith")
+        u2 = User.objects.get(username="user2")
+        active_user_as_follower = Follower.objects.get(user=active_user)
+        self.assertTrue(u1 in active_user_as_follower.following.all())
+        self.assertTrue(u2 in active_user_as_follower.following.all())
+
+    # is erwsmith following and user3? False
+    def test_following_3(self):
+        active_user = User.objects.get(username="erwsmith")
+        u3 = User.objects.get(username="user3")
+        active_user_as_follower = Follower.objects.get(user=active_user)
+        self.assertFalse(u3 in active_user_as_follower.following.all())
+
 
     # def test_index(self):
     #     c = Client()
