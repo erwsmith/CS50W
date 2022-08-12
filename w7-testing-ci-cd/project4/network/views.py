@@ -53,6 +53,11 @@ def profile(request, user_id):
     follower = Follower.objects.get(user=profile_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
     following_bool = False
+    
+    # if Entry.objects.filter(id=item.id).exists():
+    # Do something
+
+
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "follower": follower,
