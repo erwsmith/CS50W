@@ -1,4 +1,3 @@
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -50,9 +49,12 @@ def following_view(request):
     active_user = User.objects.get(pk=request.user.id)
     active_user_as_follower = Follower.objects.get(user=active_user)
     following_posts = list(Post.objects.filter(user__in = active_user_as_follower.following.all()).order_by('-timestamp'))
+    paginator = Paginator(following_posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/following_view.html", {
         "form": CreatePostForm(), 
-        "posts": following_posts,
+        "page_obj": page_obj,
     })
 
 
@@ -71,8 +73,11 @@ def profile(request, user_id):
     except: 
         Follower.objects.create(user=active_user)
         active_user_as_follower = Follower.objects.get(user=active_user)
-    posts = Post.objects.filter(user=user_id).order_by('-timestamp')
     is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    posts = Post.objects.filter(user=user_id).order_by('-timestamp')
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     if request.method == "POST":
         if "follow-button" in request.POST:
             active_user_as_follower.following.add(profile_user)
@@ -84,9 +89,9 @@ def profile(request, user_id):
             return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
-        "posts": posts,
         "is_following": is_following,
         "follower": follower,
+        "page_obj": page_obj,
     })
 
 
