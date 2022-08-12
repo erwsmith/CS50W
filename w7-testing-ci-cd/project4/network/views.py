@@ -37,7 +37,6 @@ def following_view(request):
                 user=User.objects.get(username=request.user.username),
                 body=form.cleaned_data["body"],
             )
-            # Save the above as a new post in the database
             post.save()
             messages.success(request, "Post created!")
             return HttpResponseRedirect(reverse("index"))
@@ -53,11 +52,30 @@ def following_view(request):
 
 def profile(request, user_id):
     profile_user = User.objects.get(pk=user_id)
-    follower = Follower.objects.get(user=profile_user)
     active_user = User.objects.get(pk=request.user.id)
-    active_user_as_follower = Follower.objects.get(user=active_user)
+    # check if profile_user has a follower object yet, if not, create one
+    try: 
+        follower = Follower.objects.get(user=profile_user)
+    except: 
+        Follower.objects.create(user=profile_user)
+        follower = Follower.objects.get(user=profile_user)
+    # check if active_user has a follower object yet, if not, create one
+    try: 
+        active_user_as_follower = Follower.objects.get(user=active_user)
+    except: 
+        Follower.objects.create(user=active_user)
+        active_user_as_follower = Follower.objects.get(user=active_user)
     posts = Post.objects.filter(user=user_id).order_by('-timestamp')
     is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    if request.method == "POST":
+        if "follow-button" in request.POST:
+            active_user_as_follower.following.add(profile_user)
+            messages.success(request, f"Following {profile_user}")
+            return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+        if "unfollow-button" in request.POST:
+            active_user_as_follower.following.remove(profile_user)
+            messages.success(request, f"Unfollowed {profile_user}")
+            return HttpResponseRedirect(reverse("profile", args=(user_id,)))
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
         "posts": posts,
