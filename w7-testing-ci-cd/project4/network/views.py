@@ -28,7 +28,7 @@ def index(request):
         "posts": Post.objects.all().order_by('-timestamp'),
     })
 
-def following_view(request, user_id):
+def following_view(request):
     if request.method == "POST":
         form = CreatePostForm(request.POST)
         if form.is_valid():
@@ -42,8 +42,12 @@ def following_view(request, user_id):
             messages.success(request, "Post created!")
             return HttpResponseRedirect(reverse("index"))
         return HttpResponse("invalid form")
-    return render(request, "network/following.html", {
+    active_user = User.objects.get(pk=request.user.id)
+    active_user_as_follower = Follower.objects.get(user=active_user)
+    # posts = Post.objects.filter(user__in = active_user_as_follower.following.all()).order_by('-timestamp'),
+    return render(request, "network/following_view.html", {
         "form": CreatePostForm(), 
+        # "posts": posts,
         "posts": Post.objects.all().order_by('-timestamp'),
     })
 
