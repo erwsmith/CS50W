@@ -20,9 +20,9 @@
                             <form method="POST">
                                 {% csrf_token %}
                                 {% if is_following %}
-                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="unfollow-button" name="unfollow-button" value="Unfollow">
+                                    <input type="submit" class="btn btn-outline-dark rounded-pill" id="unfollow-button" name="unfollow-button" value="Unfollow">
                                 {% else %}
-                                    <input type="submit" class="btn btn-outline-primary rounded-pill" id="follow-button" name="follow-button" value="Follow">
+                                    <input type="submit" class="btn btn-outline-dark rounded-pill" id="follow-button" name="follow-button" value="Follow">
                                 {% endif %}
                             </form>
                     
@@ -34,18 +34,28 @@
         {% if page_obj %}
             {% for post in page_obj %}
                 <div class="container-md border border-gray rounded mb-2 width:50%">
-                    <div class="row">
+                    <div class="row align-items-center">
                         <p class="font-weight-bold mx-2 mt-2">{{ post.user }}</p>
                         <p class="font-weight-light mx-2 mt-2">{{ post.timestamp }}</p>
                     </div>
                     <div class="row">
                         <p class="my-1 mx-2">{{ post.body }}</p>
                     </div>
-                    <div class="row">
-                        <p class="my-2 mx-4 align-middle">{{ post.likes.count }}
-                            <input type="image" src="{% static 'network/liked.png' %}" name="like-button" style="width:48px" class="btn btn-outline-light rounded-2" id="like-button">
-                            <input type="image" src="{% static 'network/unliked.png' %}" name="unlike-button" style="width:52px" class="btn btn-outline-light rounded-2" id="unlike-button">
-                        </p>
+                    <div class="row align-items-center">
+                            {% if post.user == user %}
+                                <div class="col-auto my-2">{{ post.likes.count }} likes</div>
+                                <div class="col-auto my-2 text-right">
+                                    <input type="button" value="Edit" name="edit-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="edit-button">
+                                </div>
+                            {% else %}
+                                <div class="col-auto my-2">{{ post.likes.count }} likes</div>
+                                <div class="col-auto my-2 text-right">
+                                    <input type="button" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
+                                </div>
+                                <div class="col-auto my-2 text-right">
+                                    <input type="button" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
+                                </div>
+                            {% endif %}
                     </div>
                 </div>
             {% endfor %}
