@@ -1,8 +1,14 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//     document.querySelector("#profile-button").addEventListener('click', () => {
-//         console.log(`button clicked!`)
-//     });
-//   });
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector("#edit-button").addEventListener('click', () => {
+        console.log(`edit button clicked!`)
+    });
+    document.querySelector("#like-button").addEventListener('click', () => {
+        console.log(`like button clicked!`)
+    });
+    document.querySelector("#unlike-button").addEventListener('click', () => {
+        console.log(`unlike button clicked!`)
+    });
+  });
 
 
 // function load_display(display) {
