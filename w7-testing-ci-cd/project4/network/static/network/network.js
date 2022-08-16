@@ -1,12 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector("#edit-button").addEventListener('click', () => {
-        console.log(`edit button clicked!`)
-    });
-    document.querySelector("#like-button").addEventListener('click', () => {
-        console.log(`like button clicked!`)
-    });
-    document.querySelector("#unlike-button").addEventListener('click', () => {
-        console.log(`unlike button clicked!`)
+    document.querySelectorAll('input').forEach(button => {
+        button.onclick = function() {
+            console.log(`${this.dataset.name} button clicked!`)
+        };
     });
   });
 
