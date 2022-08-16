@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db import IntegrityError
@@ -5,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from .forms import *
 from .models import *
@@ -96,21 +99,47 @@ def profile(request, user_id):
     })
 
 
-# def posts_display(request, display):
-#     # Filter posts returned based on display
-#     if display == "profile":
-#         posts = Post.objects.filter(user=request.user)
-#     elif display == "all":
-#         posts = Post.objects.all()
-#     elif display == "following":
-#         posts = Post.objects.all()
-#         # posts = Post.objects.filter(user=request.user.following.all())
-#     else:
-#         return JsonResponse({"error": "Invalid display requested."}, status=400)
+def filtered_posts(request, filter):
+    if filter == "all":
+        posts = Post.objects.all()
 
-#     # Return posts in reverse chronologial order
-#     posts = posts.order_by("-timestamp").all()
-#     return JsonResponse([post.serialize() for post in posts], safe=False)
+    elif filter == "following": 
+        posts = Post.objects.filter()
+
+    user = request.user
+    posts = posts.order_by("-timestamp").all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+
+
+# @csrf_exempt
+# @login_required
+def post_view(request, post_id):
+    pass
+    # # Query for requested post
+    # try:
+    #     post = Post.objects.get(pk=post_id)
+    # except Post.DoesNotExist:
+    #     return JsonResponse({"error": "Post not found."}, status=404)
+
+    # # Return post contents
+    # if request.method == "GET":
+    #     return JsonResponse(post.serialize())
+
+    # # Update whether email is read or should be archived
+    # elif request.method == "PUT":
+    #     data = json.loads(request.body)
+    #     if data.get("read") is not None:
+    #         post.read = data["read"]
+    #     if data.get("liked") is not None:
+    #         post.liked = data["liked"]
+    #     post.save()
+    #     return HttpResponse(status=204)
+
+    # # Post must be via GET or PUT
+    # else:
+    #     return JsonResponse({
+    #         "error": "GET or PUT request required."
+    #     }, status=400)
 
 
 def login_view(request):
