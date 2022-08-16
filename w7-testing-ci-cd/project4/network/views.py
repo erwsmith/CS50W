@@ -99,43 +99,45 @@ def profile(request, user_id):
     })
 
 
-def filtered_posts(request, filter):
-    if filter == "all":
-        posts = Post.objects.all()
+# def filtered_posts(request, filter):
+#     if filter == "all":
+#         posts = Post.objects.all()
+#     elif filter == "following": 
+#         posts = Post.objects.all()
+#     elif filter == "profile":
+#         posts = Post.objects.filter(user=request.user.id)
+#     else:
+#         return JsonResponse({"error": "Invalid filter."}, status=400)
 
-    elif filter == "following": 
-        posts = Post.objects.filter()
-
-    user = request.user
-    posts = posts.order_by("-timestamp").all()
-    return JsonResponse([post.serialize() for post in posts], safe=False)
+#     user = request.user
+#     posts = posts.order_by("-timestamp").all()
+#     return JsonResponse([post.serialize() for post in posts], safe=False)
 
 
 # @csrf_exempt
 # @login_required
 def post_view(request, post_id):
-    pass
-    # # Query for requested post
-    # try:
-    #     post = Post.objects.get(pk=post_id)
-    # except Post.DoesNotExist:
-    #     return JsonResponse({"error": "Post not found."}, status=404)
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
 
-    # # Return post contents
-    # if request.method == "GET":
-    #     return JsonResponse(post.serialize())
+    # Return post contents
+    if request.method == "GET":
+        return JsonResponse(post.serialize())
 
-    # # Update whether email is read or should be archived
+    ## Update whether email is read or should be archived
     # elif request.method == "PUT":
-    #     data = json.loads(request.body)
-    #     if data.get("read") is not None:
-    #         post.read = data["read"]
-    #     if data.get("liked") is not None:
-    #         post.liked = data["liked"]
-    #     post.save()
-    #     return HttpResponse(status=204)
+        # data = json.loads(request.body)
+        # if data.get("read") is not None:
+        #     post.read = data["read"]
+        # if data.get("liked") is not None:
+        #     post.liked = data["liked"]
+        # post.save()
+        # return HttpResponse(status=204)
 
-    # # Post must be via GET or PUT
+    ## Post must be via GET or PUT
     # else:
     #     return JsonResponse({
     #         "error": "GET or PUT request required."
