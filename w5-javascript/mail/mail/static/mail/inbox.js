@@ -156,7 +156,6 @@ function load_email(email) {
     document.querySelector('#reply').onclick = function() {
       // PUT /emails/<int:email_id> - mark email as unarchived
       console.log("Reply button clicked!")
-      
       _recipients = email.sender;
       if (email.subject.startsWith('RE:')) {
         _subject = `${email.subject}`;
