@@ -10,6 +10,14 @@ class Post(models.Model):
     body = models.TextField(blank=False, max_length=280)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.user.username,
+            "body": self.body,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+        }
+
     def __str__(self):
         return f"{self.id}"
 
