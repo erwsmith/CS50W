@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('#filtered-posts').addEventListener('click', () => load_posts('all'));
+    // document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
+    // document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
+    // document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
     document.querySelectorAll('input').forEach(button => {
         button.onclick = function() {
-            console.log(`${this.dataset.name} button clicked!`)
-            if (this.dataset.name === "edit") {
-                console.log("EDIT BUTTON")
+                console.log(`${this.dataset.name} button ${this.dataset.postid} clicked!`);
+                const post_id = parseInt(this.dataset.postid);
+                load_post(post_id);
             }
-        };
+        });
     });
-  });
-
 
 function load_posts(filter) {
     // Show create view and hide other views
@@ -23,8 +23,11 @@ function load_posts(filter) {
     });
 }
 
-function load_post(post) {
-    fetch(`posts/${post.id}`)
-    .then(response = response.json())
-    .then(console.log(`${post}`));
+function load_post(post_id) {
+    fetch(`posts/${post_id}`)
+    .then(response => response.json())
+    .then(post => {
+        const post_data = [`${post.id}`, `${post.username}`, `${post.body}`, `${post.timestamp}`];
+        console.log(post_data);
+    });
 }
