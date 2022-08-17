@@ -97,22 +97,7 @@ def profile(request, user_id):
         "follower": follower,
         "page_obj": page_obj,
     })
-
-
-# def filtered_posts(request, filter):
-#     if filter == "all":
-#         posts = Post.objects.all()
-#     elif filter == "following": 
-#         posts = Post.objects.all()
-#     elif filter == "profile":
-#         posts = Post.objects.filter(user=request.user.id)
-#     else:
-#         return JsonResponse({"error": "Invalid filter."}, status=400)
-
-#     user = request.user
-#     posts = posts.order_by("-timestamp").all()
-#     return JsonResponse([post.serialize() for post in posts], safe=False)
-
+    
 
 @csrf_exempt
 @login_required
