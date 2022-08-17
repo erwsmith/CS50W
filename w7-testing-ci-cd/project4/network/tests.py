@@ -14,11 +14,12 @@ class NetworkTestCase(TestCase):
         # create posts
         p1 = Post.objects.create(user=u1, body="Post A", id=1)
         p2 = Post.objects.create(user=u2, body="Post B", id=2)
+        p3 = Post.objects.create(user=u3, body="Post C", id=3)
         # create likes
-        Like.objects.create(post=p1, user=u1, liked=True)
-        Like.objects.create(post=p2, user=u2, liked=True)
-        Like.objects.create(post=p2, user=u1, liked=True)
-        Like.objects.create(post=p2, user=u3, liked=True)
+        p1.liked_by.add(u2)
+        p2.liked_by.add(u1, u3)
+        p3.liked_by.add(u1, u2)
+        p3.liked_by.remove(u1, u2)
         # create followers
         f1 = Follower.objects.create(user=u1) 
         f1.following.add(u2)
@@ -27,15 +28,37 @@ class NetworkTestCase(TestCase):
         f3 = Follower.objects.create(user=u3)
         f3.following.add(u1)
         f3.following.add(u2)
+    
+    def test_likes_count_1(self):
+        p = Post.objects.get(pk=3)
+        self.assertEqual(p.liked_by.count(), 0)
 
     def test_likes_count_1(self):
         p = Post.objects.get(pk=1)
-        self.assertEqual(p.likes.count(), 1)
-    
+        self.assertEqual(p.liked_by.count(), 1)
+
     def test_likes_count_2(self):
         p = Post.objects.get(pk=2)
-        self.assertEqual(p.likes.count(), 3)
+        self.assertEqual(p.liked_by.count(), 2)
     
+    # does erwsmith like post with id 1
+    def test_liked_check_1(self):
+        active_user = User.objects.get(username="erwsmith")
+        p = Post.objects.get(pk=1)
+        self.assertFalse(p.liked_by.filter(id=active_user.id).exists())
+
+    # does erwsmith like post with id 2
+    def test_liked_check_1(self):
+        active_user = User.objects.get(username="erwsmith")
+        p = Post.objects.get(pk=2)
+        self.assertTrue(p.liked_by.filter(id=active_user.id).exists())
+
+    # does user2 like post with id 2
+    def test_liked_check_2(self):
+        active_user = User.objects.get(username="user2")
+        p = Post.objects.get(pk=2)
+        self.assertTrue(p.liked_by.filter(id=active_user.id).exists())
+
     def test_valid_follower(self):
         u1 = User.objects.get(username="erwsmith")
         f = Follower.objects.get(user=u1)
