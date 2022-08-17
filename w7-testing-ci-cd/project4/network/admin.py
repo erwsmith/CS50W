@@ -5,6 +5,10 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, Post, Like, Follower
 
 # Django Admin Settings
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "email", "is_staff", "id")
+    ordering = ["id"]
+
 class PostAdmin(admin.ModelAdmin):
     list_display = ("user", "body", "timestamp", "id")
     ordering = ["user"]
