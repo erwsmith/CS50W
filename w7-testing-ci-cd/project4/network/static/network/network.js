@@ -5,15 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('input').forEach(button => {
         button.onclick = function() {
                 post_id = this.dataset.postid
+                active_user_id = this.dataset.active_user_id
                 button_name = this.dataset.name
                 if (button_name === "edit") {
-                    edit_post(post_id)
+                    edit_post(post_id, active_user_id)
                 } else if (button_name === "like") {
                     console.log(`${button_name} button ${post_id} clicked!`)
-                    like_post(post_id)
+                    like_post(post_id, active_user_id)
                 } else if (button_name === "unlike") {
                     console.log(`${button_name} button ${post_id} clicked!`)
-                    unlike_post(post_id)
+                    unlike_post(post_id, active_user_id)
                 }
             }
         })
@@ -30,29 +31,30 @@ function load_posts(filter) {
     })
 }
 
-function like_post(post_id) {
+function like_post(post_id, active_user_id) {
     fetch(`posts/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
-            liked: true // this isn't correct
+            liked_by: active_user_id,
         })
     })
 }
 
-function unlike_post(post_id) {
+function unlike_post(post_id, active_user_id) {
     fetch(`posts/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
-            liked: false // this isn't correct
+            unliked_by: active_user_id
         })
     })
 }
 
-function edit_post(post_id) {
+function edit_post(post_id, active_user_id) {
     fetch(`posts/${post_id}`)
     .then(response => response.json())
     .then(post => {
+        // TODO
         const post_data = [`${post.id}`, `${post.username}`, `${post.body}`, `${post.timestamp}`]
-        console.log(post_data)
+        console.log(post_data, active_user_id)
     })
 }
