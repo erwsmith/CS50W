@@ -8,6 +8,7 @@ from .models import User, Post, Like, Follower
 class PostAdmin(admin.ModelAdmin):
     list_display = ("user", "body", "timestamp", "id")
     ordering = ["user"]
+    filter_horizontal = ("liked_by",)
 
 class LikeAdmin(admin.ModelAdmin):
     list_display = ("user", "post", "liked", "id")
