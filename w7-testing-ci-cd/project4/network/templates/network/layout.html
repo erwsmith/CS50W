@@ -69,14 +69,14 @@
                                 <div class="col-auto my-2 text-right">
                                     <input hidden type="button" id="unlike-button">
                                     <input hidden type="button" id="like-button">
-                                    <input data-name="edit" data-postid="{{ post.id }}" type="button" value="Edit" name="edit-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="edit-button">
+                                    <input data-active_user_id="{{ user.id }}" data-name="edit" data-postid="{{ post.id }}" type="button" value="Edit" name="edit-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="edit-button">
                                 </div>
                             {% else %}
                                 <div class="col-auto my-2 text-right">
-                                    <input data-name="like" data-postid="{{ post.id }}" type="button" value="Like" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
+                                    <input data-active_user_id="{{ user.id }}" data-name="like" data-postid="{{ post.id }}" type="button" value="Like" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
                                 </div>
                                 <div class="col-auto my-2 text-right">
-                                    <input data-name="unlike" data-postid="{{ post.id }}" type="button" value="Unlike" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
+                                    <input data-active_user_id="{{ user.id }}" data-name="unlike" data-postid="{{ post.id }}" type="button" value="Unlike" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
                                 </div>
                                 <input hidden type="button" id="edit-button">
                             {% endif %}
