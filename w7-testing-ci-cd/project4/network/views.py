@@ -129,12 +129,13 @@ def post_view(request, post_id):
 
     # Update post liked or unliked by active user
     elif request.method == "PUT":
-        # the following is not correct
-        # data = json.loads(request.body)
-        # if data.get("liked") is not None:
-        #     post.liked = data["liked"]
-        # post.save()
-        return HttpResponse(status=204)
+        data = json.loads(request.body)
+        if data.get("liked_by") is not None:
+            post.liked_by.add(data["liked_by"])
+        elif data.get("unliked_by") is not None:
+            post.liked_by.remove(data["unliked_by"])
+        post.save()
+        return HttpResponse("Data retreived", status=204)
 
     # Post must be via GET or PUT
     else:
