@@ -29,7 +29,7 @@ class NetworkTestCase(TestCase):
         f3.following.add(u1)
         f3.following.add(u2)
     
-    def test_likes_count_1(self):
+    def test_likes_count_0(self):
         p = Post.objects.get(pk=3)
         self.assertEqual(p.liked_by.count(), 0)
 
@@ -42,7 +42,7 @@ class NetworkTestCase(TestCase):
         self.assertEqual(p.liked_by.count(), 2)
     
     # does erwsmith like post with id 1
-    def test_liked_check_1(self):
+    def test_liked_check_0(self):
         active_user = User.objects.get(username="erwsmith")
         p = Post.objects.get(pk=1)
         self.assertFalse(p.liked_by.filter(id=active_user.id).exists())
@@ -57,7 +57,15 @@ class NetworkTestCase(TestCase):
     def test_liked_check_2(self):
         active_user = User.objects.get(username="user2")
         p = Post.objects.get(pk=2)
-        self.assertTrue(p.liked_by.filter(id=active_user.id).exists())
+        self.assertFalse(p.liked_by.filter(id=active_user.id).exists())
+
+    # do u1 and u3 like post with id 2
+    def test_liked_check_2(self):
+        u1 = User.objects.get(username="erwsmith")
+        u3 = User.objects.get(username="user3")
+        p = Post.objects.get(pk=2)
+        self.assertTrue(p.liked_by.filter(id=u1.id).exists())
+        self.assertTrue(p.liked_by.filter(id=u3.id).exists())
 
     def test_valid_follower(self):
         u1 = User.objects.get(username="erwsmith")
