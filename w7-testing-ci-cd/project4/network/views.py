@@ -114,8 +114,8 @@ def profile(request, user_id):
 #     return JsonResponse([post.serialize() for post in posts], safe=False)
 
 
-# @csrf_exempt
-# @login_required
+@csrf_exempt
+@login_required
 def post_view(request, post_id):
     # Query for requested post
     try:
@@ -127,21 +127,20 @@ def post_view(request, post_id):
     if request.method == "GET":
         return JsonResponse(post.serialize())
 
-    ## Update whether email is read or should be archived
-    # elif request.method == "PUT":
+    # Update post liked or unliked by active user
+    elif request.method == "PUT":
+        # the following is not correct
         # data = json.loads(request.body)
-        # if data.get("read") is not None:
-        #     post.read = data["read"]
         # if data.get("liked") is not None:
         #     post.liked = data["liked"]
         # post.save()
-        # return HttpResponse(status=204)
+        return HttpResponse(status=204)
 
-    ## Post must be via GET or PUT
-    # else:
-    #     return JsonResponse({
-    #         "error": "GET or PUT request required."
-    #     }, status=400)
+    # Post must be via GET or PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
 
 
 def login_view(request):
