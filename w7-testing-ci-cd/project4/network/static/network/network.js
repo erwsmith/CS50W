@@ -32,7 +32,7 @@ function load_posts(filter) {
 }
 
 function like_post(post_id, active_user_id) {
-    fetch(`posts/${post_id}`, {
+    fetch(`/posts/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             liked_by: active_user_id,
@@ -41,7 +41,7 @@ function like_post(post_id, active_user_id) {
 }
 
 function unlike_post(post_id, active_user_id) {
-    fetch(`posts/${post_id}`, {
+    fetch(`/posts/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             unliked_by: active_user_id
@@ -50,7 +50,7 @@ function unlike_post(post_id, active_user_id) {
 }
 
 function edit_post(post_id, active_user_id) {
-    fetch(`posts/${post_id}`)
+    fetch(`/posts/${post_id}`)
     .then(response => response.json())
     .then(post => {
         // TODO
