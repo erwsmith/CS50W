@@ -62,11 +62,7 @@
                             <p class="my-1 mx-2">{{ post.body }}</p>
                         </div>
                         <div class="row align-items-center">
-                            {% if post.liked_by.count == 1 %}
-                                <div class="col-auto my-2 font-weight-bold">{{ post.liked_by.count }}</div>Like
-                            {% else %}
-                                <div class="col-auto my-2 font-weight-bold">{{ post.liked_by.count }}</div>Likes
-                            {% endif %}
+                            <div id="likes-count" class="col-auto my-2 font-weight-bold">{{ post.liked_by.count }}</div>Likes
                             {% if post.user == user %}
                                 <div class="col-auto my-2 text-right">
                                     <input hidden type="button" id="unlike-button">
@@ -75,12 +71,15 @@
                                 </div>
                             {% else %}
                                 <div id="like-button-js"></div> 
-                                <div class="col-auto my-2 text-right">
-                                    <input data-active_user_id="{{ user.id }}" data-name="like" data-postid="{{ post.id }}" type="button" value="Like" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
-                                </div>
-                                <div class="col-auto my-2 text-right">
-                                    <input data-active_user_id="{{ user.id }}" data-name="unlike" data-postid="{{ post.id }}" type="button" value="Unlike" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
-                                </div>
+                                {% if user in post.liked_by.all %}
+                                    <div class="col-auto my-2 text-right">
+                                        <input data-active_user_id="{{ user.id }}" data-name="unlike" data-postid="{{ post.id }}" type="button" value="Unlike" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
+                                    </div>
+                                {% else %}
+                                    <div class="col-auto my-2 text-right">
+                                        <input data-active_user_id="{{ user.id }}" data-name="like" data-postid="{{ post.id }}" type="button" value="Like" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
+                                    </div>
+                                {% endif %}
                                 <input hidden type="button" id="edit-button">
                             {% endif %}
                         </div>
