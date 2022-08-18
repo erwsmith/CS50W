@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Post, Like, Follower
+from .models import User, Post, Follower
 
 # Django Admin Settings
 class UserAdmin(admin.ModelAdmin):
@@ -14,10 +14,6 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ["user"]
     filter_horizontal = ("liked_by",)
 
-class LikeAdmin(admin.ModelAdmin):
-    list_display = ("user", "post", "liked", "id")
-    ordering = ["user"]
-
 class FollowerAdmin(admin.ModelAdmin):
     list_display = ("user", "id")
     ordering = ["user"]
@@ -26,5 +22,4 @@ class FollowerAdmin(admin.ModelAdmin):
 # Model registration
 admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Like, LikeAdmin)
 admin.site.register(Follower, FollowerAdmin)
