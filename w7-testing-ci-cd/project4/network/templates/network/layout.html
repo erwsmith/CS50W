@@ -48,8 +48,6 @@
             {% endblock %}
         </div>
 
-        <div id="posts-view-js"></div>
-
         <div id="posts-view">
             {% if page_obj %}
                 {% for post in page_obj %}
@@ -64,7 +62,7 @@
                             <p class="my-1 mx-2">{{ post.body }}</p>
                         </div>
                         <div class="row align-items-center">
-                            <div class="col-auto my-2">{{ post.likes.count }} likes</div>
+                            <div class="col-auto my-2">{{ post.liked_by.count }} likes</div>
                             {% if post.user == user %}
                                 <div class="col-auto my-2 text-right">
                                     <input hidden type="button" id="unlike-button">

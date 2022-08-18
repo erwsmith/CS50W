@@ -20,16 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
-function load_posts(filter) {
-    document.querySelector('#posts-view-js').style.display = 'block';
-    fetch(`/posts/${filter}`)
-    .then(response => response.json())
-    .then(posts => {
-        posts.forEach((post) => {
-            const post_data = [`${post.id}`, `${post.username}`, `${post.body}`, `${post.timestamp}`]
-        })
-    })
-}
 
 function like_post(post_id, active_user_id) {
     fetch(`/posts/${post_id}`, {
