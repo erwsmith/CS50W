@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
 
+// function like_button(post_id, active_user_id) {
+//     fetch(`/posts/${post_id}`)
+//     .then(response => response.json())
+//     .then(console.log(response))
+//     // if post.liked_by.filter(id=active_user.id).exists()
+//     }
+
+
 function like_post(post_id, active_user_id) {
     fetch(`/posts/${post_id}`, {
         method: 'PUT',
