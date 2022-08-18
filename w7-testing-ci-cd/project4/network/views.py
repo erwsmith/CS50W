@@ -97,7 +97,7 @@ def profile(request, user_id):
         "follower": follower,
         "page_obj": page_obj,
     })
-    
+
 
 @csrf_exempt
 @login_required
