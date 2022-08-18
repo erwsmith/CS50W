@@ -36,6 +36,12 @@ function like_post(post_id, active_user_id) {
             liked_by: active_user_id,
         })
     })
+    .then(function () {fetch(`/posts/${post_id}`)
+        .then(response => response.json())
+        .then(post => {
+            console.log(post.likes_count);
+            document.querySelector('#likes-count').innerHTML = `${post.likes_count}`;
+        })})
 }
 
 function unlike_post(post_id, active_user_id) {
@@ -45,6 +51,12 @@ function unlike_post(post_id, active_user_id) {
             unliked_by: active_user_id
         })
     })
+    .then(function () {fetch(`/posts/${post_id}`)
+        .then(response => response.json())
+        .then(post => {
+            console.log(post.likes_count);
+            document.querySelector('#likes-count').innerHTML = `${post.likes_count}`;
+        })})
 }
 
 function edit_post(post_id, active_user_id) {
