@@ -20,6 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
+function load_page_view() {
+    document.querySelector('#email-view').style.display = 'none';
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
+}
+    
 
 // function like_button(post_id, active_user_id) {
 //     fetch(`/posts/${post_id}`)
