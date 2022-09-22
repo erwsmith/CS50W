@@ -20,13 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
+    
 function load_posts(post_view) {
-    document.querySelector('#show-posts').style.display = 'block';
+    document.querySelector('#posts-view').style.display = 'block';
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
-
+    .then(posts => {
+        posts.forEach((post) => {
+            const post_data = [`${post.user}`, `${post.body}`, `${post.timestamp}`, `${post.liked_by}`]
+            const grid = document.getElementById("grid");
+            for (let a of post_data) { 
+                let cell = document.createElement("div");
+                cell.innerHTML = a;
+                grid.appendChild(cell);
+            }
+        });
+    });
 }
-    
+
 
 // function like_button(post_id, active_user_id) {
 //     fetch(`/posts/${post_id}`)
@@ -51,6 +62,7 @@ function like_post(post_id, active_user_id) {
         })})
 }
 
+
 function unlike_post(post_id, active_user_id) {
     fetch(`/posts/${post_id}`, {
         method: 'PUT',
@@ -65,6 +77,7 @@ function unlike_post(post_id, active_user_id) {
             document.querySelector('#likes-count').innerHTML = `${post.likes_count}`;
         })})
 }
+
 
 function edit_post(post_id, active_user_id) {
     fetch(`/posts/${post_id}`)
