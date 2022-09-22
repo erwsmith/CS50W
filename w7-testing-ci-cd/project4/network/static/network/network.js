@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
-    
+
 function load_posts(post_view) {
     document.querySelector('#posts-view').style.display = 'block';
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
     .then(posts => {
         posts.forEach((post) => {
-            const post_data = [`${post.user}`, `${post.body}`, `${post.timestamp}`, `${post.liked_by}`]
+            const post_data = [`${post.user}`, `${post.body}`, `${post.timestamp}`]
             const grid = document.getElementById("grid");
             for (let a of post_data) { 
                 let cell = document.createElement("div");
