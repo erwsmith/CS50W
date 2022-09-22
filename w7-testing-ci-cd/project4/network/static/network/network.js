@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
-    // document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
-    // document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
+    document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
+    document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
+    document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
     document.querySelectorAll('input').forEach(button => {
         button.onclick = function() {
                 post_id = this.dataset.postid
@@ -20,10 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
-function load_page_view() {
-    document.querySelector('#email-view').style.display = 'none';
-    document.querySelector('#emails-view').style.display = 'none';
-    document.querySelector('#compose-view').style.display = 'block';
+function load_posts(post_view) {
+    document.querySelector('#show-posts').style.display = 'block';
+    fetch(`/posts/${post_view}`)
+    .then(response => response.json())
+
 }
     
 
