@@ -2,6 +2,15 @@
 {% load static %}
 
 {% block body %}
+    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
+    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="following-posts">Following</button>
+    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
+    {% if user.is_authenticated %}
+        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
+    {% else %}
+        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
+        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
+    {% endif %}
     <br>
     {% if user.is_authenticated %}
         <div class="container mb-4 p-2">
@@ -12,6 +21,54 @@
             </form>
         </div>
     {% endif %}
+    
+    <div id="posts-view">
+        {% if page_obj %}
+            {% for post in page_obj %}
+                <div class="container-md border border-gray rounded mb-2 width:50%">
+                    <div class="row">
+                        <p class="my-1 mx-2">{{ post.body }}</p>
+                    </div>
+                    <div class="row align-items-center">
+                        <div id="likes-count" class="col-auto my-2 font-weight-bold">{{ post.liked_by.count }}</div>Likes
+                        {% if post.user == user %}
+                            <div class="col-auto my-2 text-right">
+                                <input hidden type="button" id="unlike-button">
+                                <input hidden type="button" id="like-button">
+                                <input data-active_user_id="{{ user.id }}" data-name="edit" data-postid="{{ post.id }}" type="button" value="Edit" name="edit-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="edit-button">
+                            </div>
+                        {% else %}
+                            <div id="like-button-js"></div> 
+                            {% if user in post.liked_by.all %}
+                                <div class="col-auto my-2 text-right">
+                                    <input data-active_user_id="{{ user.id }}" data-name="unlike" data-postid="{{ post.id }}" type="button" value="Unlike" name="unlike-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="unlike-button">
+                                </div>
+                            {% else %}
+                                <div class="col-auto my-2 text-right">
+                                    <input data-active_user_id="{{ user.id }}" data-name="like" data-postid="{{ post.id }}" type="button" value="Like" name="like-button" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3" id="like-button">
+                                </div>
+                            {% endif %}
+                            <input hidden type="button" id="edit-button">
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><a class="page-link text-dark" href="?page={{ page_obj.number }}">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif%}
+                </ul>
+            </nav>
+            <br><br><br><br><br><br><br><br>
+        {% else %}
+            <p>There are no posts yet.</p>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block script %}
