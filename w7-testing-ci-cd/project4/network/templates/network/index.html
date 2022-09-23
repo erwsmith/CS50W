@@ -13,17 +13,29 @@
     {% endif %}
     <br>
     {% if user.is_authenticated %}
-        <div class="container mb-4 p-2">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form }}
-                <input data-name="post" type="submit" value="Post!" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3">
-            </form>
+        <div id="compose-post">
+            <div class="container mb-4 p-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input data-name="post" type="submit" value="Post!" class="btn btn-sm btn-outline-dark rounded-pill my-sm-2 mx-2 px-3">
+                </form>
+            </div>
         </div>
     {% endif %}
     
     <div id="posts-view">
-        {% if page_obj %}
+        <div id="grid"></div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}
+
+
+<!-- {% if page_obj %}
             {% for post in page_obj %}
                 <div class="container-md border border-gray rounded mb-2 width:50%">
                     <div class="row">
@@ -67,10 +79,4 @@
             <br><br><br><br><br><br><br><br>
         {% else %}
             <p>There are no posts yet.</p>
-        {% endif %}
-    </div>
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'network/network.js' %}"></script>
-{% endblock %}
+        {% endif %} -->
