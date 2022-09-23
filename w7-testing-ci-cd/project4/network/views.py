@@ -40,21 +40,18 @@ def index(request):
 def filtered_posts(request, post_view):
     # Filter emails returned based on filter
     if post_view == "profile":
-        posts = Post.objects.filter(
-            user=request.user,
-        )
+        # posts = Post.objects.filter(user=user_id)
+        posts = Post.objects.all()
     elif post_view == "all":
-        posts = Post.objects.filter(
-            user=request.user,
-        )
+        posts = Post.objects.all()
     elif post_view == "following":
-        posts = Post.objects.filter(
-            user=request.user,
-        )
+        active_user = User.objects.get(pk=request.user.id)
+        active_user_as_follower = Follower.objects.get(user=active_user)
+        posts = Post.objects.filter(user__in = active_user_as_follower.following.all())
     else:
         return JsonResponse({"error": "Invalid filter."}, status=400)
 
-    # Return emails in reverse chronologial order
+    # Return posts in reverse chronologial order
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
 
