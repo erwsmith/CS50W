@@ -38,10 +38,10 @@ def index(request):
 
 
 def filtered_posts(request, post_view):
-    # Filter emails returned based on filter
     if post_view == "profile":
-        # posts = Post.objects.filter(user=user_id)
-        posts = Post.objects.all()
+        # Load active user's profile page
+        profile_user = User.objects.get(pk=request.user.id)
+        posts = Post.objects.filter(user=profile_user)
     elif post_view == "all":
         posts = Post.objects.all()
     elif post_view == "following":
@@ -54,6 +54,10 @@ def filtered_posts(request, post_view):
     # Return posts in reverse chronologial order
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
+
+
+def profile_view(request, username):
+    profile_user = User.objects.get(username=username)
 
 
 def following_view(request):
