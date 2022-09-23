@@ -3,9 +3,9 @@
 
 {% block body %}
     <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
-    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="following-posts">Following</button>
-    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
     {% if user.is_authenticated %}
+        <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="following-posts">Following</button>
+        <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
         <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
     {% else %}
         <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
@@ -25,10 +25,6 @@
     {% endif %}
     
     <div id="posts-view">
-        <div id="grid"></div>
-    </div>
-    
-    <div id="profile-view">
         <div id="grid"></div>
     </div>
 
