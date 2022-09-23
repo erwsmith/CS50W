@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
-    document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
-    document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
+    document.querySelector('#all-posts').addEventListener('click', () => load_posts(1));
+    document.querySelector('#following-posts').addEventListener('click', () => load_posts(2));
+    document.querySelector('#profile-posts').addEventListener('click', () => load_posts(3));
     document.querySelectorAll('input').forEach(button => {
         button.onclick = function() {
             post_id = this.dataset.postid
@@ -18,15 +18,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
-    load_posts('all');
+    load_posts(1);
 })
 
 
 function load_posts(post_view) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
-    document.querySelector('#profile-view').style.display = 'none';
-    console.log(post_view)
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
     .then(posts => {
@@ -37,8 +35,7 @@ function load_posts(post_view) {
                 let cell = document.createElement("div");
                 cell.innerHTML = a;
                 cell.addEventListener('click', function() {
-                    console.log(`User ${post.username} has been clicked!`);
-                    // load_profile(username);
+                    load_profile(post.username);
                   });
                 grid.appendChild(cell);
             }
@@ -48,9 +45,7 @@ function load_posts(post_view) {
 
 function load_profile(username) {
     document.querySelector('#grid').innerHTML = '';
-    document.querySelector('#posts-view').style.display = 'none';
-    document.querySelector('#profile-view').style.display = 'block';
-    console.log(username)
+    document.querySelector('#posts-view').style.display = 'block';
     fetch(`/posts/${username}`)
     .then(response => response.json())
     .then(posts => {
@@ -60,10 +55,6 @@ function load_profile(username) {
             for (let a of post_data) { 
                 let cell = document.createElement("div");
                 cell.innerHTML = a;
-                cell.addEventListener('click', function() {
-                    console.log(`User ${post.username} has been clicked!`);
-                    // load_profile(username);
-                  });
                 grid.appendChild(cell);
             }
         });
