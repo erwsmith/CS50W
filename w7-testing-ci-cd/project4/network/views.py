@@ -38,26 +38,31 @@ def index(request):
 
 
 def filtered_posts(request, post_view):
-    if post_view == "profile":
-        # Load active user's profile page
-        profile_user = User.objects.get(pk=request.user.id)
-        posts = Post.objects.filter(user=profile_user)
-    elif post_view == "all":
+    if post_view == 1:
         posts = Post.objects.all()
-    elif post_view == "following":
+    elif post_view == 2:
         active_user = User.objects.get(pk=request.user.id)
         active_user_as_follower = Follower.objects.get(user=active_user)
         posts = Post.objects.filter(user__in = active_user_as_follower.following.all())
+    elif post_view == 3:
+        # Load active user's profile page
+        profile_user = User.objects.get(pk=request.user.id)
+        posts = Post.objects.filter(user=profile_user)
     else:
         return JsonResponse({"error": "Invalid filter."}, status=400)
-
     # Return posts in reverse chronologial order
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
-
+ 
 
 def profile_view(request, username):
-    profile_user = User.objects.get(username=username)
+    try:
+        profile_user = User.objects.get(username=username)
+        posts = Post.objects.filter(user=profile_user)
+        posts = posts.order_by("-timestamp").all()
+        return JsonResponse([post.serialize() for post in posts], safe=False)
+    except:
+        return JsonResponse({"error": "Invalid filter."}, status=400)
 
 
 def following_view(request):
