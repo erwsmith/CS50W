@@ -9,4 +9,5 @@ urlpatterns = [
 
     # API Routes
     path("posts/<str:post_view>", views.filtered_posts, name="filtered_posts"),
+    path("posts/<str:username>", views.profile_view, name="profile_view"),
 ]
