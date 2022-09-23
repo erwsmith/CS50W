@@ -18,25 +18,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
+    load_posts('all');
 })
 
 
 function load_posts(post_view) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
+    document.querySelector('#profile-view').style.display = 'none';
     console.log(post_view)
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
     .then(posts => {
         posts.forEach((post) => {
-            const post_data = [`${post.id}`, `${post.username}`, `${post.body}`, `${post.timestamp}`]
+            const post_data = [`${post.username}`, `${post.body}`, `${post.timestamp}`]
             const grid = document.getElementById("grid");
             for (let a of post_data) { 
                 let cell = document.createElement("div");
                 cell.innerHTML = a;
                 cell.addEventListener('click', function() {
                     console.log(`User ${post.username} has been clicked!`);
-                    // load_email(email);
+                    // load_profile(username);
                   });
                 grid.appendChild(cell);
             }
@@ -44,6 +46,30 @@ function load_posts(post_view) {
     });
 }
 
+function load_profile(username) {
+    document.querySelector('#grid').innerHTML = '';
+    document.querySelector('#posts-view').style.display = 'none';
+    document.querySelector('#profile-view').style.display = 'block';
+    console.log(username)
+    fetch(`/posts/${username}`)
+    .then(response => response.json())
+    .then(posts => {
+        posts.forEach((post) => {
+            const post_data = [`${post.username}`, `${post.body}`, `${post.timestamp}`]
+            const grid = document.getElementById("grid");
+            for (let a of post_data) { 
+                let cell = document.createElement("div");
+                cell.innerHTML = a;
+                cell.addEventListener('click', function() {
+                    console.log(`User ${post.username} has been clicked!`);
+                    // load_profile(username);
+                  });
+                grid.appendChild(cell);
+            }
+        });
+    });
+
+}
 
 // function like_button(post_id, active_user_id) {
 //     fetch(`/posts/${post_id}`)
