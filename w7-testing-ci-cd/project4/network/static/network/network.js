@@ -25,6 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
 function load_posts(post_view) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
+    let view_name = ''
+    if (post_view == 1) {
+        view_name = "All Posts";
+    } else if (post_view == 2) {
+        view_name = "Following View";
+    } else {
+        view_name = "Profile View";
+    }
+    document.querySelector('#posts-view-head').innerHTML = `<h3>${view_name}</h3>`;
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
     .then(posts => {
@@ -34,6 +43,7 @@ function load_posts(post_view) {
             for (let a of post_data) { 
                 let cell = document.createElement("div");
                 cell.innerHTML = a;
+                cell.className = "post_cell";
                 cell.addEventListener('click', function() {
                     load_profile(post.username);
                   });
@@ -61,6 +71,7 @@ function load_profile(username) {
     });
 
 }
+
 
 // function like_button(post_id, active_user_id) {
 //     fetch(`/posts/${post_id}`)
