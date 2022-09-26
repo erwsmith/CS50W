@@ -8,27 +8,27 @@ textarea {
     grid-template-columns: 25% 50% 25%; 
     grid-gap: 0px;
     border: solid lightgray;
-  }
+}
 
 #grid {
     display: grid;
     grid-template-columns: 25% 50% 25%; 
     grid-gap: 0px;
     border: solid lightgray;
-  }
+}
  
-  /* (C) OPTIONAL FOR THE CELLS */
-  .head, .read_cell, .unread_cell { padding: 10px; }
-  .head {
-    font-weight: bold;
-    background: none;
-    border: none;
-  }
-  .unread_cell {
-    border-top: 1px solid lightgray;
-    background: #ffffff;
-  }
-  .read_cell {
-    border-top: 1px solid lightgray;
-    background: lightgray;
-  }
+/* (C) OPTIONAL FOR THE CELLS */
+.head, .read_cell, .unread_cell { padding: 10px; }
+.head {
+  font-weight: bold;
+  background: none;
+  border: none;
+}
+.unread_cell {
+  border-top: 1px solid lightgray;
+  background: #ffffff;
+}
+.read_cell {
+  border-top: 1px solid lightgray;
+  background: lightgray;
+}
