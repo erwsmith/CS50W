@@ -39,13 +39,15 @@ def index(request):
 
 def filtered_posts(request, post_view):
     if post_view == 1:
+        # Send all posts
         posts = Post.objects.all()
     elif post_view == 2:
+        # Send posts by users followed by active user
         active_user = User.objects.get(pk=request.user.id)
         active_user_as_follower = Follower.objects.get(user=active_user)
         posts = Post.objects.filter(user__in = active_user_as_follower.following.all())
     elif post_view == 3:
-        # Load active user's profile page
+        # Send active user's posts
         profile_user = User.objects.get(pk=request.user.id)
         posts = Post.objects.filter(user=profile_user)
     else:
