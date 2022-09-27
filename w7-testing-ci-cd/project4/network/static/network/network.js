@@ -26,9 +26,9 @@ function load_posts(post_view) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
     let view_name = ''
-    if (post_view == 1) {
+    if (post_view === 1) {
         view_name = "All Posts";
-    } else if (post_view == 2) {
+    } else if (post_view === 2) {
         view_name = "Following View";
     } else {
         view_name = "Profile View";
@@ -53,6 +53,7 @@ function load_posts(post_view) {
     });
 }
 
+
 function load_profile(username) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
@@ -65,6 +66,7 @@ function load_profile(username) {
             for (let a of post_data) { 
                 let cell = document.createElement("div");
                 cell.innerHTML = a;
+                cell.className = "post_cell";
                 grid.appendChild(cell);
             }
         });
