@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('#all-posts').addEventListener('click', () => load_posts(1));
-    document.querySelector('#following-posts').addEventListener('click', () => load_posts(2));
-    document.querySelector('#profile-posts').addEventListener('click', () => load_posts(3));
+    document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
+    document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
+    document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
     document.querySelectorAll('input').forEach(button => {
         button.onclick = function() {
             post_id = this.dataset.postid
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     })
-    load_posts(1);
+    load_posts('all');
 })
 
 
@@ -26,9 +26,9 @@ function load_posts(post_view) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
     let view_name = ''
-    if (post_view === 1) {
+    if (post_view === 'all') {
         view_name = "All Posts";
-    } else if (post_view === 2) {
+    } else if (post_view === 'following') {
         view_name = "Following View";
     } else {
         view_name = "Profile View";
@@ -57,7 +57,7 @@ function load_posts(post_view) {
 function load_profile(username) {
     document.querySelector('#grid').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
-    fetch(`/posts/${username}`)
+    fetch(`/profile/${username}`)
     .then(response => response.json())
     .then(posts => {
         posts.forEach((post) => {
