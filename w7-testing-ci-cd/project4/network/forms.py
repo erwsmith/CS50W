@@ -13,7 +13,7 @@ class CreatePostForm(ModelForm):
             'body': Textarea(attrs={
                 'cols': 80, 
                 'rows': 2,
-                'class': 'form-control border border-light', 
+                'class': 'form-control border border-dark', 
                 'placeholder': "What's up?",
                 })
         }
