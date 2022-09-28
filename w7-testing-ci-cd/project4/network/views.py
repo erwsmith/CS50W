@@ -34,6 +34,7 @@ def index(request):
     return render(request, "network/index.html", {
         "form": CreatePostForm(), 
         "page_obj": page_obj,
+        "active_user": request.user,
     })
 
 
