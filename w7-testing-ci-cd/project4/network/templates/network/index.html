@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block body %}
-    <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
+    <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
     {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="following-posts">Following</button>
-        <button class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
-        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
+        <div hidden data-active_user_id="{{ user.id }}" id="active_user_id"></div>
+        <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="following-posts">Following</button>
+        <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
+        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
     {% else %}
-        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
-        <a class="btn btn-sm btn-outline-dark rounded my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
+        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
+        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
     {% endif %}
     <br>
     {% if user.is_authenticated %}
@@ -18,7 +19,7 @@
                 <form method="POST">
                     {% csrf_token %}
                     {{ form }}
-                    <input data-name="post" type="submit" value="Post!" class="btn btn-sm btn-outline-dark rounded my-2 px-3">
+                    <input data-name="post" type="submit" value="Post!" class="btn btn-sm btn-outline-dark my-2 px-3">
                 </form>
             </div>
         </div>
