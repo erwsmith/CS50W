@@ -1,21 +1,6 @@
-#grid-head {
-    display: grid;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 25px;
-    padding-right: 25px;
-    grid-template-columns: 25% 50% 25%; 
-    grid-gap: 5px;
-    border: solid lightgray;
-    font-weight: bold;
-}
-
-#grid {
-    display: grid;
-    grid-template-columns: 25% 50% 25%; 
-    border: solid lightgray;
-}
-
 .post_cell {
-    border-top: 1px solid lightgray;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin: 3px;
+    padding: 5px;
 }
