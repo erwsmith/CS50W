@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
             active_user_id = this.dataset.active_user_id
             button_name = this.dataset.name
             if (button_name === "edit") {
-                edit_post(post_id, active_user_id)
+                console.log(`${button_name} button ${post_id} clicked!`)
+                // edit_post(post_id, active_user_id)
             } else if (button_name === "like") {
                 console.log(`${button_name} button ${post_id} clicked!`)
-                like_post(post_id, active_user_id)
+                // like_post(post_id, active_user_id)
             } else if (button_name === "unlike") {
                 console.log(`${button_name} button ${post_id} clicked!`)
-                unlike_post(post_id, active_user_id)
+                // unlike_post(post_id, active_user_id)
             }
         }
     })
@@ -23,55 +24,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function load_posts(post_view) {
-    document.querySelector('#grid').innerHTML = '';
-    document.querySelector('#posts-view').style.display = 'block';
     let view_name = ''
     if (post_view === 'all') {
         view_name = "All Posts";
     } else if (post_view === 'following') {
         view_name = "Following View";
-    } else {
+    } else if (post_view === 'profile') {
         view_name = "Profile View";
+    } else {
+        console.log("Error: Invalid Post View")
+        view_name = "All Posts";
     }
     document.querySelector('#posts-view-head').innerHTML = `<h3>${view_name}</h3>`;
+    document.querySelector('#posts-view').style.display = 'block';
+    document.querySelector('#posts-view').innerHTML = '';
     fetch(`/posts/${post_view}`)
     .then(response => response.json())
     .then(posts => {
-        posts.forEach((post) => {
-            const post_data = [`${post.username}`, `${post.body}`, `${post.timestamp}`]
-            const grid = document.getElementById("grid");
-            for (let a of post_data) { 
-                let cell = document.createElement("div");
-                cell.innerHTML = a;
-                cell.className = "post_cell";
-                cell.addEventListener('click', function() {
-                    load_profile(post.username);
-                  });
-                grid.appendChild(cell);
-            }
+        posts.forEach((element) => {
+            let post = document.createElement("div");
+            post.innerHTML = `<button class="btn btn-link my-0">${element.username}</button>
+            <button data-name="edit" class="btn btn-sm btn-outline-dark rounded mx-2 px-3">Edit</button>
+            <hr>
+            <p>${element.body}</p>
+            <p class="mb-2 text-muted">${element.timestamp}</p>
+            <button data-name="like" class="btn btn-sm btn-outline-dark rounded mx-2 px-3">Like</button>
+            <span class="margin">${element.likes_count} likes</span>`
+            post.className = "post_cell";
+            document.querySelector('#posts-view').appendChild(post)
+            
+            const like_button = document.createElement('button');
+            like_button.innerHTML = "Like";
+            like_button.id = "like";
+            like_button.className = "btn btn-sm btn-outline-primary";
+            document.querySelector('#posts-view').append(like_button);
+            like_button.addEventListener('click', function() {
+                console.log("Like button clicked!")
+            });
         });
     });
 }
 
 
 function load_profile(username) {
-    document.querySelector('#grid').innerHTML = '';
+    document.querySelector('#posts-view').innerHTML = '';
     document.querySelector('#posts-view').style.display = 'block';
     fetch(`/profile/${username}`)
     .then(response => response.json())
     .then(posts => {
-        posts.forEach((post) => {
-            const post_data = [`${post.username}`, `${post.body}`, `${post.timestamp}`]
-            const grid = document.getElementById("grid");
-            for (let a of post_data) { 
-                let cell = document.createElement("div");
-                cell.innerHTML = a;
-                cell.className = "post_cell";
-                grid.appendChild(cell);
-            }
-        });
+        posts.forEach((element) => {
+            let post = document.createElement("div");
+            post.innerHTML = 
+            `<button class="btn btn-link user-link">${element.username}</button>
+            <button class="btn btn-outline-info edit">Edit</button>
+            <hr>
+            <p>${element.body}</p>
+            <p class= "mb-2 text-muted">${element.timestamp}</p>
+            <button class="btn like">Like</button>
+            <span class="margin">${element.likes_count} likes</span>`
+            document.querySelector('#posts-view').append(post)
+            post.id = element.id
+            });
     });
-
 }
 
 
