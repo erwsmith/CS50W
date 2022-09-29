@@ -13,8 +13,10 @@ function load_posts(post_view, username='none') {
         view_name = "All Posts";
     } else if (post_view === 'following') {
         view_name = "Following View";
-    } else if (post_view === 'profile') {
-        view_name = "Profile View";
+    } else if (post_view === 'profile' && username != 'none') {
+        view_name = `${username}'s Profile`;
+    } else if (post_view === 'profile' && username == 'none') {
+        view_name = `Your Profile`;
     } else {
         console.log("Error: Invalid Post View")
         view_name = "All Posts";
@@ -27,10 +29,16 @@ function load_posts(post_view, username='none') {
     let au = document.querySelector('#active_user_id')
     let active_user_id = au.dataset.active_user_id
     
+    let aun = document.querySelector('#active_username')
+    let active_username = aun.dataset.active_username
+    
     if (username == 'none') {
         endpoint = `/posts/${post_view}`
     } else {
         endpoint = `/profile/${username}`
+        let followers_display = document.createElement('div')
+        followers_display.innerHTML = "Followers, Following "
+        document.querySelector('#posts-view-head').append(followers_display)
     }
 
     fetch(endpoint)
@@ -99,8 +107,10 @@ function like_post(post_id, active_user_id, post_view) {
             liked_by: active_user_id,
         })
     })
-    // .then(function() {load_posts(post_view);});
     .then(function() {document.location.reload()});
+    
+    // TODO - update likes count without reloading the whole page, don't change scroll position
+    // .then(function() {load_posts(post_view);});
     // .then(function () {
     //     fetch(`/like_post/${post_id}`)
     //     .then(response => response.json())
