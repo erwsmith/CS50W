@@ -74,6 +74,14 @@ def profile_view(request, username):
         active_user_as_follower = Follower.objects.get(user=active_user)
     
     # is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    if request.method == "GET":
+        try:
+            profile_user = User.objects.get(username=username)
+            posts = Post.objects.filter(user=profile_user)
+            posts = posts.order_by("-timestamp").all()
+            return JsonResponse([post.serialize() for post in posts], safe=False)
+        except:
+            return JsonResponse({"error": "Invalid filter."}, status=400)
 
     if request.method == "POST":
         if "follow-button" in request.POST:
@@ -84,15 +92,6 @@ def profile_view(request, username):
             active_user_as_follower.following.remove(profile_user)
             messages.success(request, f"Unfollowed {profile_user}")
             # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-
-    if request.method == "GET":
-        try:
-            profile_user = User.objects.get(username=username)
-            posts = Post.objects.filter(user=profile_user)
-            posts = posts.order_by("-timestamp").all()
-            return JsonResponse([post.serialize() for post in posts], safe=False)
-        except:
-            return JsonResponse({"error": "Invalid filter."}, status=400)
 
 
 @csrf_exempt
