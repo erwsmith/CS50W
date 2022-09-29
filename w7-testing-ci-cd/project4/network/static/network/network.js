@@ -37,7 +37,21 @@ function load_posts(post_view, username='none') {
     } else {
         endpoint = `/profile/${username}`
         let followers_display = document.createElement('div')
-        followers_display.innerHTML = "Followers, Following "
+        // TODO - Translate this into better format
+        // get follower and profile_user model data connected
+        followers_display.innerHTML = `<div class="col-auto ">Following: {{ follower.following.count }}</div>
+        <div class="col-auto ">Followers: {{ profile_user.followers.count }}</div>
+        {% if user != profile_user %}
+            {% if is_following %}
+                <div class="col-auto ">
+                    <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="unfollow-button" value="Unfollow">
+                </div>
+            {% else %}
+                <div class="col-auto ">
+                    <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="follow-button" value="Follow">
+                </div>
+            {% endif %}
+        {% endif %}`
         document.querySelector('#posts-view-head').append(followers_display)
     }
 
