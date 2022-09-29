@@ -59,13 +59,40 @@ def filtered_posts(request, post_view):
  
 
 def profile_view(request, username):
-    try:
-        profile_user = User.objects.get(username=username)
-        posts = Post.objects.filter(user=profile_user)
-        posts = posts.order_by("-timestamp").all()
-        return JsonResponse([post.serialize() for post in posts], safe=False)
-    except:
-        return JsonResponse({"error": "Invalid filter."}, status=400)
+    profile_user = User.objects.get(username=username)
+    active_user = User.objects.get(pk=request.user.id)
+    try: 
+        follower = Follower.objects.get(user=profile_user)
+    except: 
+        Follower.objects.create(user=profile_user)
+        follower = Follower.objects.get(user=profile_user)
+    # check if active_user has a follower object yet, if not, create one
+    try: 
+        active_user_as_follower = Follower.objects.get(user=active_user)
+    except: 
+        Follower.objects.create(user=active_user)
+        active_user_as_follower = Follower.objects.get(user=active_user)
+    
+    # is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+
+    if request.method == "POST":
+        if "follow-button" in request.POST:
+            active_user_as_follower.following.add(profile_user)
+            messages.success(request, f"Following {profile_user}")
+            # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+        if "unfollow-button" in request.POST:
+            active_user_as_follower.following.remove(profile_user)
+            messages.success(request, f"Unfollowed {profile_user}")
+            # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+    if request.method == "GET":
+        try:
+            profile_user = User.objects.get(username=username)
+            posts = Post.objects.filter(user=profile_user)
+            posts = posts.order_by("-timestamp").all()
+            return JsonResponse([post.serialize() for post in posts], safe=False)
+        except:
+            return JsonResponse({"error": "Invalid filter."}, status=400)
 
 
 @csrf_exempt
