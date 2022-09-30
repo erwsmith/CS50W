@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded',() => {
     document.querySelector('#all-posts').addEventListener('click', () => load_posts('all'));
     document.querySelector('#following-posts').addEventListener('click', () => load_posts('following'));
     document.querySelector('#profile-posts').addEventListener('click', () => load_posts('profile'));
@@ -31,87 +31,113 @@ function load_posts(post_view, username='none') {
     
     let aun = document.querySelector('#active_username')
     let active_username = aun.dataset.active_username
-    
-    if (username == 'none') {
-        endpoint = `/posts/${post_view}`
+
+    if (username === 'none') {
+        fetch(`/posts/${post_view}`)
+        .then(response => response.json())
+        .then(posts => {
+            posts.forEach(post => {
+
+                // all_post_data = [`
+                //     ${post.id}, 
+                //     ${post.username}, 
+                //     ${post.user_id}, 
+                //     ${post.body}, 
+                //     ${post.timestamp}, 
+                //     ${post.liked_by}, 
+                //     ${post.likes_count}
+                // `]
+                
+                let post_username = document.createElement('button')
+                post_username.innerHTML = `${post.username}`
+                post_username.id = "post_username"
+                post_username.className = "btn btn-link m-0 p-0"
+                post_username.addEventListener('click', () => {
+                    load_posts('profile', post.username)
+                });
+                
+                let post_body = document.createElement('div')
+                post_body.className = "m-2"
+                post_body.innerHTML = `${post.body}`
+                
+                let post_timestamp = document.createElement('div')
+                post_timestamp.className = "text-muted m-2"
+                post_timestamp.innerHTML = `${post.timestamp}`
+                
+                let edit_button = document.createElement('button');
+                if (post.user_id === parseInt(active_user_id)) {
+                    edit_button.innerHTML = "Edit";
+                    edit_button.id = "edit";
+                    edit_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
+                    edit_button.addEventListener('click', () => {
+                        console.log(`Edit button ${post.id} clicked!`)
+                    });
+                } else {
+                    edit_button.style.display = "none";
+                }
+
+                let likes_count = document.createElement('span')
+                likes_count.className = "mx-2"
+                likes_count.innerHTML = `${post.likes_count}`
+
+                let like_button = document.createElement('button');
+                like_button.innerHTML = "Like";
+                like_button.id = "like";
+                like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
+                like_button.addEventListener('click', () => {
+                    like_post(post.id, active_user_id, post_view)
+                })
+
+                document.querySelector('#posts-view').append(
+                    document.createElement('hr'), 
+                    post_username, 
+                    post_body, 
+                    post_timestamp, 
+                    edit_button, 
+                    like_button, 
+                    likes_count, 
+                    )
+            });
+        });
     } else {
-        endpoint = `/profile/${username}`
-        let followers_display = document.createElement('div')
-        // TODO - Translate this into better format
-        // get follower and profile_user model data connected
-        followers_display.innerHTML = `<div class="col-auto ">Following: {{ follower.following.count }}</div>
-        <div class="col-auto ">Followers: {{ profile_user.followers.count }}</div>
-        {% if user != profile_user %}
-            {% if is_following %}
-                <div class="col-auto ">
-                    <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="unfollow-button" value="Unfollow">
-                </div>
-            {% else %}
-                <div class="col-auto ">
-                    <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="follow-button" value="Follow">
-                </div>
-            {% endif %}
-        {% endif %}`
-        document.querySelector('#posts-view-head').append(followers_display)
+        Promise.all([
+            fetch(`/profile/${username}`),
+            fetch(`/followers/${username}`)
+        ]).then((responses) => {
+            // Get a JSON object from each of the responses
+            return Promise.all(responses.map((response) => {
+                return response.json();
+            }));
+        }).then((data) => {
+            let posts = data[0]
+            console.log(posts);
+            let follower_data = data[1]
+            console.log(`Followers: ${follower_data.followers_count}, Following: ${follower_data.following_count}`);
+        }).catch((error) => {
+                    console.log(error);
+                });
     }
 
-    fetch(endpoint)
-    .then(response => response.json())
-    .then(posts => {
-        posts.forEach((post) => {
-            
-            let post_username = document.createElement('button')
-            post_username.innerHTML = `${post.username}`
-            post_username.id = "post_username"
-            post_username.className = "btn btn-link m-0 p-0"
-            post_username.addEventListener('click', function() {
-                load_posts('profile', post.username)
-            });
-            
-            let post_body = document.createElement('div')
-            post_body.className = "m-2"
-            post_body.innerHTML = `${post.body}`
-            
-            let post_timestamp = document.createElement('div')
-            post_timestamp.className = "text-muted m-2"
-            post_timestamp.innerHTML = `${post.timestamp}`
-            
-            let edit_button = document.createElement('button');
-            if (post.user_id === parseInt(active_user_id)) {
-                edit_button.innerHTML = "Edit";
-                edit_button.id = "edit";
-                edit_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
-                edit_button.addEventListener('click', function() {
-                    console.log(`Edit button ${post.id} clicked!`)
-                });
-            } else {
-                edit_button.style.display = "none";
-            }
+    // let followers_display = document.createElement('div')
+    // // TODO - Translate this into better format
+    // followers_display.innerHTML = `<div class="col-auto">Following: {{ follower.following.count }}</div>
+    // <div class="col-auto ">Followers: {{ profile_user.followers.count }}</div>
+    // {% if user != profile_user %}
+    //     {% if is_following %}
+    //         <div class="col-auto ">
+    //             <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="unfollow-button" value="Unfollow">
+    //         </div>
+    //     {% else %}
+    //         <div class="col-auto ">
+    //             <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="follow-button" value="Follow">
+    //         </div>
+    //     {% endif %}
+    // {% endif %}`
+    // document.querySelector('#posts-view-head').append(followers_display)
 
-            let likes_count = document.createElement('span')
-            likes_count.className = "mx-2"
-            likes_count.innerHTML = `${post.likes_count}`
-
-            let like_button = document.createElement('button');
-            like_button.innerHTML = "Like";
-            like_button.id = "like";
-            like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
-            like_button.addEventListener('click', function() {
-                like_post(post.id, active_user_id, post_view)
-            })
-
-            document.querySelector('#posts-view').append(
-                document.createElement('hr'), 
-                post_username, 
-                post_body, 
-                post_timestamp, 
-                edit_button, 
-                like_button, 
-                likes_count, 
-                )
-        });
-    });
 }
+
+
 
 
 function like_post(post_id, active_user_id, post_view) {
