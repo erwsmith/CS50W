@@ -32,5 +32,15 @@ class Follower(models.Model):
     def is_valid_follower(self):
         return self.user not in self.following.all()
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.user.username,
+            "user_id": self.user.id,
+            "following": [user.username for user in self.following.all()],
+            "following_count": self.following.count(),
+            "followers_count": self.user.followers.count(),
+        }
+
     def __str__(self):
         return f"{self.id}"
