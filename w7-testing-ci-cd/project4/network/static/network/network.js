@@ -22,12 +22,12 @@ function show_posts(post_view, username='none') {
         view_name = "All Posts";
     }
 
-    document.querySelector('#posts-view-head').innerHTML = `<h3>${view_name}</h3>`;
+    document.querySelector('#posts-view-head').innerHTML = `<h4>${view_name}</h4>`;
     document.querySelector('#posts-view').style.display = 'block';
     document.querySelector('#posts-view').innerHTML = '';
     
     let au = document.querySelector('#active_user_id')
-    let active_user_id = au.dataset.active_user_id
+    let active_user_id = parseInt(au.dataset.active_user_id)
     
     let aun = document.querySelector('#active_username')
     let active_username = aun.dataset.active_username
@@ -52,7 +52,6 @@ function show_posts(post_view, username='none') {
             get_post_data(posts)
             
             let follower = data[1]
-
             let following_count = document.createElement('span')
             following_count.className = "h4 ml-2 font-weight-bold"
             following_count.innerHTML = `${follower.following_count}`
@@ -68,36 +67,32 @@ function show_posts(post_view, username='none') {
             let followers_text = document.createElement('span')
             followers_text.innerHTML = "Follower(s)"
             followers_text.className = "m-2"
+            
+            let follow_button = document.createElement('button')
+
+            if (follower.user_id === active_user_id) {
+                follow_button.style.visibility = "hidden"
+            } else if (follower.is_following) {
+                follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
+                follow_button.id = "unfollow-button"
+                follow_button.innerHTML = "Unfollow"
+            } else {
+                follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
+                follow_button.id = "follow-button"
+                follow_button.innerHTML = "Follow"
+            }
 
             document.querySelector('#posts-view-head').append(
                 following_count,
                 following_text,
                 followers_count,
                 followers_text,
-                
+                follow_button,
                 )
         }).catch((error) => {
                     console.log(error);
                 });
     }
-
-    // let followers_display = document.createElement('div')
-    // // TODO - Translate this into better format
-    // followers_display.innerHTML = `<div class="col-auto">Following: {{ follower.following.count }}</div>
-    // <div class="col-auto ">Followers: {{ profile_user.followers.count }}</div>
-    // {% if user != profile_user %}
-    //     {% if is_following %}
-    //         <div class="col-auto ">
-    //             <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="unfollow-button" value="Unfollow">
-    //         </div>
-    //     {% else %}
-    //         <div class="col-auto ">
-    //             <input type="button" class="btn btn-sm btn-outline-dark mx-2 px-3" id="follow-button" value="Follow">
-    //         </div>
-    //     {% endif %}
-    // {% endif %}`
-    // document.querySelector('#posts-view-head').append(followers_display)
-
 }
 
 function get_post_data(posts) {
@@ -151,7 +146,7 @@ function get_post_data(posts) {
         like_button.id = "like";
         like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
         like_button.addEventListener('click', () => {
-            like_post(post.id, active_user_id, post_view)
+            like_post(post.id, active_user_id)
         })
 
         document.querySelector('#posts-view').append(
@@ -167,7 +162,7 @@ function get_post_data(posts) {
 }
 
 
-function like_post(post_id, active_user_id, post_view) {
+function like_post(post_id, active_user_id) {
     fetch(`/like_post/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
