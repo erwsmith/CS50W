@@ -94,6 +94,16 @@ def profile_view(request, username):
             # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
 
 
+def get_followers(request, username):
+    profile_user = User.objects.get(username=username)
+    try: 
+        follower = Follower.objects.get(user=profile_user)
+    except: 
+        Follower.objects.create(user=profile_user)
+        follower = Follower.objects.get(user=profile_user)
+    return JsonResponse(follower.serialize(), safe=False)
+
+
 @csrf_exempt
 @login_required
 def like_post(request, post_id):
