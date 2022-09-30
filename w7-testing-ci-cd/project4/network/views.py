@@ -73,7 +73,8 @@ def profile_view(request, username):
         Follower.objects.create(user=active_user)
         active_user_as_follower = Follower.objects.get(user=active_user)
     
-    # is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    
     if request.method == "GET":
         try:
             profile_user = User.objects.get(username=username)
@@ -81,7 +82,7 @@ def profile_view(request, username):
             posts = posts.order_by("-timestamp").all()
             return JsonResponse([post.serialize() for post in posts], safe=False)
         except:
-            return JsonResponse({"error": "Invalid filter."}, status=400)
+            return JsonResponse({"error": "Invalid filter."}, status=400), is_following
 
     if request.method == "POST":
         if "follow-button" in request.POST:
@@ -96,13 +97,22 @@ def profile_view(request, username):
 
 def get_followers(request, username):
     profile_user = User.objects.get(username=username)
+    active_user = User.objects.get(pk=request.user.id)
     try: 
         follower = Follower.objects.get(user=profile_user)
     except: 
         Follower.objects.create(user=profile_user)
         follower = Follower.objects.get(user=profile_user)
-    return JsonResponse(follower.serialize(), safe=False)
+    # check if active_user has a follower object yet, if not, create one
+    try: 
+        active_user_as_follower = Follower.objects.get(user=active_user)
+    except: 
+        Follower.objects.create(user=active_user)
+        active_user_as_follower = Follower.objects.get(user=active_user)
 
+    follower = follower.serialize()
+    follower["is_following"] = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    return JsonResponse(follower, safe=False)
 
 @csrf_exempt
 @login_required
