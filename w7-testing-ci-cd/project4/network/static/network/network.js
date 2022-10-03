@@ -76,10 +76,28 @@ function show_posts(post_view, username='none') {
                 follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
                 follow_button.id = "unfollow-button"
                 follow_button.innerHTML = "Unfollow"
+                follow_button.addEventListener('click', () => {
+                    console.log("Unfollow button clicked")
+                    fetch(`/profile/${username}`, {
+                      method: 'PUT',
+                      body: JSON.stringify({
+                        follow: false
+                      })
+                    }).then(function() {show_posts('following');});
+                })
             } else {
                 follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
                 follow_button.id = "follow-button"
                 follow_button.innerHTML = "Follow"
+                follow_button.addEventListener('click', () => {
+                    console.log("Follow button clicked")
+                    fetch(`/profile/${username}`, {
+                      method: 'PUT',
+                      body: JSON.stringify({
+                        follow: true
+                      })
+                    }).then(function() {show_posts('following');});
+                })
             }
 
             document.querySelector('#posts-view-head').append(
