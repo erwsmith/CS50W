@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded',() => {
+    document.querySelectorAll('button').forEach(button => {
+        button.onclick = () => {
+            history.pushState({foo: `${button.name}`}, "", `${button.name}`);
+        };
+    });
     document.querySelector('#all-posts').addEventListener('click', () => show_posts('all'));
     document.querySelector('#following-posts').addEventListener('click', () => show_posts('following'));
     document.querySelector('#profile-posts').addEventListener('click', () => show_posts('profile'));
@@ -83,7 +88,9 @@ function show_posts(post_view, username='none') {
                       body: JSON.stringify({
                         follow: false
                       })
-                    }).then(function() {show_posts('following');});
+                    })
+                    .then(() => {show_posts('following')})
+                    // .then(() => {alert(`Unfollowed ${username}`)})
                 })
             } else {
                 follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
@@ -96,7 +103,9 @@ function show_posts(post_view, username='none') {
                       body: JSON.stringify({
                         follow: true
                       })
-                    }).then(function() {show_posts('following');});
+                    })
+                    .then(() => {show_posts('following')})
+                    // .then(() => {alert(`Now following ${username}`)})
                 })
             }
 
@@ -107,9 +116,7 @@ function show_posts(post_view, username='none') {
                 followers_text,
                 follow_button,
                 )
-        }).catch((error) => {
-                    console.log(error);
-                });
+        }).catch((error) => {console.log(error);});
     }
 }
 
