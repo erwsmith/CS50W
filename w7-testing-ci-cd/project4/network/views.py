@@ -82,20 +82,23 @@ def profile_view(request, username):
             posts = posts.order_by("-timestamp").all()
             return JsonResponse([post.serialize() for post in posts], safe=False)
         except:
-            return JsonResponse({"error": "Invalid filter."}, status=400), is_following
+            return JsonResponse({"error": "Invalid filter."}, status=400)
 
     elif request.method == "PUT":
+
         data = json.loads(request.body) 
         if data.get("follow") is not None:
             if data.get("follow") == True:
                 active_user_as_follower.following.add(profile_user)
-                messages.success(request, f"Following {profile_user}")
+                # messages.add_message(request, messages.SUCCESS, f"Following {profile_user}")
+                return HttpResponse(status=204)
             elif data.get("follow") == False:
                 active_user_as_follower.following.remove(profile_user)  
-                messages.success(request, f"Unfollowed {profile_user}")
+                # messages.add_message(request, messages.SUCCESS, f"Unfollowed {profile_user}")
+                return HttpResponse(status=204)
     
-    # Request method must be GET or PUT
     else:
+        # Request method must be GET or PUT
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
