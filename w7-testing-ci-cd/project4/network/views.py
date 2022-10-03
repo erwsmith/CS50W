@@ -57,7 +57,7 @@ def filtered_posts(request, post_view):
     posts = posts.order_by("-timestamp").all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
  
-
+@csrf_exempt
 def profile_view(request, username):
     profile_user = User.objects.get(username=username)
     active_user = User.objects.get(pk=request.user.id)
@@ -84,16 +84,21 @@ def profile_view(request, username):
         except:
             return JsonResponse({"error": "Invalid filter."}, status=400), is_following
 
-    if request.method == "POST":
-        if "follow-button" in request.POST:
-            active_user_as_follower.following.add(profile_user)
-            messages.success(request, f"Following {profile_user}")
-            # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-        if "unfollow-button" in request.POST:
-            active_user_as_follower.following.remove(profile_user)
-            messages.success(request, f"Unfollowed {profile_user}")
-            # return HttpResponseRedirect(reverse("profile", args=(user_id,)))
-
+    elif request.method == "PUT":
+        data = json.loads(request.body) 
+        if data.get("follow") is not None:
+            if data.get("follow") == True:
+                active_user_as_follower.following.add(profile_user)
+                messages.success(request, f"Following {profile_user}")
+            elif data.get("follow") == False:
+                active_user_as_follower.following.remove(profile_user)  
+                messages.success(request, f"Unfollowed {profile_user}")
+    
+    # Request method must be GET or PUT
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
 
 def get_followers(request, username):
     profile_user = User.objects.get(username=username)
@@ -113,6 +118,7 @@ def get_followers(request, username):
     follower = follower.serialize()
     follower["is_following"] = active_user_as_follower.following.filter(id=profile_user.id).exists()
     return JsonResponse(follower, safe=False)
+
 
 @csrf_exempt
 @login_required
