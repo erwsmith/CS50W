@@ -99,11 +99,10 @@ def profile_view(request, username):
                 # messages.add_message(request, messages.SUCCESS, f"Unfollowed {profile_user}")
                 return HttpResponse(status=204)
 
-    else:
-        # Request method must be GET or PUT
-        return JsonResponse({
-            "error": "GET or PUT request required."
-        }, status=400)
+    # Request method must be GET or PUT
+    return JsonResponse({
+        "error": "GET or PUT request required."
+    }, status=400)
 
 
 def get_followers(request, username):
@@ -143,8 +142,7 @@ def like_post(request, post_id):
                     post.liked_by.remove(data["unliked_by"])
                     return HttpResponse(status=204)
                 post.save()
-    else:
-        return JsonResponse({"error": "PUT request required."}, status=400)
+    return JsonResponse({"error": "PUT request required."}, status=400)
 
 
 def login_view(request):
@@ -163,8 +161,7 @@ def login_view(request):
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
             })
-    else:
-        return render(request, "network/login.html")
+    return render(request, "network/login.html")
 
 
 def logout_view(request):
@@ -195,5 +192,4 @@ def register(request):
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/register.html")
+    return render(request, "network/register.html")
