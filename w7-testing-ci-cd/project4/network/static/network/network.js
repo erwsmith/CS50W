@@ -24,9 +24,9 @@ function show_posts(post_view, username='none') {
         view_name = "All Posts";
     } else if (post_view === 'following') {
         view_name = "Following View";
-    } else if (post_view === 'profile' && username != 'none') {
+    } else if (post_view === 'profile' && username !== 'none') {
         view_name = `${username}'s Profile`;
-    } else if (post_view === 'profile' && username == 'none') {
+    } else if (post_view === 'profile' && username === 'none') {
         username = active_username
         view_name = `${username}'s Profile`;
     } else {
