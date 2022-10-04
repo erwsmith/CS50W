@@ -104,7 +104,7 @@ function show_posts(post_view, username='none') {
                     .then(() => {show_posts('following')})
                 })
             }
-            
+
             document.querySelector('#posts-view-head').append(
                 following_count,
                 following_text,
@@ -163,7 +163,6 @@ function get_post_data(posts) {
                 let edit_post_body = document.createElement('textarea') 
                 edit_post_body.className = "form-control" 
                 edit_post_body.id = "edit-post-body" 
-                edit_post_body.autofocus = "on"
                 edit_post_body.value = `${post.body}`
                 document.querySelector(`#body-${post.id}`).append(edit_post_body)
                 
@@ -171,6 +170,9 @@ function get_post_data(posts) {
                 save_edit_button.innerHTML = 'Save changes'
                 save_edit_button.id = 'save-edit-button'
                 save_edit_button.className = "btn btn-sm btn-outline-dark my-0 mx-2 px-3"
+                save_edit_button.addEventListener('click', () => {
+                    console.log('save edit button clicked')
+                })
                 document.querySelector(`#body-${post.id}`).append(
                     document.createElement('br'),
                     save_edit_button
