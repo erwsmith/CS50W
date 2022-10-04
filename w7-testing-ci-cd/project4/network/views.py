@@ -129,19 +129,19 @@ def get_followers(request, username):
 @login_required
 def like_post(request, post_id):
     if request.method == "PUT":
-            data = json.loads(request.body)
-            if data.get("like") is not None:
-                try:
-                    post = Post.objects.get(pk=post_id)
-                except Post.DoesNotExist:
-                    return JsonResponse({"error": "Post not found."}, status=404)
-                if data.get("like") == True:
-                    post.liked_by.add(data["liked_by"]) 
-                    return HttpResponse(status=204)
-                elif data.get("like") == False: 
-                    post.liked_by.remove(data["unliked_by"])
-                    return HttpResponse(status=204)
-                post.save()
+        data = json.loads(request.body)
+        if data.get("like") is not None:
+            try:
+                post = Post.objects.get(pk=post_id)
+            except Post.DoesNotExist:
+                return JsonResponse({"error": "Post not found."}, status=404)
+            if data.get("like") == True:
+                post.liked_by.add(request.user) 
+                return HttpResponse(status=204)
+            elif data.get("like") == False: 
+                post.liked_by.remove(request.user)
+                return HttpResponse(status=204)
+            post.save()
     return JsonResponse({"error": "PUT request required."}, status=400)
 
 
