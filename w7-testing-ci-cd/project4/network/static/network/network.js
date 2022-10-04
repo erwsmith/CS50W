@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded',() => {
 
 function show_posts(post_view, username='none') {
     
+    let au = document.querySelector('#active_user_id')
+    let active_user_id = parseInt(au.dataset.active_user_id)
+    
+    let aun = document.querySelector('#active_username')
+    let active_username = aun.dataset.active_username
+    
     let view_name = ''
     if (post_view === 'all') {
         view_name = "All Posts";
@@ -21,7 +27,8 @@ function show_posts(post_view, username='none') {
     } else if (post_view === 'profile' && username != 'none') {
         view_name = `${username}'s Profile`;
     } else if (post_view === 'profile' && username == 'none') {
-        view_name = `Your Profile`;
+        username = active_username
+        view_name = `${username}'s Profile`;
     } else {
         console.log("Error: Invalid Post View")
         view_name = "All Posts";
@@ -31,12 +38,6 @@ function show_posts(post_view, username='none') {
     document.querySelector('#posts-view').style.display = 'block';
     document.querySelector('#posts-view').innerHTML = '';
     
-    let au = document.querySelector('#active_user_id')
-    let active_user_id = parseInt(au.dataset.active_user_id)
-    
-    let aun = document.querySelector('#active_username')
-    let active_username = aun.dataset.active_username
-
     if (username === 'none') {
         fetch(`/posts/${post_view}`)
         .then(response => response.json())
@@ -90,7 +91,6 @@ function show_posts(post_view, username='none') {
                       })
                     })
                     .then(() => {show_posts('following')})
-                    // .then(() => {alert(`Unfollowed ${username}`)})
                 })
             } else {
                 follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
@@ -105,7 +105,6 @@ function show_posts(post_view, username='none') {
                       })
                     })
                     .then(() => {show_posts('following')})
-                    // .then(() => {alert(`Now following ${username}`)})
                 })
             }
 
