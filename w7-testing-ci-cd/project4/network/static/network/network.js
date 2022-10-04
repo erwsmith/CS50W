@@ -13,11 +13,8 @@ document.addEventListener('DOMContentLoaded',() => {
 
 function show_posts(post_view, username='none') {
     
-    let au = document.querySelector('#active_user_id')
-    let active_user_id = parseInt(au.dataset.active_user_id)
-    
-    let aun = document.querySelector('#active_username')
-    let active_username = aun.dataset.active_username
+    let active_user_id = parseInt(document.querySelector('#active_user_id').dataset.active_user_id)
+    let active_username = document.querySelector('#active_username').dataset.active_username
     
     let view_name = ''
     if (post_view === 'all') {
@@ -120,6 +117,9 @@ function show_posts(post_view, username='none') {
 }
 
 function get_post_data(posts) {
+    
+    let active_user_id = parseInt(document.querySelector('#active_user_id').dataset.active_user_id)
+    let active_username = document.querySelector('#active_username').dataset.active_username
 
     posts.forEach(post => {
 
@@ -150,7 +150,8 @@ function get_post_data(posts) {
         post_timestamp.innerHTML = `${post.timestamp}`
         
         let edit_button = document.createElement('button');
-        if (post.user_id === parseInt(active_user_id)) {
+        
+        if (post.user_id === active_user_id) {
             edit_button.innerHTML = "Edit";
             edit_button.id = "edit";
             edit_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
@@ -162,17 +163,57 @@ function get_post_data(posts) {
         }
 
         let likes_count = document.createElement('span')
+        likes_count.id = `likes-count-${post.id}`
         likes_count.className = "mx-2"
         likes_count.innerHTML = `${post.likes_count}`
 
         let like_button = document.createElement('button');
-        like_button.innerHTML = "Like";
-        like_button.id = "like";
         like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
-        like_button.addEventListener('click', () => {
-            like_post(post.id, parseInt(active_user_id.dataset.active_user_id))
-        })
-
+        if (post.liked_by.includes(active_username)) {
+            like_button.innerHTML = "Unlike";
+            like_button.id = `unlike-${post.id}`;
+            like_button.addEventListener('click', () => {
+                console.log(`User ${active_user_id} clicked post ${post.id} unlike button.`)
+                fetch(`/like_post/${post.id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        like: false,
+                    })
+                })
+                .then(() => {
+                    fetch(`/get_post/${post.id}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(post => {
+                        document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`
+                        document.querySelector(`#unlike-${post.id}`).innerHTML = 'Like'
+                    })
+                })
+            })
+        } else {
+            like_button.innerHTML = "Like";
+            like_button.id = like_button.id = `like-${post.id}`;;
+            like_button.addEventListener('click', () => {
+                console.log(`User ${active_user_id} clicked post ${post.id} like button.`)
+                fetch(`/like_post/${post.id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        like: true,
+                    })
+                })
+                .then(() =>{
+                    fetch(`/get_post/${post.id}`, {
+                        method: 'GET'
+                    })
+                    .then(response => response.json())
+                    .then(post => {
+                        document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`
+                        document.querySelector(`#like-${post.id}`).innerHTML = 'Unlike'
+                    })  
+                })
+            })
+        }
         document.querySelector('#posts-view').append(
             document.createElement('hr'), 
             post_username, 
@@ -183,21 +224,4 @@ function get_post_data(posts) {
             likes_count, 
             )
     });
-}
-
-
-function like_post(post_id, active_user_id) {
-    console.log(`Post ${post_id} liked by user ${active_user_id}.`)
-    // TODO: get post data, check if liked, render correct button etc. 
-    // if (post.liked_by.filter(id=active_user.id).exists()) {
-        // fetch(`/like_post/${post_id}`, {
-        //     method: 'PUT',
-        //     body: JSON.stringify({
-        //         like: true,
-        //     })
-        // })
-    // }
-        
-    // TODO - update likes count without reloading the whole page, don't change scroll position
-    // .then(function() {show_posts(post_view);});
 }
