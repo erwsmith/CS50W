@@ -73,7 +73,7 @@ def profile_view(request, username):
         Follower.objects.create(user=active_user)
         active_user_as_follower = Follower.objects.get(user=active_user)
     
-    is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
+    # is_following = active_user_as_follower.following.filter(id=profile_user.id).exists()
     
     if request.method == "GET":
         try:
