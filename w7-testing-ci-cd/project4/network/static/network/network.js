@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded',() => {
 
 function show_posts(post_view, username='none') {
     
-    let active_user_id = parseInt(document.querySelector('#active_user_id').dataset.active_user_id)
-    let active_username = document.querySelector('#active_username').dataset.active_username
+    let active_user_id = parseInt(document.querySelector('#active_user_id').dataset.active_user_id);
+    let active_username = document.querySelector('#active_username').dataset.active_username;
     
     let view_name = ''
     if (post_view === 'all') {
@@ -104,7 +104,7 @@ function show_posts(post_view, username='none') {
                     .then(() => {show_posts('following')})
                 })
             }
-
+            
             document.querySelector('#posts-view-head').append(
                 following_count,
                 following_text,
@@ -143,13 +143,14 @@ function get_post_data(posts) {
         
         let post_body = document.createElement('div')
         post_body.className = "m-2"
+        post_body.id = `body-${post.id}`
         post_body.innerHTML = `${post.body}`
         
         let post_timestamp = document.createElement('div')
         post_timestamp.className = "text-muted m-2"
         post_timestamp.innerHTML = `${post.timestamp}`
         
-        let edit_button = document.createElement('button');
+        let edit_button = document.createElement('button')
         
         if (post.user_id === active_user_id) {
             edit_button.innerHTML = "Edit";
@@ -157,6 +158,23 @@ function get_post_data(posts) {
             edit_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
             edit_button.addEventListener('click', () => {
                 console.log(`Edit button ${post.id} clicked!`)
+                document.querySelector(`#body-${post.id}`).innerHTML = ''
+                
+                let edit_post_body = document.createElement('textarea') 
+                edit_post_body.className = "form-control" 
+                edit_post_body.id = "edit-post-body" 
+                edit_post_body.autofocus = "on"
+                edit_post_body.value = `${post.body}`
+                document.querySelector(`#body-${post.id}`).append(edit_post_body)
+                
+                let save_edit_button = document.createElement('button')
+                save_edit_button.innerHTML = 'Save changes'
+                save_edit_button.id = 'save-edit-button'
+                save_edit_button.className = "btn btn-sm btn-outline-dark my-0 mx-2 px-3"
+                document.querySelector(`#body-${post.id}`).append(
+                    document.createElement('br'),
+                    save_edit_button
+                    )
             });
         } else {
             edit_button.style.display = "none";
@@ -215,7 +233,7 @@ function get_post_data(posts) {
             })
         }
         document.querySelector('#posts-view').append(
-            document.createElement('hr'), 
+            document.createElement('hr'),
             post_username, 
             post_body, 
             post_timestamp, 
