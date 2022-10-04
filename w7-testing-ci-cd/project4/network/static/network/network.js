@@ -170,7 +170,7 @@ function get_post_data(posts) {
         like_button.id = "like";
         like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
         like_button.addEventListener('click', () => {
-            like_post(post.id, active_user_id)
+            like_post(post.id, parseInt(active_user_id.dataset.active_user_id))
         })
 
         document.querySelector('#posts-view').append(
@@ -187,55 +187,17 @@ function get_post_data(posts) {
 
 
 function like_post(post_id, active_user_id) {
-    fetch(`/like_post/${post_id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            liked_by: active_user_id,
-        })
-    })
-    .then(function() {document.location.reload()});
-    
+    console.log(`Post ${post_id} liked by user ${active_user_id}.`)
+    // TODO: get post data, check if liked, render correct button etc. 
+    // if (post.liked_by.filter(id=active_user.id).exists()) {
+        // fetch(`/like_post/${post_id}`, {
+        //     method: 'PUT',
+        //     body: JSON.stringify({
+        //         like: true,
+        //     })
+        // })
+    // }
+        
     // TODO - update likes count without reloading the whole page, don't change scroll position
     // .then(function() {show_posts(post_view);});
-    // .then(function () {
-    //     fetch(`/like_post/${post_id}`)
-    //     .then(response => response.json())
-    //     .then(post => {
-    //         console.log(`Post ${post_id} liked by user ${active_user_id}, now has ${post.likes_count} likes.`);
-    //     })
-    // })
 }
-
-
-// function like_button(post_id, active_user_id) {
-//     fetch(`/posts/${post_id}`)
-//     .then(response => response.json())
-//     .then(console.log(response))
-//     // if post.liked_by.filter(id=active_user.id).exists()
-//     }
-
-// function unlike_post(post_id, active_user_id) {
-//     fetch(`/posts/${post_id}`, {
-//         method: 'PUT',
-//         body: JSON.stringify({
-//             unliked_by: active_user_id
-//         })
-//     })
-//     .then(function () {fetch(`/posts/${post_id}`)
-//         .then(response => response.json())
-//         .then(post => {
-//             console.log(post.likes_count);
-//             document.querySelector('#likes-count').innerHTML = `${post.likes_count}`;
-//         })
-//     })
-// }
-
-// function edit_post(post_id, active_user_id) {
-//     fetch(`/posts/${post_id}`)
-//     .then(response => response.json())
-//     .then(post => {
-//         // TODO
-//         const post_data = [`${post.id}`, `${post.username}`, `${post.body}`, `${post.timestamp}`]
-//         console.log(post_data, active_user_id)
-//     })
-// }
