@@ -125,6 +125,12 @@ def get_followers(request, username):
     return JsonResponse(follower, safe=False)
 
 
+def get_post(request, post_id):
+    if request.method == 'GET':
+        post = Post.objects.get(pk=post_id).serialize()
+        return JsonResponse(post, safe=False)
+
+
 @csrf_exempt
 @login_required
 def like_post(request, post_id):
@@ -138,10 +144,11 @@ def like_post(request, post_id):
             if data.get("like") == True:
                 post.liked_by.add(request.user) 
                 return HttpResponse(status=204)
-            elif data.get("like") == False: 
+            elif data.get("like") == False:
                 post.liked_by.remove(request.user)
                 return HttpResponse(status=204)
             post.save()
+        return JsonResponse({"error": "like value not in data"}, status=400)
     return JsonResponse({"error": "PUT request required."}, status=400)
 
 
