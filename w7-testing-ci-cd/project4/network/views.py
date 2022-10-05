@@ -125,10 +125,17 @@ def get_followers(request, username):
     return JsonResponse(follower, safe=False)
 
 
+@csrf_exempt
+@login_required
 def get_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
     if request.method == 'GET':
-        post = Post.objects.get(pk=post_id).serialize()
-        return JsonResponse(post, safe=False)
+        return JsonResponse(post.serialize(), safe=False)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        post.body = data["post_body"]
+        post.save()
+        return JsonResponse(post.serialize(), safe=False)
 
 
 @csrf_exempt
