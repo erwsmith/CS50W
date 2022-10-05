@@ -16,8 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
     document.querySelector('#all-posts').addEventListener('click', () => show_posts('all'));
-    document.querySelector('#following-posts').addEventListener('click', () => show_posts('following'));
-    document.querySelector('#profile-posts').addEventListener('click', () => show_posts('profile'));
+    if (document.querySelector('#following-posts')) {
+        document.querySelector('#following-posts').addEventListener('click', () => show_posts('following'));
+    }
+    if (document.querySelector('#profile-posts')) {
+        document.querySelector('#profile-posts').addEventListener('click', () => show_posts('profile'));
+    }
     show_posts('all')
     const section = 'all';
     history.pushState({section: section, profile_user: 'none'}, "");
