@@ -2,17 +2,19 @@
 {% load static %}
 
 {% block body %}
-    <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
+    <button data-section="all" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="all-posts">All Posts</button>
     {% if user.is_authenticated %}
         <div hidden data-active_user_id="{{ user.id }}" id="active_user_id"></div>
         <div hidden data-active_username="{{ user.username }}" id="active_username"></div>
-        <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="following-posts">Following</button>
-        <button class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
-        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
+        <button data-section="following" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="following-posts">Following</button>
+        <button data-section="profile" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
+        <a data-section="logout" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
         <span class="text-muted m-2">Logged in as {{user.username}}</span>
     {% else %}
-        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
-        <a class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
+        <div hidden data-active_user_id="none" id="active_user_id"></div>
+        <div hidden data-active_username="none" id="active_username"></div>
+        <a data-section="login" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
+        <a data-section="register" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
     {% endif %}
     <br>
     {% if user.is_authenticated %}
@@ -31,7 +33,7 @@
     <div id="posts-view"></div>
     <div id="post-edit-view"></div>
     <br><br><br><br><br><br><br><br>
-
+    
 {% endblock %}
 
 {% block script %}
