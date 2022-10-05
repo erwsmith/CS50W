@@ -158,7 +158,13 @@ function get_post_data(posts) {
             edit_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
             edit_button.addEventListener('click', () => {
                 console.log(`Edit button ${post.id} clicked!`)
+                document.querySelector('#posts-view').style.display = 'none';
+                document.querySelector('#post-edit-view').style.display = 'block';
                 document.querySelector(`#body-${post.id}`).innerHTML = ''
+                post_timestamp.style.visibility = "hidden"
+                edit_button.style.visibility = "hidden"
+                like_button.style.visibility = "hidden"
+                likes_count.style.visibility = "hidden"
                 
                 let edit_post_body = document.createElement('textarea') 
                 edit_post_body.className = "form-control" 
@@ -171,7 +177,13 @@ function get_post_data(posts) {
                 save_edit_button.id = 'save-edit-button'
                 save_edit_button.className = "btn btn-sm btn-outline-dark my-0 mx-2 px-3"
                 save_edit_button.addEventListener('click', () => {
-                    console.log('save edit button clicked')
+                    console.log('Save changes button clicked')
+                    fetch(`/get_post/${post.id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            post_body: document.querySelector('#edit-post-body').value,
+                        })
+                    })
                 })
                 document.querySelector(`#body-${post.id}`).append(
                     document.createElement('br'),
