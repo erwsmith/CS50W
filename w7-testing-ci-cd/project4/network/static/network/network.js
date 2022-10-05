@@ -56,7 +56,7 @@ function show_posts(post_view, username='none') {
         fetch(`/posts/${post_view}`)
         .then(response => response.json())
         .then(posts => {
-            get_post_data(posts)
+            get_post_data(posts, post_view)
         });
     } else {
         Promise.all([
@@ -107,10 +107,10 @@ function show_posts(post_view, username='none') {
                       })
                     })
                     .then(() => {
-                        const section = this.dataset.section;
-                        history.pushState({section: section, profile_user: 'none'}, "");
+                        const section = 'profile';
+                        history.pushState({section: section, profile_user: username}, "");
                     })
-                    .then(() => {show_posts('following')})
+                    .then(() => {show_posts('profile', username)})
                 })
             } else {
                 follow_button.className = "btn btn-sm btn-outline-dark mx-2 px-3"
@@ -125,10 +125,10 @@ function show_posts(post_view, username='none') {
                       })
                     })
                     .then(() => {
-                        const section = this.dataset.section;
-                        history.pushState({section: section, profile_user: 'none'}, "");
+                        const section = 'profile';
+                        history.pushState({section: section, profile_user: username}, "");
                     })
-                    .then(() => {show_posts('following')})
+                    .then(() => {show_posts('profile', username)})
                 })
             }
 
@@ -143,7 +143,7 @@ function show_posts(post_view, username='none') {
     }
 }
 
-function get_post_data(posts) {
+function get_post_data(posts, post_view='all') {
     
     let active_user_id = parseInt(document.querySelector('#active_user_id').dataset.active_user_id)
     let active_username = document.querySelector('#active_username').dataset.active_username
@@ -169,7 +169,7 @@ function get_post_data(posts) {
             const section = 'profile';
             history.pushState({section: section, profile_user: post_username.name}, "");
             show_posts('profile', post.username)
-            })
+        })
         
         let post_body = document.createElement('div')
         post_body.className = "m-2"
@@ -237,31 +237,34 @@ function get_post_data(posts) {
         like_button.className = "btn btn-sm btn-outline-dark mx-2 px-3";
 
         if (post.liked_by.includes(active_username)) {
-            like_button.innerHTML = "Unlike";
+            like_button.innerHTML = 'Unlike';
             like_button.id = `unlike-${post.id}`;
+            like_button.name = 'unlike';
             like_button.addEventListener('click', () => {
-                console.log(`User ${active_user_id} clicked post ${post.id} unlike button.`)
+                console.log(`User ${active_user_id} clicked post ${post.id} ${like_button.name} button.`)
                 fetch(`/like_post/${post.id}`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         like: false,
                     })
                 })
-                .then(() => {
-                    fetch(`/get_post/${post.id}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(post => {
-                        document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`
-                        document.querySelector(`#unlike-${post.id}`).innerHTML = 'Like'
-                        document.querySelector(`#unlike-${post.id}`).id = `like-${post.id}`;
-                    })
-                })
+                .then(() => {show_posts(post_view)})
+                // .then(() => {
+                //     fetch(`/get_post/${post.id}`, {
+                //         method: 'GET'
+                //     })
+                //     .then(response => response.json())
+                //     .then(post => {
+                //         document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`
+                //         document.querySelector(`#unlike-${post.id}`).innerHTML = 'Like'
+                //         document.querySelector(`#unlike-${post.id}`).id = `like-${post.id}`;
+                //     })
+                // })
             })
         } else {
             like_button.innerHTML = "Like";
-            like_button.id = `like-${post.id}`;;
+            like_button.id = `like-${post.id}`;
+            like_button.name = 'like';
             like_button.addEventListener('click', () => {
                 console.log(`User ${active_user_id} clicked post ${post.id} like button.`)
                 fetch(`/like_post/${post.id}`, {
@@ -270,17 +273,18 @@ function get_post_data(posts) {
                         like: true,
                     })
                 })
-                .then(() =>{
-                    fetch(`/get_post/${post.id}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(post => {
-                        document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`;
-                        document.querySelector(`#like-${post.id}`).innerHTML = 'Unlike';
-                        document.querySelector(`#like-${post.id}`).id = `unlike-${post.id}`;
-                    })  
-                })
+                .then(() => {show_posts(post_view)})
+                // .then(() =>{
+                //     fetch(`/get_post/${post.id}`, {
+                //         method: 'GET'
+                //     })
+                //     .then(response => response.json())
+                //     .then(post => {
+                //         document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`;
+                //         document.querySelector(`#like-${post.id}`).innerHTML = 'Unlike';
+                //         document.querySelector(`#like-${post.id}`).id = `unlike-${post.id}`;
+                //     })  
+                // })
             })
         }
         document.querySelector('#posts-view').append(
