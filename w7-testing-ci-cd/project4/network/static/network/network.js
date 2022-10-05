@@ -162,7 +162,7 @@ function get_post_data(posts) {
         post_username.className = "btn btn-link m-0 p-0"
         post_username.name = `${post.username}`
         post_username.addEventListener('click', () => {
-            const section = post_username.name;
+            const section = 'profile';
             history.pushState({section: section, profile_user: post_username.name}, "");
             show_posts('profile', post.username)
             })
