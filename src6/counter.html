@@ -12,16 +12,20 @@
         <script type="text/babel">
 
             function App() {
+                // React 'hook' - useState()
+                // Returns list of a variable and a function
+                // State variable here = count, count starts at x
+                let x = 0
+                const [count, setCount] = React.useState(x);
 
-                const [count, setCount] = React.useState(0);
-
+                //  The setCount function defined above must be used in order to update the state variable
                 function updateCount() {
                     setCount(count + 1);
                 }
 
                 return (
                     <div>
-                        <h1>{count}</h1>
+                        <div>{count}</div>
                         <button onClick={updateCount}>Count</button>
                     </div>
                 );
