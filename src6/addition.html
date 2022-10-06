@@ -32,38 +32,35 @@
 
             function App() {
 
+                // const [num1, setNum1] = React.useState(1);
+                // const [num2, setNum2] = React.useState(2);
+                // The 2 lines above can be consolidated like this: 
                 const [state, setState] = React.useState({
-                    num1: 1,
-                    num2: 1,
+                    num1: 2, 
+                    num2: 4,
                     response: "",
-                    score: 0,
+                    score: 0, 
                     incorrect: false
-                });
-
-                function renderWinScreen() {
-                    return (
-                        <div id="winner">You won!</div>
-                    );
-                }
+                })
 
                 function inputKeyPress(event) {
                     if (event.key === "Enter") {
-                        const answer = parseInt(state.response);
-                        if (answer === state.num1 + state.num2) {
+                        const answer = parseInt(state.response)
+                        if (state.num1 + state.num2 === answer) {
                             // User got question right
                             setState({
                                 ...state,
-                                score: state.score + 1,
-                                response: "",
                                 num1: Math.ceil(Math.random() * 10),
                                 num2: Math.ceil(Math.random() * 10),
+                                score: state.score + 1,
+                                response: "",
                                 incorrect: false
-                            });
+                            })
                         } else {
                             // User got question wrong
                             setState({
-                                ...state,
-                                score: state.score - 1,
+                                ...state, 
+                                score: state.score - 1, 
                                 response: "",
                                 incorrect: true
                             })
@@ -72,29 +69,32 @@
                 }
 
                 function updateResponse(event) {
+                    
                     setState({
+                        // num1: state.num1,
+                        // num2: state.num2,
+                        // or use 'spread' operator '...state' 
+                        // This says keep everything the same except what you explicitly redefine
                         ...state,
                         response: event.target.value
                     });
                 }
 
-                function renderProblem() {
+                if (state.score === 10) {
                     return (
-                        <div>
-                            <div className={state.incorrect ? "incorrect" : ""} id="problem">
-                                {state.num1} + {state.num2}
-                            </div>
-                            <input onKeyPress={inputKeyPress} onChange={updateResponse} autoFocus={true} value={state.response} />
-                            <div>Score: {state.score}</div>
+                        <div id="winner">
+                            You won!
                         </div>
-                    )
+                    );
                 }
 
-                if (state.score === 10) {
-                    return renderWinScreen();
-                } else {
-                    return renderProblem();
-                }
+                return (
+                    <div>
+                        <div className={state.incorrect ? "incorrect" : ""} id="problem">{state.num1} + {state.num2}</div>
+                        <input autoFocus={true} onKeyPress={inputKeyPress} onChange={updateResponse} value={state.response}/>
+                        <div>Score: {state.score}</div>
+                    </div>
+                );
             }
 
             ReactDOM.render(<App />, document.querySelector("#app"));
