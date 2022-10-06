@@ -10,14 +10,6 @@
         <button data-section="profile" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
         <a data-section="logout" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
         <span class="text-muted m-2">Logged in as {{user.username}}</span>
-    {% else %}
-        <div hidden data-active_user_id="none" id="active_user_id"></div>
-        <div hidden data-active_username="none" id="active_username"></div>
-        <a data-section="login" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
-        <a data-section="register" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
-    {% endif %}
-    <br>
-    {% if user.is_authenticated %}
         <div id="compose-post">
             <div class="container mb-4 p-2">
                 <form method="POST">
@@ -27,13 +19,17 @@
                 </form>
             </div>
         </div>
+    {% else %}
+        <div hidden data-active_user_id="none" id="active_user_id"></div>
+        <div hidden data-active_username="none" id="active_username"></div>
+        <a data-section="login" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'login' %}">Log In</a>
+        <a data-section="register" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'register' %}">Register</a>
     {% endif %}
-    
+    <br>
     <div id="posts-view-head"></div>
     <div id="posts-view"></div>
     <div id="post-edit-view"></div>
     <br><br><br><br><br><br><br><br>
-    
 {% endblock %}
 
 {% block script %}
