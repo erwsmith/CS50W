@@ -249,17 +249,6 @@ function get_post_data(posts, post_view='all') {
                     })
                 })
                 .then(() => {show_posts(post_view)})
-                // .then(() => {
-                //     fetch(`/get_post/${post.id}`, {
-                //         method: 'GET'
-                //     })
-                //     .then(response => response.json())
-                //     .then(post => {
-                //         document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`
-                //         document.querySelector(`#unlike-${post.id}`).innerHTML = 'Like'
-                //         document.querySelector(`#unlike-${post.id}`).id = `like-${post.id}`;
-                //     })
-                // })
             })
         } else {
             like_button.innerHTML = "Like";
@@ -274,17 +263,6 @@ function get_post_data(posts, post_view='all') {
                     })
                 })
                 .then(() => {show_posts(post_view)})
-                // .then(() =>{
-                //     fetch(`/get_post/${post.id}`, {
-                //         method: 'GET'
-                //     })
-                //     .then(response => response.json())
-                //     .then(post => {
-                //         document.querySelector(`#likes-count-${post.id}`).innerHTML = `${post.likes_count}`;
-                //         document.querySelector(`#like-${post.id}`).innerHTML = 'Unlike';
-                //         document.querySelector(`#like-${post.id}`).id = `unlike-${post.id}`;
-                //     })  
-                // })
             })
         }
         document.querySelector('#posts-view').append(
