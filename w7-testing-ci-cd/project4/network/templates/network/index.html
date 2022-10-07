@@ -9,6 +9,7 @@
         <button data-section="following" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="following-posts">Following</button>
         <button data-section="profile" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" id="profile-posts">Profile</button>
         <a data-section="logout" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'logout' %}">Log Out</a>
+        <a data-section="react-testing" class="btn btn-sm btn-outline-dark my-sm-4 mx-2 px-3" href="{% url 'react_testing' %}">React Testing</a>
         <span class="text-muted m-2">Logged in as {{user.username}}</span>
         <div id="compose-post">
             <div class="container mb-4 p-2">
@@ -33,7 +34,7 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'network/network.js' %}"></script>
+    <script type="text/babel" src="{% static 'network/network.js' %}"></script>
 {% endblock %}
 
 

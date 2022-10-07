@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
 
+def react_testing(request): 
+    return render(request, "network/react_testing.html")
 
 def index(request):
     if request.method == "POST":
