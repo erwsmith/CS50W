@@ -62,11 +62,6 @@ def filtered_posts(request, post_view):
 def profile_view(request, username):
     profile_user = User.objects.get(username=username)
     active_user = User.objects.get(pk=request.user.id)
-    try: 
-        follower = Follower.objects.get(user=profile_user)
-    except: 
-        Follower.objects.create(user=profile_user)
-        follower = Follower.objects.get(user=profile_user)
     # check if active_user has a follower object yet, if not, create one
     try: 
         active_user_as_follower = Follower.objects.get(user=active_user)
