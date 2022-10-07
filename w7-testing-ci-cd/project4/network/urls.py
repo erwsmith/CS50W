@@ -6,7 +6,6 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("register/", views.register, name="register"),
-    path("react_testing/", views.react_testing, name="react_testing"),
 
     # API Routes
     path("get_post/<int:post_id>", views.get_post, name="get_post"),
