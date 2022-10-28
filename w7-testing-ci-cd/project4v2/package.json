@@ -1,6 +1,7 @@
 {
   "name": "project4v2",
   "version": "1.0.0",
+  "type": "module",
   "description": "CS50W Network Project =====================",
   "main": "index.js",
   "scripts": {
