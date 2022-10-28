@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
-from .models import User
+from rest_framework import viewsets
+from network.serializers import PostSerializer, FollowerSerializer
+from .models import *
 
 
 def index(request):
@@ -61,3 +62,11 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+class PostView(viewsets.ModelViewSet): 
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+class FollowerView(viewsets.ModelViewSet): 
+    serializer_class = FollowerSerializer
+    queryset = Follower.objects.all()
