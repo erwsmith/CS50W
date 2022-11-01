@@ -4,7 +4,7 @@ import Search from './Search';
 
 const App = () => {
   return (
-    <div className='container'><Search /></div>
+    <div className='container'>Search Results: <Search /></div>
   );
 }
 
