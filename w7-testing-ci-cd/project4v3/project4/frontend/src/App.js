@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Search from './Search';
 
-function App() {
+const App = () => {
   return (
-    <div>
-      App
-    </div>
+    <div className='container'><Search /></div>
   );
 }
 
