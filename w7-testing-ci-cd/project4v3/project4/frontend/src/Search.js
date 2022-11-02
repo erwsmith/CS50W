@@ -6,15 +6,26 @@ const Search = () => {
     
     useEffect(() => {
         const search = async () => {
-            const { data } = await axios.get('http://127.0.0.1:8000/api/posts/');
-            console.log(data[0]);
+            const { data } = await axios.get('/api/posts/');
+            console.log(data);
             setPosts(data);
         };
+        search();
     }, []);
+
+    const renderedPosts = posts.map((post) => {
+        return (
+            <div key={post.id}>
+                <div className='container border'>
+                    user: {post.user}, {post.body}, {post.timestamp}, liked by: {post.liked_by}
+                </div>
+            </div>
+        )
+    })
 
     return (
         <div>
-            <h1 className='header'>{ posts }</h1>
+            <div className='header'>{ renderedPosts }</div>
         </div>
     )
 }
